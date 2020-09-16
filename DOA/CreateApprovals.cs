@@ -63,7 +63,7 @@ namespace DOA
                         approvals.Add(0, ((EntityReference)oppowner["spectra_cityhead"]).Id);
                     }
                     else
-                        throw new InvalidPluginExecutionException("City Head for the selected city is null, please contact System Administrator");
+                        throw new InvalidPluginExecutionException("City Head is not maaped with Opportunity owner, please contact System Administrator");
                     #endregion
 
 
