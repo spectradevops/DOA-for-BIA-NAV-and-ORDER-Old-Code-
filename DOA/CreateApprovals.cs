@@ -60,10 +60,13 @@ namespace DOA
                     Entity oppowner = service.Retrieve("systemuser", ((EntityReference)OpportunityDetails.Attributes["ownerid"]).Id, new ColumnSet("spectra_cityhead"));
                     if (oppowner.Attributes.Contains("spectra_cityhead"))
                     {
-                        approvals.Add(0, ((EntityReference)oppowner["spectra_cityhead"]).Id);
+                        approvals.Add(1, ((EntityReference)oppowner["spectra_cityhead"]).Id);
                     }
                     else
-                        throw new InvalidPluginExecutionException("City Head is not maaped with Opportunity owner, please contact System Administrator");
+                    {
+                        string OwnerName = ((EntityReference)OpportunityDetails.Attributes["ownerid"]).Name.ToString();
+                        throw new InvalidPluginExecutionException("City Head is not mapped for " + OwnerName + ", please contact sales co-ordinater for City Head mapping.");
+                    }
                     #endregion
 
 
