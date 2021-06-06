@@ -25,14 +25,14 @@ namespace NAVDOA
                 string city = null;
                 string BSType = null;
                 string BSName = null;
-                string BSStatus = null;              
+                string BSStatus = null;
 
                 if (Type == "WCR")
                 {
                     seg = "Home";
                     canid = Img.GetAttributeValue<string>("spectra_canno");
                     customer = Img.GetAttributeValue<EntityReference>("alletech_account").Name;
-                    city= Img.GetAttributeValue<EntityReference>("alletech_city").Name;
+                    city = Img.GetAttributeValue<EntityReference>("alletech_city").Name;
                     BSType = "Society";
 
                     if (Img.Attributes.Contains("spectra_society"))
@@ -114,7 +114,7 @@ namespace NAVDOA
                 #endregion
 
                 #region Row 2
-                
+
                 emailbody += @"<tr style='height : 20pt'>
                                    <td style='border-width: 1pt; border-style:solid;'><p><b>Customer Name</b></p></td>
                                    <td style='border-width: 1pt; border-style:solid;' colspan='2'><p align='center' text-align='center;'>" + customer + @"</p></td>";
@@ -143,14 +143,14 @@ namespace NAVDOA
                 emailbody += @"<td style='border-width: 1pt; border-style:solid;'><b>Area</b></td>
                                     <td style='border-width: 1pt; border-style:solid;'><p align='center' text-align='center;'>" + TempName + @"</p></td>";
 
-                emailbody += @"<td style='border-width: 1pt; border-style:solid;'><b>"+ BSType + @" Name</b></td>
+                emailbody += @"<td style='border-width: 1pt; border-style:solid;'><b>" + BSType + @" Name</b></td>
                                     <td style='border-width: 1pt; border-style:solid;'><p align='center' text-align='center;'>" + BSName + @"</p></td>
                                     </tr>";
                 #endregion
 
                 #region Row 4
                 emailbody += @" <tr style='height : 20pt'>
-                                    <td style='border-width: 1pt; border-style:solid;'> <b>"+BSType+@" Status</b></td>
+                                    <td style='border-width: 1pt; border-style:solid;'> <b>" + BSType + @" Status</b></td>
                                     <td style='border-width: 1pt; border-style:solid;'><p align='center' text-align='center;'>" + BSStatus + @"</p></td>";
 
                 if (Caf.Attributes.Contains("opp.alletech_redundancyrequired") && (bool)Caf.GetAttributeValue<AliasedValue>("opp.alletech_redundancyrequired").Value)
@@ -226,8 +226,84 @@ namespace NAVDOA
                                     </tr>";
                 #endregion
 
-                #region Checking Item consumptions
+                #region Checking Item consumptions: Old Code commented on 06-June-2021
 
+                //TempName = null;
+                //string Itemtable = "";
+                //fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                //                  <entity name='alletech_itemconsumption'>
+                //                    <attribute name='alletech_quantity' />
+                //                    <attribute name='alletech_actualquantityused' />
+                //                    <attribute name='alletech_subitem' />
+                //                    <attribute name='spectra_itemtype' />
+                //                    <order attribute='alletech_subitem' descending='false' />
+                //                    <order attribute='spectra_itemtype' descending='false' />
+                //                    <filter type='and'>";
+                //if (Type == "WCR")
+                //{
+                //    fetch += "<condition attribute='alletech_wcr' operator='eq' uiname='' uitype='alletech_wcr' value='" + Img.Id.ToString() + @"' />";
+                //}
+                //else
+                //{
+                //    fetch += "<condition attribute='spectra_installationreport' operator='eq' uiname='' uitype='alletech_installationform' value='" + Img.Id.ToString() + @"' />";
+                //}
+
+                //fetch += @"       </filter>
+                //                    <link-entity name='alletech_subitem' from='alletech_subitemid' to='alletech_subitem' visible='false' link-type='outer' alias='sub'>
+                //                      <attribute name='alletech_subitemcode' />
+                //                    </link-entity>
+                //                  </entity>
+                //                </fetch>";
+
+                //TempColl = service.RetrieveMultiple(new FetchExpression(fetch));
+
+                //if (TempColl.Entities.Count > 0)
+                //{
+                //    int count = TempColl.Entities.Count;
+                //    for (int i = 0; i < count; i++)
+                //    {
+                //        try
+                //        {
+                //            //if additional
+                //            if (TempColl.Entities[i].GetAttributeValue<OptionSetValue>("spectra_itemtype").Value == 111260001)
+                //            {
+                //                int qty = 0, conqty = 0, dev = 0;
+                //                string item = TempColl.Entities[i].GetAttributeValue<EntityReference>("alletech_subitem").Name;
+                //                string code = null;
+
+                //                if (TempColl.Entities[i].Attributes.Contains("sub.alletech_subitemcode"))
+                //                    code = (string)TempColl.Entities[i].GetAttributeValue<AliasedValue>("sub.alletech_subitemcode").Value;
+
+                //                if (i + 1 < count && item == TempColl.Entities[i + 1].GetAttributeValue<EntityReference>("alletech_subitem").Name)
+                //                {
+                //                    qty = TempColl.Entities[i + 1].GetAttributeValue<int>("alletech_actualquantityused");
+                //                }
+                //                else
+                //                {
+                //                    qty = 0;
+                //                }
+
+                //                conqty = qty + TempColl.Entities[i].GetAttributeValue<int>("alletech_actualquantityused");
+                //                dev = TempColl.Entities[i].GetAttributeValue<int>("alletech_actualquantityused");
+
+                //                Itemtable += @"<tr style='height : 20pt'>
+                //                           <td style='border-width: 1pt; border-style:solid;' colspan='2'><p align='center' text-align='center;'><b>" + item + @"</b></p></td>
+                //                           <td style='border-width: 1pt; border-style:solid;'><p align='center' text-align=' center;'>" + code + @"</p></td>
+                //                           <td style='border-width: 1pt; border-style:solid;'><p align='center' text-align=' center;'>" + qty + @"</p></td>
+                //                           <td style='border-width: 1pt; border-style:solid;'><p align='center' text-align=' center;'>" + conqty + @"</p></td>
+                //                           <td style='border-width: 1pt; border-style:solid;'><p align='center' text-align=' center;'>" + dev + @"</p></td>
+                //                           </tr>";
+                //            }
+                //        }
+                //        catch (Exception ex)
+                //        {
+
+                //        }
+                //    }
+                //}
+                #endregion
+
+                #region Checking Item consumptions: New Code created on 06-June-2021 by VLabs
                 TempName = null;
                 string Itemtable = "";
                 fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
@@ -236,8 +312,7 @@ namespace NAVDOA
                                     <attribute name='alletech_actualquantityused' />
                                     <attribute name='alletech_subitem' />
                                     <attribute name='spectra_itemtype' />
-                                    <order attribute='alletech_subitem' descending='false' />
-                                    <order attribute='spectra_itemtype' descending='false' />
+                                    <order attribute='createdon' descending='true' />
                                     <filter type='and'>";
                 if (Type == "WCR")
                 {
@@ -248,7 +323,8 @@ namespace NAVDOA
                     fetch += "<condition attribute='spectra_installationreport' operator='eq' uiname='' uitype='alletech_installationform' value='" + Img.Id.ToString() + @"' />";
                 }
 
-                fetch += @"       </filter>
+                fetch += @"       <condition attribute='spectra_itemtype' operator='eq' value='111260001' />
+                                    </filter>
                                     <link-entity name='alletech_subitem' from='alletech_subitemid' to='alletech_subitem' visible='false' link-type='outer' alias='sub'>
                                       <attribute name='alletech_subitemcode' />
                                     </link-entity>
@@ -259,48 +335,91 @@ namespace NAVDOA
 
                 if (TempColl.Entities.Count > 0)
                 {
+                    string _duplicate_Item_Name = string.Empty;
                     int count = TempColl.Entities.Count;
                     for (int i = 0; i < count; i++)
                     {
                         try
                         {
-                            //if additional
+                            #region New Code
                             if (TempColl.Entities[i].GetAttributeValue<OptionSetValue>("spectra_itemtype").Value == 111260001)
                             {
-                                int qty = 0, conqty = 0, dev = 0;
+                                int eQty = 0, consumedQty = 0, deviation = 0;
+                                string ItemCode = null;
                                 string item = TempColl.Entities[i].GetAttributeValue<EntityReference>("alletech_subitem").Name;
-                                string code = null;
 
-                                if (TempColl.Entities[i].Attributes.Contains("sub.alletech_subitemcode"))
-                                    code = (string)TempColl.Entities[i].GetAttributeValue<AliasedValue>("sub.alletech_subitemcode").Value;
-
-                                if (i + 1 < count && item == TempColl.Entities[i + 1].GetAttributeValue<EntityReference>("alletech_subitem").Name)
+                                if (_duplicate_Item_Name != item)
                                 {
-                                    qty = TempColl.Entities[i + 1].GetAttributeValue<int>("alletech_actualquantityused");
-                                }
-                                else
-                                {
-                                    qty = 0;
-                                }
+                                    if (TempColl.Entities[i].Attributes.Contains("sub.alletech_subitemcode"))
+                                        ItemCode = (string)TempColl.Entities[i].GetAttributeValue<AliasedValue>("sub.alletech_subitemcode").Value;
 
-                                conqty = qty + TempColl.Entities[i].GetAttributeValue<int>("alletech_actualquantityused");
-                                dev = TempColl.Entities[i].GetAttributeValue<int>("alletech_actualquantityused");
+                                    string ItemCodeCheck = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                                                      <entity name='alletech_itemconsumption'>
+                                                        <attribute name='createdon' />
+                                                        <attribute name='alletech_actualquantityused' />
+                                                        <attribute name='spectra_itemtype' />
+                                                        <attribute name='alletech_subitem' />
+                                                        <attribute name='alletech_itemconsumptionid' />
+                                                        <order attribute='spectra_itemtype' descending='false' />
+                                                        <filter type='and'>";
+                                    if (Type == "WCR")
+                                    {
+                                        ItemCodeCheck += "<condition attribute='alletech_wcr' operator='eq' uiname='' uitype='alletech_wcr' value='" + Img.Id.ToString() + @"' />";
+                                    }
+                                    else
+                                    {
+                                        ItemCodeCheck += "<condition attribute='spectra_installationreport' operator='eq' uiname='' uitype='alletech_installationform' value='" + Img.Id.ToString() + @"' />";
+                                    }
 
-                                Itemtable += @"<tr style='height : 20pt'>
-                                           <td style='border-width: 1pt; border-style:solid;' colspan='2'><p align='center' text-align='center;'><b>" + item + @"</b></p></td>
-                                           <td style='border-width: 1pt; border-style:solid;'><p align='center' text-align=' center;'>" + code + @"</p></td>
-                                           <td style='border-width: 1pt; border-style:solid;'><p align='center' text-align=' center;'>" + qty + @"</p></td>
-                                           <td style='border-width: 1pt; border-style:solid;'><p align='center' text-align=' center;'>" + conqty + @"</p></td>
-                                           <td style='border-width: 1pt; border-style:solid;'><p align='center' text-align=' center;'>" + dev + @"</p></td>
-                                           </tr>";
+                                    ItemCodeCheck += @" </filter>
+                                                        <link-entity name='alletech_subitem' from='alletech_subitemid' to='alletech_subitem' alias='ac'>
+                                                          <filter type='and'>
+                                                            <condition attribute='alletech_itemcodeinnav' operator='eq' value='" + ItemCode + @"' />
+                                                          </filter>
+                                                        </link-entity>
+                                                      </entity>
+                                                    </fetch>";
+                                    EntityCollection ItemCodeColl = service.RetrieveMultiple(new FetchExpression(ItemCodeCheck));
+                                    if (ItemCodeColl.Entities.Count > 0)
+                                    {
+                                        foreach (Entity _itemCode in ItemCodeColl.Entities)
+                                        {
+                                            if (_itemCode.Attributes.Contains("spectra_itemtype"))
+                                            {
+                                                if (_itemCode.GetAttributeValue<OptionSetValue>("spectra_itemtype").Value == 111260000)
+                                                {
+                                                    eQty = _itemCode.GetAttributeValue<int>("alletech_actualquantityused");
+                                                    consumedQty += eQty;
+                                                }
+                                                else
+                                                {
+                                                    eQty = 0;
+                                                    consumedQty += _itemCode.GetAttributeValue<int>("alletech_actualquantityused");
+                                                }
+                                            }
+                                        }
+                                        _duplicate_Item_Name = TempColl.Entities[i].GetAttributeValue<EntityReference>("alletech_subitem").Name;
+
+                                        deviation = consumedQty - eQty;
+                                        Itemtable += @"<tr style='height : 20pt'>
+                                                       <td style='border-width: 1pt; border-style:solid;' colspan='2'><p align='center' text-align='center;'><b>" + item + @"</b></p></td>
+                                                       <td style='border-width: 1pt; border-style:solid;'><p align='center' text-align=' center;'>" + ItemCode + @"</p></td>
+                                                       <td style='border-width: 1pt; border-style:solid;'><p align='center' text-align=' center;'>" + eQty + @"</p></td>
+                                                       <td style='border-width: 1pt; border-style:solid;'><p align='center' text-align=' center;'>" + consumedQty + @"</p></td>
+                                                       <td style='border-width: 1pt; border-style:solid;'><p align='center' text-align=' center;'>" + deviation + @"</p></td>
+                                                       </tr>";
+                                    }
+                                }
                             }
+                            #endregion
                         }
                         catch (Exception ex)
                         {
-
+                            throw new InvalidPluginExecutionException("Error in Item Consumption construct: " + ex.Message);
                         }
                     }
                 }
+
                 #endregion
 
                 #region Checking Installation Item
@@ -366,7 +485,7 @@ namespace NAVDOA
                             }
                             catch (Exception ex)
                             {
-
+                                throw new InvalidPluginExecutionException("Error in Installation item construction: " + ex.Message);
                             }
                         }
                     }

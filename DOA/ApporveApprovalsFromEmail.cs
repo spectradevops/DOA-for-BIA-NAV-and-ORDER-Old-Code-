@@ -53,6 +53,7 @@ namespace SpectractNet.Plugins
                                             trace.Trace(((EntityReference)entApproval["ownerid"]).Id.ToString());
 
                                             if (entForm.Contains("partyid") && ((EntityReference)entForm["partyid"]).Id.ToString() == ((EntityReference)entApproval["ownerid"]).Id.ToString())
+                                            //if (entForm.Contains("partyid") && ((EntityReference)entForm["partyid"]).Name.ToString() == ((EntityReference)entApproval["ownerid"]).Name.ToString())
                                             {
                                                 trace.Trace("checking");
 
