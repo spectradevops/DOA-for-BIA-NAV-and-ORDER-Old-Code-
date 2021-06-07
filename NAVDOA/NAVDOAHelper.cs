@@ -422,31 +422,102 @@ namespace NAVDOA
 
                 #endregion
 
-                #region Checking Installation Item
+                #region Checking Installation Item:  Old Code commented on 07-June-2021 byVLabs
+                //if (Type == "IR")
+                //{
+                //    TempName = null;
+
+                //    fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                //                  <entity name='alletech_installationitem'>
+                //                    <attribute name='spectra_quantityir' />
+                //                    <attribute name='alletech_subitem' />
+                //                    <attribute name='spectra_itemtype' />
+                //                    <order attribute='alletech_subitem' descending='false' />
+                //                    <order attribute='spectra_itemtype' descending='false' />
+                //                    <filter type='and'>
+                //                      <condition attribute='alletech_installationform' operator='eq' uiname='' uitype='alletech_installationform' value='" + Img.Id.ToString() + @"' />
+                //                    </filter>
+                //                    <link-entity name='alletech_subitem' from='alletech_subitemid' to='alletech_subitem' visible='false' link-type='outer' alias='sub'>
+                //                      <attribute name='alletech_subitemcode' />
+                //                    </link-entity>
+                //                  </entity>
+                //                </fetch>";
+
+                //    TempColl = service.RetrieveMultiple(new FetchExpression(fetch));
+
+                //    if (TempColl.Entities.Count > 0)
+                //    {
+                //        int count = TempColl.Entities.Count;
+                //        for (int i = 0; i < count; i++)
+                //        {
+                //            try
+                //            {
+                //                //if additional
+                //                if (TempColl.Entities[i].GetAttributeValue<OptionSetValue>("spectra_itemtype").Value == 111260001)
+                //                {
+                //                    int qty = 0, conqty = 0, dev = 0;
+                //                    string item = TempColl.Entities[i].GetAttributeValue<EntityReference>("alletech_subitem").Name;
+                //                    string code = null;
+
+                //                    if (TempColl.Entities[i].Attributes.Contains("sub.alletech_subitemcode"))
+                //                        code = (string)TempColl.Entities[i].GetAttributeValue<AliasedValue>("sub.alletech_subitemcode").Value;
+
+                //                    if (i + 1 < count && item == TempColl.Entities[i + 1].GetAttributeValue<EntityReference>("alletech_subitem").Name)
+                //                    {
+                //                        qty = TempColl.Entities[i + 1].GetAttributeValue<int>("spectra_quantityir");
+                //                    }
+                //                    else
+                //                    {
+                //                        qty = 0;
+                //                    }
+
+                //                    conqty = qty + TempColl.Entities[i].GetAttributeValue<int>("spectra_quantityir");
+                //                    dev = TempColl.Entities[i].GetAttributeValue<int>("spectra_quantityir");
+
+                //                    Itemtable += @"<tr style='height : 20pt'>
+                //                           <td style='border-width: 1pt; border-style:solid;' colspan='2'><p align='center' text-align='center;'><b>" + item + @"</b></p></td>
+                //                           <td style='border-width: 1pt; border-style:solid;'><p align='center' text-align=' center;'>" + code + @"</p></td>
+                //                           <td style='border-width: 1pt; border-style:solid;'><p align='center' text-align=' center;'>" + qty + @"</p></td>
+                //                           <td style='border-width: 1pt; border-style:solid;'><p align='center' text-align=' center;'>" + conqty + @"</p></td>
+                //                           <td style='border-width: 1pt; border-style:solid;'><p align='center' text-align=' center;'>" + dev + @"</p></td>
+                //                           </tr>";
+                //                }
+                //            }
+                //            catch (Exception ex)
+                //            {
+                //                throw new InvalidPluginExecutionException("Error in Installation item construction: " + ex.Message);
+                //            }
+                //        }
+                //    }
+                //}
+
+                #endregion
+
+                #region Checking Installation Item: New Code on 07-June-2021 by VLabs
                 if (Type == "IR")
                 {
                     TempName = null;
-
                     fetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
-                                  <entity name='alletech_installationitem'>
-                                    <attribute name='spectra_quantityir' />
-                                    <attribute name='alletech_subitem' />
-                                    <attribute name='spectra_itemtype' />
-                                    <order attribute='alletech_subitem' descending='false' />
-                                    <order attribute='spectra_itemtype' descending='false' />
-                                    <filter type='and'>
-                                      <condition attribute='alletech_installationform' operator='eq' uiname='' uitype='alletech_installationform' value='" + Img.Id.ToString() + @"' />
-                                    </filter>
-                                    <link-entity name='alletech_subitem' from='alletech_subitemid' to='alletech_subitem' visible='false' link-type='outer' alias='sub'>
-                                      <attribute name='alletech_subitemcode' />
-                                    </link-entity>
-                                  </entity>
-                                </fetch>";
-
+                              <entity name='alletech_installationitem'>
+                                <attribute name='createdon' />
+                                <attribute name='spectra_itemtype' />
+                                <attribute name='alletech_installationitemid' />
+                                <attribute name='alletech_subitem' />
+                                <attribute name='spectra_quantityir' />
+                                <order attribute='createdon' descending='true' />
+                                <filter type='and'>
+                                  <condition attribute='spectra_itemtype' operator='eq' value='111260001' />
+                                  <condition attribute='alletech_installationform' operator='eq' value='" + Img.Id.ToString() + @"' />
+                                </filter>
+                                <link-entity name='alletech_subitem' from='alletech_subitemid' to='alletech_subitem' visible='false' link-type='outer' alias='sub'>
+                                  <attribute name='alletech_itemcodeinnav' />
+                                </link-entity>
+                              </entity>
+                            </fetch>";
                     TempColl = service.RetrieveMultiple(new FetchExpression(fetch));
-
                     if (TempColl.Entities.Count > 0)
                     {
+                        string _duplicate_InstallationItem_Name = string.Empty;
                         int count = TempColl.Entities.Count;
                         for (int i = 0; i < count; i++)
                         {
@@ -455,42 +526,72 @@ namespace NAVDOA
                                 //if additional
                                 if (TempColl.Entities[i].GetAttributeValue<OptionSetValue>("spectra_itemtype").Value == 111260001)
                                 {
-                                    int qty = 0, conqty = 0, dev = 0;
+                                    int eQty = 0, consumedQty = 0, deviation = 0;
+                                    string ItemCode = null;
                                     string item = TempColl.Entities[i].GetAttributeValue<EntityReference>("alletech_subitem").Name;
-                                    string code = null;
-
-                                    if (TempColl.Entities[i].Attributes.Contains("sub.alletech_subitemcode"))
-                                        code = (string)TempColl.Entities[i].GetAttributeValue<AliasedValue>("sub.alletech_subitemcode").Value;
-
-                                    if (i + 1 < count && item == TempColl.Entities[i + 1].GetAttributeValue<EntityReference>("alletech_subitem").Name)
+                                    if (_duplicate_InstallationItem_Name != item)
                                     {
-                                        qty = TempColl.Entities[i + 1].GetAttributeValue<int>("spectra_quantityir");
-                                    }
-                                    else
-                                    {
-                                        qty = 0;
-                                    }
+                                        if (TempColl.Entities[i].Attributes.Contains("sub.alletech_itemcodeinnav"))
+                                            ItemCode = (string)TempColl.Entities[i].GetAttributeValue<AliasedValue>("sub.alletech_itemcodeinnav").Value;
+                                        string _installationFetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                                                                      <entity name='alletech_installationitem'>
+                                                                        <attribute name='createdon' />
+                                                                        <attribute name='spectra_itemtype' />
+                                                                        <attribute name='alletech_installationitemid' />
+                                                                        <attribute name='alletech_subitem' />
+                                                                        <attribute name='spectra_quantityir' />
+                                                                        <order attribute='spectra_itemtype' descending='false' />
+                                                                        <filter type='and'>
+                                                                          <condition attribute='alletech_installationform' operator='eq' value='" + Img.Id.ToString() + @"' />
+                                                                        </filter>
+                                                                        <link-entity name='alletech_subitem' from='alletech_subitemid' to='alletech_subitem' alias='sub'>
+                                                                          <attribute name='alletech_itemcodeinnav' />
+                                                                          <filter type='and'>
+                                                                            <condition attribute='alletech_itemcodeinnav' operator='eq' value='" + ItemCode + @"' />
+                                                                          </filter>
+                                                                        </link-entity>
+                                                                      </entity>
+                                                                    </fetch>";
+                                        EntityCollection _installationItemCodeColl = service.RetrieveMultiple(new FetchExpression(_installationFetch));
+                                        if (_installationItemCodeColl.Entities.Count > 0)
+                                        {
+                                            foreach (Entity _itemCode in _installationItemCodeColl.Entities)
+                                            {
+                                                if (_itemCode.Attributes.Contains("spectra_itemtype"))
+                                                {
+                                                    if (_itemCode.GetAttributeValue<OptionSetValue>("spectra_itemtype").Value == 111260000)
+                                                    {
+                                                        eQty = _itemCode.GetAttributeValue<int>("spectra_quantityir");
+                                                        consumedQty += eQty;
+                                                    }
+                                                    else
+                                                    {
+                                                        eQty = 0;
+                                                        consumedQty += _itemCode.GetAttributeValue<int>("spectra_quantityir");
+                                                    }
+                                                }
+                                            }
+                                            _duplicate_InstallationItem_Name = TempColl.Entities[i].GetAttributeValue<EntityReference>("alletech_subitem").Name;
 
-                                    conqty = qty + TempColl.Entities[i].GetAttributeValue<int>("spectra_quantityir");
-                                    dev = TempColl.Entities[i].GetAttributeValue<int>("spectra_quantityir");
-
-                                    Itemtable += @"<tr style='height : 20pt'>
-                                           <td style='border-width: 1pt; border-style:solid;' colspan='2'><p align='center' text-align='center;'><b>" + item + @"</b></p></td>
-                                           <td style='border-width: 1pt; border-style:solid;'><p align='center' text-align=' center;'>" + code + @"</p></td>
-                                           <td style='border-width: 1pt; border-style:solid;'><p align='center' text-align=' center;'>" + qty + @"</p></td>
-                                           <td style='border-width: 1pt; border-style:solid;'><p align='center' text-align=' center;'>" + conqty + @"</p></td>
-                                           <td style='border-width: 1pt; border-style:solid;'><p align='center' text-align=' center;'>" + dev + @"</p></td>
-                                           </tr>";
+                                            deviation = consumedQty - eQty;
+                                            Itemtable += @"<tr style='height : 20pt'>
+                                                       <td style='border-width: 1pt; border-style:solid;' colspan='2'><p align='center' text-align='center;'><b>" + item + @"</b></p></td>
+                                                       <td style='border-width: 1pt; border-style:solid;'><p align='center' text-align=' center;'>" + ItemCode + @"</p></td>
+                                                       <td style='border-width: 1pt; border-style:solid;'><p align='center' text-align=' center;'>" + eQty + @"</p></td>
+                                                       <td style='border-width: 1pt; border-style:solid;'><p align='center' text-align=' center;'>" + consumedQty + @"</p></td>
+                                                       <td style='border-width: 1pt; border-style:solid;'><p align='center' text-align=' center;'>" + deviation + @"</p></td>
+                                                       </tr>";
+                                        }
+                                    }
                                 }
                             }
                             catch (Exception ex)
                             {
-                                throw new InvalidPluginExecutionException("Error in Installation item construction: " + ex.Message);
+                                throw new InvalidPluginExecutionException("Error in Installation Item Quantity adding in DOA: " + ex.Message);
                             }
                         }
                     }
                 }
-
                 #endregion
 
                 emailbody += Itemtable;//Items
