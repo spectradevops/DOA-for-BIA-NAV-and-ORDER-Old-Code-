@@ -312,7 +312,7 @@ namespace NAVDOA
                                     <attribute name='alletech_actualquantityused' />
                                     <attribute name='alletech_subitem' />
                                     <attribute name='spectra_itemtype' />
-                                    <order attribute='createdon' descending='true' />
+                                    <order attribute='alletech_subitem' descending='false' />
                                     <filter type='and'>";
                 if (Type == "WCR")
                 {
@@ -344,7 +344,7 @@ namespace NAVDOA
                             #region New Code
                             if (TempColl.Entities[i].GetAttributeValue<OptionSetValue>("spectra_itemtype").Value == 111260001)
                             {
-                                int eQty = 0, consumedQty = 0, deviation = 0;
+                                int eQty = 0, additional = 0, consumedQty = 0, deviation = 0;
                                 string ItemCode = null;
                                 string item = TempColl.Entities[i].GetAttributeValue<EntityReference>("alletech_subitem").Name;
 
@@ -382,33 +382,41 @@ namespace NAVDOA
                                     EntityCollection ItemCodeColl = service.RetrieveMultiple(new FetchExpression(ItemCodeCheck));
                                     if (ItemCodeColl.Entities.Count > 0)
                                     {
-                                        foreach (Entity _itemCode in ItemCodeColl.Entities)
+                                        foreach (Entity _default in ItemCodeColl.Entities)
                                         {
-                                            if (_itemCode.Attributes.Contains("spectra_itemtype"))
+                                            if (_default.Attributes.Contains("spectra_itemtype"))
                                             {
-                                                if (_itemCode.GetAttributeValue<OptionSetValue>("spectra_itemtype").Value == 111260000)
+                                                if (_default.GetAttributeValue<OptionSetValue>("spectra_itemtype").Value == 111260000)
                                                 {
-                                                    eQty = _itemCode.GetAttributeValue<int>("alletech_actualquantityused");
-                                                    consumedQty += eQty;
-                                                }
-                                                else
-                                                {
-                                                    eQty = 0;
-                                                    consumedQty += _itemCode.GetAttributeValue<int>("alletech_actualquantityused");
+                                                    eQty += _default.GetAttributeValue<int>("alletech_actualquantityused");
+                                                    //consumedQty += eQty;
                                                 }
                                             }
                                         }
-                                        _duplicate_Item_Name = TempColl.Entities[i].GetAttributeValue<EntityReference>("alletech_subitem").Name;
+                                        foreach (Entity _additional in ItemCodeColl.Entities)
+                                        {
+                                            if (_additional.Attributes.Contains("spectra_itemtype"))
+                                            {
+                                                if (_additional.GetAttributeValue<OptionSetValue>("spectra_itemtype").Value == 111260001)
+                                                {
+                                                    additional += _additional.GetAttributeValue<int>("alletech_actualquantityused");
+                                                    //consumedQty += eQty;
+                                                }
+                                            }
+                                        }
 
-                                        deviation = consumedQty - eQty;
-                                        Itemtable += @"<tr style='height : 20pt'>
+                                    }
+                                    _duplicate_Item_Name = TempColl.Entities[i].GetAttributeValue<EntityReference>("alletech_subitem").Name;
+                                    consumedQty = eQty + additional;
+                                    deviation = consumedQty - eQty;
+                                    Itemtable += @"<tr style='height : 20pt'>
                                                        <td style='border-width: 1pt; border-style:solid;' colspan='2'><p align='center' text-align='center;'><b>" + item + @"</b></p></td>
                                                        <td style='border-width: 1pt; border-style:solid;'><p align='center' text-align=' center;'>" + ItemCode + @"</p></td>
                                                        <td style='border-width: 1pt; border-style:solid;'><p align='center' text-align=' center;'>" + eQty + @"</p></td>
                                                        <td style='border-width: 1pt; border-style:solid;'><p align='center' text-align=' center;'>" + consumedQty + @"</p></td>
                                                        <td style='border-width: 1pt; border-style:solid;'><p align='center' text-align=' center;'>" + deviation + @"</p></td>
                                                        </tr>";
-                                    }
+
                                 }
                             }
                             #endregion
@@ -526,7 +534,7 @@ namespace NAVDOA
                                 //if additional
                                 if (TempColl.Entities[i].GetAttributeValue<OptionSetValue>("spectra_itemtype").Value == 111260001)
                                 {
-                                    int eQty = 0, consumedQty = 0, deviation = 0;
+                                    int eQty = 0, additional = 0, consumedQty = 0, deviation = 0;
                                     string ItemCode = null;
                                     string item = TempColl.Entities[i].GetAttributeValue<EntityReference>("alletech_subitem").Name;
                                     if (_duplicate_InstallationItem_Name != item)
@@ -555,24 +563,42 @@ namespace NAVDOA
                                         EntityCollection _installationItemCodeColl = service.RetrieveMultiple(new FetchExpression(_installationFetch));
                                         if (_installationItemCodeColl.Entities.Count > 0)
                                         {
-                                            foreach (Entity _itemCode in _installationItemCodeColl.Entities)
+                                            foreach (Entity _default in _installationItemCodeColl.Entities)
                                             {
-                                                if (_itemCode.Attributes.Contains("spectra_itemtype"))
+                                                if (_default.Attributes.Contains("spectra_itemtype"))
                                                 {
-                                                    if (_itemCode.GetAttributeValue<OptionSetValue>("spectra_itemtype").Value == 111260000)
+                                                    if (_default.GetAttributeValue<OptionSetValue>("spectra_itemtype").Value == 111260000)
                                                     {
-                                                        eQty = _itemCode.GetAttributeValue<int>("spectra_quantityir");
-                                                        consumedQty += eQty;
-                                                    }
-                                                    else
-                                                    {
-                                                        eQty = 0;
-                                                        consumedQty += _itemCode.GetAttributeValue<int>("spectra_quantityir");
+                                                        eQty += _default.GetAttributeValue<int>("spectra_quantityir");
                                                     }
                                                 }
                                             }
-                                            _duplicate_InstallationItem_Name = TempColl.Entities[i].GetAttributeValue<EntityReference>("alletech_subitem").Name;
+                                            foreach (Entity _additional in _installationItemCodeColl.Entities)
+                                            {
+                                                if (_additional.Attributes.Contains("spectra_itemtype"))
+                                                {
+                                                    if (_additional.GetAttributeValue<OptionSetValue>("spectra_itemtype").Value == 111260001)
+                                                    {
+                                                        additional += _additional.GetAttributeValue<int>("spectra_quantityir");
+                                                    }
+                                                }
 
+                                                //if (_itemCode.Attributes.Contains("spectra_itemtype"))
+                                                //{
+                                                //    if (_itemCode.GetAttributeValue<OptionSetValue>("spectra_itemtype").Value == 111260000)
+                                                //    {
+                                                //        eQty += _itemCode.GetAttributeValue<int>("spectra_quantityir");
+                                                //        consumedQty += eQty;
+                                                //    }
+                                                //    else
+                                                //    {
+                                                //        eQty = 0;
+                                                //        consumedQty += _itemCode.GetAttributeValue<int>("spectra_quantityir");
+                                                //    }
+                                                //}
+                                            }
+                                            _duplicate_InstallationItem_Name = TempColl.Entities[i].GetAttributeValue<EntityReference>("alletech_subitem").Name;
+                                            consumedQty = eQty + additional;
                                             deviation = consumedQty - eQty;
                                             Itemtable += @"<tr style='height : 20pt'>
                                                        <td style='border-width: 1pt; border-style:solid;' colspan='2'><p align='center' text-align='center;'><b>" + item + @"</b></p></td>
