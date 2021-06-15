@@ -512,7 +512,7 @@ namespace NAVDOA
                                 <attribute name='alletech_installationitemid' />
                                 <attribute name='alletech_subitem' />
                                 <attribute name='spectra_quantityir' />
-                                <order attribute='createdon' descending='true' />
+                                <order attribute='alletech_subitem' descending='false' />
                                 <filter type='and'>
                                   <condition attribute='spectra_itemtype' operator='eq' value='111260001' />
                                   <condition attribute='alletech_installationform' operator='eq' value='" + Img.Id.ToString() + @"' />
