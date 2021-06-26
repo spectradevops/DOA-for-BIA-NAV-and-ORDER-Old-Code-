@@ -326,7 +326,7 @@ namespace NAVDOA
                 fetch += @"       <condition attribute='spectra_itemtype' operator='eq' value='111260001' />
                                     </filter>
                                     <link-entity name='alletech_subitem' from='alletech_subitemid' to='alletech_subitem' visible='false' link-type='outer' alias='sub'>
-                                      <attribute name='alletech_subitemcode' />
+                                      <attribute name='alletech_itemcodeinnav' />
                                     </link-entity>
                                   </entity>
                                 </fetch>";
@@ -350,8 +350,8 @@ namespace NAVDOA
 
                                 if (_duplicate_Item_Name != item)
                                 {
-                                    if (TempColl.Entities[i].Attributes.Contains("sub.alletech_subitemcode"))
-                                        ItemCode = (string)TempColl.Entities[i].GetAttributeValue<AliasedValue>("sub.alletech_subitemcode").Value;
+                                    if (TempColl.Entities[i].Attributes.Contains("sub.alletech_itemcodeinnav"))
+                                        ItemCode = (string)TempColl.Entities[i].GetAttributeValue<AliasedValue>("sub.alletech_itemcodeinnav").Value;
 
                                     string ItemCodeCheck = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                                                       <entity name='alletech_itemconsumption'>
