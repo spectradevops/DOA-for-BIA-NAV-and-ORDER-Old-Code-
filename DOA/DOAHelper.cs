@@ -36,7 +36,6 @@ namespace DOA
                         }
                     }
 
-
                     #region Constructing HTML
                     emailbody = "<html><body><div>";
                     emailbody += "Hi " + Approver + ",<br/><br/>";
@@ -204,7 +203,7 @@ namespace DOA
                             <p align='center' text-align: center;'>" + TempName + @"</p>
                         </td>";
 
-                        if (TempName2 == "Non-RFS")
+                        if (TempName2 == "Non-RFS" || ((TempName2 == "B-RFS" || TempName2 == "P-RFS" || TempName2 == "C-RFS" || TempName2 == "A-RFS Type1" || TempName2 == "A-RFS Type2") && TempName == "Yes")) // Change = 1 Added A/B/C/P RFS status condition done by Madhu Vlabs for TPF flow on 07-08-2021
                         {
                             decimal amt = 0;
                             string[] feasiblityattr = { "alletech_feasibilityid" };
@@ -214,14 +213,17 @@ namespace DOA
                             {
                                 foreach (Entity feasible in feasibleColl.Entities)
                                 {
-                                    string[] Prjattr = { "alletech_pjcid", "alletech_totalcalculatedcost" };
+                                    string[] Prjattr = { "alletech_pjcid", "alletech_totalcalculatedcost", "spectra_partnerselected" }; // Change = 2 Added Partner Selected Attr in the column done by Madhu Vlabs for TPF flow on 07-08-2021
                                     EntityCollection ProjcstColl = GetResultsByAttribute(service, "alletech_projectestimationcost", "alletech_pjcid", feasible.Id.ToString(), Prjattr);
                                     if (ProjcstColl.Entities.Count > 0)
                                     {
                                         foreach (Entity prj in ProjcstColl.Entities)
                                         {
-                                            if (prj.Attributes.Contains("alletech_totalcalculatedcost"))
-                                                amt += prj.GetAttributeValue<Money>("alletech_totalcalculatedcost").Value;
+                                            if (prj.GetAttribute‌​‌​Value<bool>("spectra_partnerselected") == true) // Change = 3  Allow only Partner Selected YES done by Madhu Vlabs for TPF flow on 07-08-2021
+                                            {
+                                                if (prj.Attributes.Contains("alletech_totalcalculatedcost"))
+                                                    amt = prj.GetAttributeValue<Money>("alletech_totalcalculatedcost").Value;
+                                            }
                                         }
                                     }
                                     if (TempName == "No")
@@ -432,7 +434,8 @@ namespace DOA
                             <p align='center' text-align: center;'>" + TempName + @"</p>
                         </td>";
 
-                        if (TempName2 == "Non-RFS")
+
+                        if (TempName2 == "Non-RFS" || ((TempName2 == "B-RFS" || TempName2 == "P-RFS" || TempName2 == "C-RFS" || TempName2 == "A-RFS Type1" || TempName2 == "A-RFS Type2") && TempName == "Yes")) // Change = 1 Added A/B/C/P RFS status condition done by Madhu Vlabs for TPF flow on 07-08-2021
                         {
                             decimal amt = 0;
                             string[] feasiblityattr = { "alletech_feasibilityid" };
@@ -442,14 +445,17 @@ namespace DOA
                             {
                                 foreach (Entity feasible in feasibleColl.Entities)
                                 {
-                                    string[] Prjattr = { "alletech_pjcid", "alletech_totalcalculatedcost" };
+                                    string[] Prjattr = { "alletech_pjcid", "alletech_totalcalculatedcost", "spectra_partnerselected" }; // Change = 2 Added Partner Selected Attr in the column done by Madhu Vlabs for TPF flow on 07-08-2021
                                     EntityCollection ProjcstColl = GetResultsByAttribute(service, "alletech_projectestimationcost", "alletech_pjcid", feasible.Id.ToString(), Prjattr);
                                     if (ProjcstColl.Entities.Count > 0)
                                     {
                                         foreach (Entity prj in ProjcstColl.Entities)
                                         {
-                                            if (prj.Attributes.Contains("alletech_totalcalculatedcost"))
-                                                amt += prj.GetAttributeValue<Money>("alletech_totalcalculatedcost").Value;
+                                            if (prj.GetAttribute‌​‌​Value<bool>("spectra_partnerselected") == true) // Change = 3  Allow only Partner Selected YES done by Madhu Vlabs for TPF flow on 07-08-2021
+                                            {
+                                                if (prj.Attributes.Contains("alletech_totalcalculatedcost"))
+                                                    amt = prj.GetAttributeValue<Money>("alletech_totalcalculatedcost").Value;
+                                            }
                                         }
                                     }
                                     if (TempName == "No")
