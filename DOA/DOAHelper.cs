@@ -203,7 +203,7 @@ namespace DOA
                             <p align='center' text-align: center;'>" + TempName + @"</p>
                         </td>";
 
-                        if (TempName2 == "Non-RFS" || ((TempName2 == "B-RFS" || TempName2 == "P-RFS" || TempName2 == "C-RFS" || TempName2 == "A-RFS Type1" || TempName2 == "A-RFS Type2") && TempName == "Yes")) // Change = 1 Added A/B/C/P RFS status condition done by Madhu Vlabs for TPF flow on 07-08-2021
+                        if (TempName2 == "Non-RFS" || TempName2 == "TP-F" || ((TempName2 == "B-RFS" || TempName2 == "P-RFS" || TempName2 == "C-RFS" || TempName2 == "A-RFS Type1" || TempName2 == "A-RFS Type2") && TempName == "Yes")) // Change = 1 Added A/B/C/P RFS status condition done by Madhu Vlabs for TPF flow on 07-08-2021
                         {
                             decimal amt = 0;
                             string[] feasiblityattr = { "alletech_feasibilityid" };
@@ -328,7 +328,7 @@ namespace DOA
                             <p align='center' text-align: center;'>" + TempName + @"</p>
                         </td>";
 
-                        if (TempName2 == "Non-RFS")
+                        if (TempName2 == "Non-RFS" || TempName2 == "TP-F" || ((TempName2 == "B-RFS" || TempName2 == "P-RFS" || TempName2 == "C-RFS" || TempName2 == "A-RFS Type1" || TempName2 == "A-RFS Type2") && TempName == "Yes"))
                         {
                             decimal amt = 0;
                             string[] feasiblityattr = { "alletech_feasibilityid" };
@@ -435,7 +435,7 @@ namespace DOA
                         </td>";
 
 
-                        if (TempName2 == "Non-RFS" || ((TempName2 == "B-RFS" || TempName2 == "P-RFS" || TempName2 == "C-RFS" || TempName2 == "A-RFS Type1" || TempName2 == "A-RFS Type2") && TempName == "Yes")) // Change = 1 Added A/B/C/P RFS status condition done by Madhu Vlabs for TPF flow on 07-08-2021
+                        if (TempName2 == "Non-RFS" || TempName2 == "TP-F" || ((TempName2 == "B-RFS" || TempName2 == "P-RFS" || TempName2 == "C-RFS" || TempName2 == "A-RFS Type1" || TempName2 == "A-RFS Type2") && TempName == "Yes")) // Change = 1 Added A/B/C/P RFS status condition done by Madhu Vlabs for TPF flow on 07-08-2021
                         {
                             decimal amt = 0;
                             string[] feasiblityattr = { "alletech_feasibilityid" };
