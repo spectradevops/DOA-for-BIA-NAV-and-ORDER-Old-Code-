@@ -434,46 +434,155 @@ namespace DOA
                             <p align='center' text-align: center;'>" + TempName + @"</p>
                         </td>";
 
+                        #region Code commented on 8th Sep 2021
+                        //        if (TempName2 == "Non-RFS" || TempName2 == "TP-F" || ((TempName2 == "B-RFS" || TempName2 == "P-RFS" || TempName2 == "C-RFS" || TempName2 == "A-RFS Type1" || TempName2 == "A-RFS Type2") && TempName == "Yes")) // Change = 1 Added A/B/C/P RFS status condition done by Madhu Vlabs for TPF flow on 07-08-2021
+                        //        {
+                        //            decimal amt = 0;
+                        //            string[] feasiblityattr = { "alletech_feasibilityid" };
+                        //            EntityCollection feasibleColl = GetResultsByAttribute(service, "alletech_feasibility", "alletech_opportunity", opptyid, feasiblityattr);
 
+                        //            if (feasibleColl.Entities.Count > 0)
+                        //            {
+                        //                foreach (Entity feasible in feasibleColl.Entities)
+                        //                {
+                        //                    string[] Prjattr = { "alletech_pjcid", "alletech_totalcalculatedcost", "spectra_partnerselected" }; // Change = 2 Added Partner Selected Attr in the column done by Madhu Vlabs for TPF flow on 07-08-2021
+                        //                    EntityCollection ProjcstColl = GetResultsByAttribute(service, "alletech_projectestimationcost", "alletech_pjcid", feasible.Id.ToString(), Prjattr);
+                        //                    if (ProjcstColl.Entities.Count > 0)
+                        //                    {
+                        //                        foreach (Entity prj in ProjcstColl.Entities)
+                        //                        {
+                        //                            if (prj.GetAttribute‌​‌​Value<bool>("spectra_partnerselected") == true) // Change = 3  Allow only Partner Selected YES done by Madhu Vlabs for TPF flow on 07-08-2021
+                        //                            {
+                        //                                if (prj.Attributes.Contains("alletech_totalcalculatedcost"))
+                        //                                    amt = prj.GetAttributeValue<Money>("alletech_totalcalculatedcost").Value;
+                        //                            }
+                        //                        }
+                        //                    }
+                        //                    if (TempName == "No")
+                        //                        break;
+                        //                }
+                        //            }
+                        //            TempName = amt.ToString();
+                        //        }
+                        //        else
+                        //            TempName = null;
+
+                        //        emailbody += @" <td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 98pt; height: 15pt; '>
+                        //        <p><b>Connectivity Cost</b></p>
+                        //    </td>
+                        //    <td width='360' style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none; border-color: rgb(0, 0, 0) black windowtext rgb(0, 0, 0); padding: 0in 5.4pt; width: 3.75in; height: 15pt; ' colspan='3'>
+                        //        <p align='center' text-align: center;' style='font-size: 8pt;'>" + TempName + @"</p>
+                        //    </td>
+                        //</tr>";
+                        #endregion
+
+                        #region New code on 09-Sep-2021
+                        string primary = string.Empty, finalPrimary = string.Empty, finalRedundant = string.Empty, redundant = string.Empty, primary_amount = string.Empty, redundant_amount = string.Empty, IspName = string.Empty, IspNameRedundant = string.Empty;
+                        int primaryValue = 0, redundantValue = 0;
                         if (TempName2 == "Non-RFS" || TempName2 == "TP-F" || ((TempName2 == "B-RFS" || TempName2 == "P-RFS" || TempName2 == "C-RFS" || TempName2 == "A-RFS Type1" || TempName2 == "A-RFS Type2") && TempName == "Yes")) // Change = 1 Added A/B/C/P RFS status condition done by Madhu Vlabs for TPF flow on 07-08-2021
                         {
-                            decimal amt = 0;
-                            string[] feasiblityattr = { "alletech_feasibilityid" };
+                           // decimal amt = 0;
+                            string[] feasiblityattr = { "alletech_feasibilityid", "alletech_routetype", "alletech_thirdpartyinstallation" };
                             EntityCollection feasibleColl = GetResultsByAttribute(service, "alletech_feasibility", "alletech_opportunity", opptyid, feasiblityattr);
 
                             if (feasibleColl.Entities.Count > 0)
                             {
                                 foreach (Entity feasible in feasibleColl.Entities)
                                 {
-                                    string[] Prjattr = { "alletech_pjcid", "alletech_totalcalculatedcost", "spectra_partnerselected" }; // Change = 2 Added Partner Selected Attr in the column done by Madhu Vlabs for TPF flow on 07-08-2021
-                                    EntityCollection ProjcstColl = GetResultsByAttribute(service, "alletech_projectestimationcost", "alletech_pjcid", feasible.Id.ToString(), Prjattr);
-                                    if (ProjcstColl.Entities.Count > 0)
+                                    if (feasible.Attributes.Contains("alletech_routetype"))
                                     {
-                                        foreach (Entity prj in ProjcstColl.Entities)
+                                        if (feasible.GetAttribute‌​‌​Value<bool>("alletech_routetype") == false)
                                         {
-                                            if (prj.GetAttribute‌​‌​Value<bool>("spectra_partnerselected") == true) // Change = 3  Allow only Partner Selected YES done by Madhu Vlabs for TPF flow on 07-08-2021
+                                            primary = "Primary";
+                                            primaryValue = 1;
+                                            #region Current running code
+                                            string[] Prjattr = { "alletech_pjcid", "alletech_totalcalculatedcost", "spectra_partnerselected", "spectra_ispname" }; // Change = 2 Added Partner Selected Attr in the column done by Madhu Vlabs for TPF flow on 07-08-2021
+                                            EntityCollection ProjcstColl = GetResultsByAttribute(service, "alletech_projectestimationcost", "alletech_pjcid", feasible.Id.ToString(), Prjattr);
+                                            if (ProjcstColl.Entities.Count > 0)
                                             {
-                                                if (prj.Attributes.Contains("alletech_totalcalculatedcost"))
-                                                    amt = prj.GetAttributeValue<Money>("alletech_totalcalculatedcost").Value;
+                                                foreach (Entity prj in ProjcstColl.Entities)
+                                                {
+                                                    if (feasible.Attributes.Contains("alletech_thirdpartyinstallation"))
+                                                    {
+                                                        if (feasible.GetAttribute‌​‌​Value<bool>("alletech_thirdpartyinstallation") == true)
+                                                        {
+                                                            if (prj.GetAttribute‌​‌​Value<bool>("spectra_partnerselected") == true) // Change = 3  Allow only Partner Selected YES done by Madhu Vlabs for TPF flow on 07-08-2021
+                                                            {
+                                                                if (prj.Attributes.Contains("alletech_totalcalculatedcost"))
+                                                                    primary_amount += prj.GetAttributeValue<Money>("alletech_totalcalculatedcost").Value.ToString();
+                                                                if (prj.Attributes.Contains("spectra_ispname"))
+                                                                    IspName = prj.Attributes["spectra_ispname"].ToString();
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            if (prj.Attributes.Contains("alletech_totalcalculatedcost"))
+                                                                primary_amount += prj.GetAttributeValue<Money>("alletech_totalcalculatedcost").Value.ToString();
+                                                            IspName = "Own";
+                                                        }
+                                                    }
+                                                }
+                                                finalPrimary = primary + ": " + primary_amount + " (" + IspName + ")";
                                             }
+                                           // if (TempName == "No")
+                                             //   break;
+                                            #endregion
+                                        }
+                                        else if (feasible.GetAttribute‌​‌​Value<bool>("alletech_routetype") == true)
+                                        {
+                                            redundant = "Redundant";
+                                            redundantValue = 2;
+                                            #region Current running code
+                                            string[] Prjattr = { "alletech_pjcid", "alletech_totalcalculatedcost", "spectra_partnerselected", "spectra_ispname" }; // Change = 2 Added Partner Selected Attr in the column done by Madhu Vlabs for TPF flow on 07-08-2021
+                                            EntityCollection ProjcstColl = GetResultsByAttribute(service, "alletech_projectestimationcost", "alletech_pjcid", feasible.Id.ToString(), Prjattr);
+                                            if (ProjcstColl.Entities.Count > 0)
+                                            {
+                                                foreach (Entity prj in ProjcstColl.Entities)
+                                                {
+                                                    if (feasible.GetAttribute‌​‌​Value<bool>("alletech_thirdpartyinstallation") == true)
+                                                    {
+                                                        if (prj.GetAttribute‌​‌​Value<bool>("spectra_partnerselected") == true) // Change = 3  Allow only Partner Selected YES done by Madhu Vlabs for TPF flow on 07-08-2021
+                                                        {
+                                                            if (prj.Attributes.Contains("alletech_totalcalculatedcost"))
+                                                                redundant_amount += prj.GetAttributeValue<Money>("alletech_totalcalculatedcost").Value.ToString();
+                                                            if (prj.Attributes.Contains("spectra_ispname"))
+                                                                IspNameRedundant = prj.Attributes["spectra_ispname"].ToString();
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        if (prj.Attributes.Contains("alletech_totalcalculatedcost"))
+                                                            redundant_amount += prj.GetAttributeValue<Money>("alletech_totalcalculatedcost").Value.ToString();
+                                                        IspNameRedundant = "Own";
+                                                    }
+                                                }
+                                                finalRedundant = redundant + ": " + redundant_amount + " (" + IspNameRedundant + ")";
+                                            }
+                                            ///if (TempName == "No")
+                                               // break;
+                                            #endregion
                                         }
                                     }
-                                    if (TempName == "No")
-                                        break;
                                 }
                             }
-                            TempName = amt.ToString();
+                            //TempName = amt.ToString();
                         }
-                        else
-                            TempName = null;
+                        // else
+                        string seperated = string.Empty;
+                        if (primaryValue == 1 && redundantValue == 2)
+                        {
+                            seperated = " / ";
+                        }
 
                         emailbody += @" <td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 98pt; height: 15pt; '>
                         <p><b>Connectivity Cost</b></p>
                     </td>
                     <td width='360' style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none; border-color: rgb(0, 0, 0) black windowtext rgb(0, 0, 0); padding: 0in 5.4pt; width: 3.75in; height: 15pt; ' colspan='3'>
-                        <p align='center' text-align: center;' style='font-size: 8pt;'>" + TempName + @"</p>
+                        <p align='center' text-align: center;' style='font-size: 8pt;'>" + finalPrimary + seperated + finalRedundant + @"</p>
                     </td>
                 </tr>";
+                        #endregion
+
                         #endregion
                     }
 
