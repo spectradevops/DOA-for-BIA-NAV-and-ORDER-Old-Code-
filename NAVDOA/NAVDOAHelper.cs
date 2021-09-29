@@ -161,34 +161,34 @@ namespace NAVDOA
                 emailbody += @" <td style='border-width: 1pt; border-style:solid;'><b>Redundancy required</b></td>
                                     <td style='border-width: 1pt; border-style:solid;'><p align='center' text-align='center;'>" + TempName + @"</p></td>";
 
-                if (BSStatus == "Non-RFS")
-                {
-                    decimal amt = 0;
-                    string[] feasiblityattr = { "alletech_feasibilityid" };
-                    EntityCollection feasibleColl = GetResultsByAttribute(service, "alletech_feasibility", "alletech_opportunity", Caf.GetAttributeValue<EntityReference>("alletech_oppurtunityid").Id.ToString(), feasiblityattr);
+                //if (BSStatus == "Non-RFS")
+                //{
+                //    decimal amt = 0;
+                //    string[] feasiblityattr = { "alletech_feasibilityid" };
+                //    EntityCollection feasibleColl = GetResultsByAttribute(service, "alletech_feasibility", "alletech_opportunity", Caf.GetAttributeValue<EntityReference>("alletech_oppurtunityid").Id.ToString(), feasiblityattr);
 
-                    if (feasibleColl.Entities.Count > 0)
-                    {
-                        foreach (Entity feasible in feasibleColl.Entities)
-                        {
-                            string[] Prjattr = { "alletech_pjcid", "alletech_totalcalculatedcost" };
-                            EntityCollection ProjcstColl = GetResultsByAttribute(service, "alletech_projectestimationcost", "alletech_pjcid", feasible.Id.ToString(), Prjattr);
-                            if (ProjcstColl.Entities.Count > 0)
-                            {
-                                foreach (Entity prj in ProjcstColl.Entities)
-                                {
-                                    if (prj.Attributes.Contains("alletech_totalcalculatedcost"))
-                                        amt += prj.GetAttributeValue<Money>("alletech_totalcalculatedcost").Value;
-                                }
-                            }
-                            if (TempName == "No")
-                                break;
-                        }
-                    }
-                    TempName = amt.ToString();
-                }
-                else
-                    TempName = null;
+                //    if (feasibleColl.Entities.Count > 0)
+                //    {
+                //        foreach (Entity feasible in feasibleColl.Entities)
+                //        {
+                //            string[] Prjattr = { "alletech_pjcid", "alletech_totalcalculatedcost" };
+                //            EntityCollection ProjcstColl = GetResultsByAttribute(service, "alletech_projectestimationcost", "alletech_pjcid", feasible.Id.ToString(), Prjattr);
+                //            if (ProjcstColl.Entities.Count > 0)
+                //            {
+                //                foreach (Entity prj in ProjcstColl.Entities)
+                //                {
+                //                    if (prj.Attributes.Contains("alletech_totalcalculatedcost"))
+                //                        amt += prj.GetAttributeValue<Money>("alletech_totalcalculatedcost").Value;
+                //                }
+                //            }
+                //            if (TempName == "No")
+                //                break;
+                //        }
+                //    }
+                //    TempName = amt.ToString();
+                //}
+                //else
+                TempName = null;
 
                 emailbody += @" <td style='border-width: 1pt; border-style:solid;'><b>Connectivity Cost</b></td>
                                     <td style='border-width: 1pt; border-style:solid;'><p align='center' text-align='center;'>" + TempName + @"</p></td>
