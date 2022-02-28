@@ -20,7 +20,7 @@ namespace Feasibility_DOA
             {
                 string[] opptyattr = { "alletech_buildingname", "alletech_productsegment", "alletech_businesssegmentglb", "spectra_customersegmentcode", "ownerid", "parentaccountid", "alletech_oppurtunityid", "alletech_companynamebusiness", "alletech_redundancyrequired", "customerneed", "alletech_city", "alletech_area" };
 
-                Entity Oppty = GetResultByAttribute(service, "opportunity", "opportunityid", opptyid.ToString(), opptyattr);
+                Entity Oppty = GetResultByAttribute(service, "opportunity", "opportunityid", opptyid, opptyattr);
 
                 string TempName = null; //used for all entity reference name values
                 string TempName2 = null;//used for Building status and billing frequency.
@@ -30,7 +30,7 @@ namespace Feasibility_DOA
                     #region Constructing HTML
                     emailbody = "<html><body><div>";
                     emailbody += "Hi " + Approver + ",<br/><br/>";
-                    emailbody += "<p style = 'color: black; font-family: ' Arial',sans-serif; font-size: 10pt;'><b> Approval of price deviation for order : " + Oppty.GetAttributeValue<string>("alletech_oppurtunityid") + " </b></p>";
+                    emailbody += "<p style = 'color: black; font-family: ' Arial',sans-serif; font-size: 10pt;'><b> Approval of secondary path 'Not Feasible' for order: " + Oppty.GetAttributeValue<string>("alletech_oppurtunityid") + " </b></p>";
                     emailbody += "<p style = 'color: black; font-family: ' Arial',sans-serif; font-size: 10pt;'><b> Order Details </b></p>";
                     emailbody += "<table class='MsoNormalTable' style='width:547pt;font-family: Arial,sans-serif; font-size: 9pt; border-collapse: collapse;' border='0' cellspacing='0' cellpadding='0'><tbody>";
 
@@ -180,7 +180,7 @@ namespace Feasibility_DOA
                     // {
                     // decimal amt = 0;
                     string[] feasiblityattr = { "alletech_feasibilityid", "alletech_routetype", "alletech_thirdpartyinstallation" };
-                    EntityCollection feasibleColl = GetResultsByAttribute(service, "alletech_feasibility", "alletech_opportunity", opptyid.ToString(), feasiblityattr);
+                    EntityCollection feasibleColl = GetResultsByAttribute(service, "alletech_feasibility", "alletech_opportunity", opptyid, feasiblityattr);
 
                     if (feasibleColl.Entities.Count > 0)
                     {
