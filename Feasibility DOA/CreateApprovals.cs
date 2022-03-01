@@ -216,12 +216,10 @@ namespace Feasibility_DOA
                                             }
                                         }
 
-                                        //Entity entOpp = new Entity("opportunity");
-                                        //entOpp.Id = context.PrimaryEntityId;
-                                        //entOpp["spectra_approvalrequiredflag"] = false;
-                                        //entOpp["statecode"] = new OptionSetValue(0);
-                                        //entOpp["statuscode"] = new OptionSetValue(569480013);
-                                        //service.Update(entOpp);
+                                        //Entity feas_Update = new Entity("alletech_feasibility");
+                                        //feas_Update.Id = context.PrimaryEntityId;
+                                        //feas_Update["spectra_approvalrequiredflag"] = new OptionSetValue(1);                                        
+                                        //service.Update(feas_Update);
                                     }
                                 }
                             }
