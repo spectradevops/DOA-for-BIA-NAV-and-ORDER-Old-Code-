@@ -61,6 +61,7 @@
   <ItemGroup>
     <Compile Include="ApporveApprovalsFromEmail.cs" />
     <Compile Include="CreateApprovals.cs" />
+    <Compile Include="FeasibilityAproveTlinkProductUpdate.cs" />
     <Compile Include="FeasibilityDOAHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
