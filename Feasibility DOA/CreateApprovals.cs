@@ -84,7 +84,7 @@ namespace Feasibility_DOA
                             {
                                 if (FES.Attributes.Contains("alletech_feasiblitystatus"))
                                 {
-                                    if (((OptionSetValue)FES["alletech_feasiblitystatus"]).Value == 1 && FES.GetAttribute‌​‌​Value<bool>("alletech_thirdpartyinstallation") == false)
+                                    if (((OptionSetValue)FES["alletech_feasiblitystatus"]).Value == 1 && FES.GetAttribute‌​‌​Value<bool>("alletech_routetype") == false)
                                     {
                                         traceService.Trace("alletech_feasiblitystatus: Primarly");
                                         string approvalFetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>

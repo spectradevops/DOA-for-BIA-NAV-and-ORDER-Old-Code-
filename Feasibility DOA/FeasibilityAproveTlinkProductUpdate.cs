@@ -22,8 +22,9 @@ namespace Feasibility_DOA
                 Entity feasib = (Entity)context.InputParameters["Target"];
                 if (feasib.Attributes.Contains("spectra_approvalstatus"))
                 {
-                    if (feasib.GetAttributeValue<OptionSetValue>("alletech_installationstatusnew").Value == 1)
+                    if (feasib.GetAttributeValue<OptionSetValue>("spectra_approvalstatus").Value == 1)
                     {
+                        #region Feasibility
                         Entity _feasibility = service.Retrieve("alletech_feasibility", feasib.Id, new ColumnSet("alletech_routetype", "alletech_product", "alletech_opportunity"));
                         if (_feasibility != null)
                         {
@@ -65,7 +66,7 @@ namespace Feasibility_DOA
                                         string productName = ((EntityReference)_feasibility.Attributes["alletech_product"]).Name.ToString() + "_T";
                                         string productFetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                                                                   <entity name='product'>
-                                                                    <attribute name='name' />
+                                                                    <attribute name='alletech_plantype' />
                                                                     <attribute name='defaultuomid' />
                                                                     <attribute name='productid' />
                                                                     <order attribute='productnumber' descending='false' />
@@ -102,7 +103,7 @@ namespace Feasibility_DOA
                                                         {
                                                             opportunityProduct["uomid"] = new EntityReference("uom", unit_ID);
                                                         }
-                                                       Guid opD = service.Create(opportunityProduct);
+                                                        Guid opD = service.Create(opportunityProduct);
 
                                                         if (opD != null && opD != Guid.Empty)
                                                         {
@@ -146,6 +147,7 @@ namespace Feasibility_DOA
                                 }
                             }
                         }
+                        #endregion
                     }
                 }
             }
