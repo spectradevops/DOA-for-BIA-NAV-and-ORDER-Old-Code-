@@ -49,6 +49,7 @@ namespace Feasibility_DOA
                 string oppGUID = string.Empty;
                 string productName = string.Empty;
                 string feasibilityID = string.Empty;
+                string billCycle = string.Empty;
                 string oppID = OpportunityID.Get(executionContext);
                 Dictionary<int, Guid> approvals = new Dictionary<int, Guid>();
                 Entity feasibDetails = service.Retrieve("alletech_feasibility", context.PrimaryEntityId, new ColumnSet("alletech_subreason", "createdby", "alletech_feasibilityidd", "alletech_busiensssegment", "alletech_product", "alletech_opportunity"));
@@ -165,6 +166,11 @@ namespace Feasibility_DOA
                                                 {
                                                     productName = ((EntityReference)feasibDetails.Attributes["alletech_product"]).Name.ToString();
                                                     traceService.Trace("productName");
+                                                    Entity produtColl = service.Retrieve("product", ((EntityReference)feasibDetails.Attributes["alletech_product"]).Id, new ColumnSet("alletech_billingcycle"));
+                                                    if(produtColl.Attributes.Contains("alletech_billingcycle"))
+                                                    {
+                                                        billCycle = produtColl.GetAttributeValue<EntityReference>("alletech_billingcycle").Name.ToString();
+                                                    }
                                                 }
                                                 if (feasibDetails.Attributes.Contains("alletech_feasibilityidd"))
                                                 {
@@ -178,7 +184,7 @@ namespace Feasibility_DOA
                                                 }
                                                 #endregion
                                                 traceService.Trace("Before Email body");
-                                                string emailbody = helper.getEmailBody(service, oppGUID, approver, feasibilityID, productName);
+                                                string emailbody = helper.getEmailBody(service, oppGUID, approver, feasibilityID, productName, billCycle);
                                                 traceService.Trace("After Email body");
                                                 Entity entEmail = new Entity("email");
                                                 entEmail["subject"] = "Pending for your approval";

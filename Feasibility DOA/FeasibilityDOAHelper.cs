@@ -12,7 +12,7 @@ namespace Feasibility_DOA
     class FeasibilityDOAHelper
     {
 
-        public string getEmailBody(IOrganizationService service, string opptyid, string Approver, string feasibilityID, string prodcutName)
+        public string getEmailBody(IOrganizationService service, string opptyid, string Approver, string feasibilityID, string prodcutName, string billCycle)
         {
             #region Email Body creation
             string emailbody = null;
@@ -278,37 +278,37 @@ namespace Feasibility_DOA
                     #endregion
 
                     #region Checking OpptyProds
-                    string[] Opptyvalues = new string[4];
-                    TempName = null; TempName2 = null;
+                    //string[] Opptyvalues = new string[4];
+                    //TempName = null; TempName2 = null;
 
-                    string[] opptyprodattr = { "productid", "priceperunit", "manualdiscountamount", "extendedamount" };
-                    EntityCollection opptyProds = GetResultsByAttribute(service, "opportunityproduct", "opportunityid", opptyid, opptyprodattr);
+                    //string[] opptyprodattr = { "productid", "priceperunit", "manualdiscountamount", "extendedamount" };
+                    //EntityCollection opptyProds = GetResultsByAttribute(service, "opportunityproduct", "opportunityid", opptyid, opptyprodattr);
 
-                    if (opptyProds.Entities.Count > 0)
-                    {
-                        foreach (Entity opptyprod in opptyProds.Entities)
-                        {
+                    //if (opptyProds.Entities.Count > 0)
+                    //{
+                    //    foreach (Entity opptyprod in opptyProds.Entities)
+                    //    {
 
-                            string prodname = opptyprod.GetAttributeValue<EntityReference>("productid").Name;
-                            try
-                            {
-                                string[] prodattr = { "alletech_billingcycle", "alletech_plantype", "alletech_chargetype" };
-                                Entity prod = GetResultByAttribute(service, "product", "productid", opptyprod.GetAttributeValue<EntityReference>("productid").Id.ToString(), prodattr);
+                    //        string prodname = opptyprod.GetAttributeValue<EntityReference>("productid").Name;
+                    //        try
+                    //        {
+                    //            string[] prodattr = { "alletech_billingcycle", "alletech_plantype", "alletech_chargetype" };
+                    //            Entity prod = GetResultByAttribute(service, "product", "productid", opptyprod.GetAttributeValue<EntityReference>("productid").Id.ToString(), prodattr);
 
-                                int plan = prod.GetAttributeValue<OptionSetValue>("alletech_plantype").Value;
-                                int charge = prod.GetAttributeValue<OptionSetValue>("alletech_chargetype").Value;
+                    //            int plan = prod.GetAttributeValue<OptionSetValue>("alletech_plantype").Value;
+                    //            int charge = prod.GetAttributeValue<OptionSetValue>("alletech_chargetype").Value;
 
-                                TempName = prodname;
-                                if (prod.Attributes.Contains("alletech_billingcycle"))
-                                    TempName2 = prod.GetAttributeValue<EntityReference>("alletech_billingcycle").Name;
+                    //            TempName = prodname;
+                    //            if (prod.Attributes.Contains("alletech_billingcycle"))
+                    //                TempName2 = prod.GetAttributeValue<EntityReference>("alletech_billingcycle").Name;
 
-                            }
-                            catch (Exception ex)
-                            {
+                    //        }
+                    //        catch (Exception ex)
+                    //        {
 
-                            }
-                        }
-                    }
+                    //        }
+                    //    }
+                    //}
                     #endregion
 
                     #region Row 6
@@ -317,13 +317,13 @@ namespace Feasibility_DOA
                         <p align='center' text-align: center;'><b>Product</b></p>
                     </td>
                     <td  style='border-width: 0px 0px 1pt; border-style: none none solid; border-color: rgb(0, 0, 0) rgb(0, 0, 0) windowtext; padding: 0in 5.4pt; width: 98pt; height: 15pt;' colspan='2'>
-                        <p align='center' text-align: center;'>" + TempName + @"</p>
+                        <p align='center' text-align: center;'>" + prodcutName + @"</p>
                     </td>
                     <td  style='border-width: 0px 1pt 1pt; border-style: none solid solid; padding: 0in 5.4pt; width: 89pt; height: 15pt; '>
                         <p><b>Billing Frequency</b></p>
                     </td>
                     <td width='241' style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none; border-color: rgb(0, 0, 0) black windowtext rgb(0, 0, 0); padding: 0in 5.4pt; width: 181pt; height: 15pt;' colspan='2'>
-                        <p align='center' text-align: center;'>" + TempName2 + @"</p>
+                        <p align='center' text-align: center;'>" + billCycle + @"</p>
                     </td>
                     </tr>";
                     #endregion

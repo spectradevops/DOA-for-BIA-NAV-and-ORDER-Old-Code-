@@ -42,6 +42,9 @@ namespace Feasibility_DOA
                                                     <link-entity name='product' from='productid' to='productid' visible='false' link-type='outer' alias='oppprod'>
                                                       <attribute name='alletech_plantype' />
                                                       <attribute name='alletech_chargetype' />
+                                                        <filter type='and'>
+                                                           <condition attribute='name' operator='not-like' value='%[_]T' />
+                                                        </filter>
                                                     </link-entity>
                                                   </entity>
                                                 </fetch>";
@@ -72,10 +75,18 @@ namespace Feasibility_DOA
                                                                     <order attribute='productnumber' descending='false' />
                                                                     <filter type='and'>
                                                                       <condition attribute='name' operator='eq' value='" + productName + @"' />
-                                                                      <condition attribute='alletech_businesssegmentlookup' operator='eq' uiname='Business' uitype='alletech_businesssegment' value='{B6D61BE4-ACCB-E411-942D-842B2BA0F44F}' />
-                                                                      <condition attribute='alletech_subbusinesssegment' operator='ne' uiname='SDWAN' uitype='alletech_subsegment' value='{857B1258-5F33-EA11-80EE-000D3AF224B9}' />
-                                                                      <condition attribute='alletech_productsegment' operator='eq' uiname='Secured Managed Internet' uitype='alletech_productsegment' value='{A91D2A5C-D654-EC11-8127-000D3AC9A7B3}' />
+                                                                      <condition attribute='alletech_businesssegmentlookup' operator='eq' uiname='Business' uitype='alletech_businesssegment' value='{B6D61BE4-ACCB-E411-942D-842B2BA0F44F}' />                                                                      
                                                                     </filter>
+                                                                    <link-entity name='alletech_subsegment' from='alletech_subsegmentid' to='alletech_subbusinesssegment' alias='ag'>
+                                                                          <filter type='and'>
+                                                                            <condition attribute='alletech_name' operator='ne' value='SDWAN' />
+                                                                          </filter>
+                                                                    </link-entity>
+                                                                    <link-entity name='alletech_productsegment' from='alletech_productsegmentid' to='alletech_productsegment' alias='ah'>
+                                                                          <filter type='and'>
+                                                                            <condition attribute='alletech_name' operator='eq' value='Secured Managed Internet' />
+                                                                          </filter>
+                                                                    </link-entity>
                                                                   </entity>
                                                                 </fetch>";
                                         EntityCollection prodColle = service.RetrieveMultiple(new FetchExpression(productFetch));
