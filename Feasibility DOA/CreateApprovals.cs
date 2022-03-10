@@ -125,107 +125,116 @@ namespace Feasibility_DOA
                                         }
                                         foreach (KeyValuePair<int, Guid> appr in approvals.OrderByDescending(a => a.Key))
                                         {
-                                            Entity entApproval = new Entity("spectra_approval");
-                                            entApproval["spectra_name"] = appr.Key.ToString() + " approval";
-                                            entApproval["spectra_feasibility"] = new EntityReference(context.PrimaryEntityName, context.PrimaryEntityId);
-                                            entApproval["spectra_orderby"] = new OptionSetValue(Convert.ToInt32(optionValuePreFix + appr.Key.ToString()));
-                                            entApproval["ownerid"] = new EntityReference("systemuser", appr.Value);
-                                            if (approvalId != Guid.Empty)
-                                                entApproval["spectra_nextapprovalid"] = new EntityReference("spectra_approval", approvalId);//new Guid("DF20F192-F7A0-E711-80E4-005056AD0689")); //
-                                            if (appr.Key == firstApproval)//if (appr.Key == 0)
+                                            string apprvalFetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                                                                  <entity name='spectra_approval'>
+                                                                    <attribute name='spectra_approvalid' />
+                                                                    <attribute name='spectra_name' />
+                                                                    <attribute name='createdon' />
+                                                                    <order attribute='spectra_name' descending='false' />
+                                                                    <filter type='and'>
+                                                                      <condition attribute='spectra_feasibility' operator='eq' value='" + context.PrimaryEntityId + @"' />
+                                                                    </filter>
+                                                                  </entity>
+                                                                </fetch>";
+                                            EntityCollection apprvalColle = service.RetrieveMultiple(new FetchExpression(apprvalFetch));
+                                            if (apprvalColle.Entities.Count == 0)
                                             {
-                                                entApproval["spectra_approvalrequesteddate"] = DateTime.Now;
-                                                entApproval["statecode"] = new OptionSetValue(0);
-                                                entApproval["statuscode"] = new OptionSetValue(111260000);
-                                            }
-                                            traceService.Trace("Before Approval create");
-                                            approvalId = service.Create(entApproval);
-                                            traceService.Trace("after Approval create");
-                                            // ApprovalCreated.Set(executionContext, true);
-
-                                            if (appr.Key == firstApproval)//if (appr.Key == 0)
-                                            {
-
-                                                FeasibilityDOAHelper helper = new FeasibilityDOAHelper();
-                                                Entity entApprover = service.Retrieve("systemuser", appr.Value, new ColumnSet("fullname"));
-                                                string approver = (entApprover.Contains("fullname") ? entApprover["fullname"].ToString() : "Approver");
-
-
-                                                #region Parameters                                              
-                                                if (feasibDetails.Attributes.Contains("alletech_busiensssegment"))
+                                                Entity entApproval = new Entity("spectra_approval");
+                                                entApproval["spectra_name"] = appr.Key.ToString() + " approval";
+                                                entApproval["spectra_feasibility"] = new EntityReference(context.PrimaryEntityName, context.PrimaryEntityId);
+                                                entApproval["spectra_orderby"] = new OptionSetValue(Convert.ToInt32(optionValuePreFix + appr.Key.ToString()));
+                                                entApproval["ownerid"] = new EntityReference("systemuser", appr.Value);
+                                                if (approvalId != Guid.Empty)
+                                                    entApproval["spectra_nextapprovalid"] = new EntityReference("spectra_approval", approvalId);//new Guid("DF20F192-F7A0-E711-80E4-005056AD0689")); //
+                                                if (appr.Key == firstApproval)//if (appr.Key == 0)
                                                 {
-                                                    BusinessSeg = ((EntityReference)feasibDetails.Attributes["alletech_busiensssegment"]).Name.ToString();
-                                                    traceService.Trace("BusinessSeg");
+                                                    entApproval["spectra_approvalrequesteddate"] = DateTime.Now;
+                                                    entApproval["statecode"] = new OptionSetValue(0);
+                                                    entApproval["statuscode"] = new OptionSetValue(111260000);
                                                 }
-                                                if (feasibDetails.Attributes.Contains("createdby"))
+                                                traceService.Trace("Before Approval create");
+                                                approvalId = service.Create(entApproval);
+                                                traceService.Trace("after Approval create");
+                                                // ApprovalCreated.Set(executionContext, true);
+
+                                                if (appr.Key == firstApproval)//if (appr.Key == 0)
                                                 {
-                                                    accountManager = ((EntityReference)feasibDetails.Attributes["createdby"]).Name.ToString();
-                                                    traceService.Trace("accountManager");
-                                                }
-                                                if (feasibDetails.Attributes.Contains("alletech_product"))
-                                                {
-                                                    productName = ((EntityReference)feasibDetails.Attributes["alletech_product"]).Name.ToString();
-                                                    traceService.Trace("productName");
-                                                    Entity produtColl = service.Retrieve("product", ((EntityReference)feasibDetails.Attributes["alletech_product"]).Id, new ColumnSet("alletech_billingcycle"));
-                                                    if(produtColl.Attributes.Contains("alletech_billingcycle"))
+
+                                                    FeasibilityDOAHelper helper = new FeasibilityDOAHelper();
+                                                    Entity entApprover = service.Retrieve("systemuser", appr.Value, new ColumnSet("fullname"));
+                                                    string approver = (entApprover.Contains("fullname") ? entApprover["fullname"].ToString() : "Approver");
+
+
+                                                    #region Parameters                                              
+                                                    if (feasibDetails.Attributes.Contains("alletech_busiensssegment"))
                                                     {
-                                                        billCycle = produtColl.GetAttributeValue<EntityReference>("alletech_billingcycle").Name.ToString();
+                                                        BusinessSeg = ((EntityReference)feasibDetails.Attributes["alletech_busiensssegment"]).Name.ToString();
+                                                        traceService.Trace("BusinessSeg");
                                                     }
+                                                    if (feasibDetails.Attributes.Contains("createdby"))
+                                                    {
+                                                        accountManager = ((EntityReference)feasibDetails.Attributes["createdby"]).Name.ToString();
+                                                        traceService.Trace("accountManager");
+                                                    }
+                                                    if (feasibDetails.Attributes.Contains("alletech_product"))
+                                                    {
+                                                        productName = ((EntityReference)feasibDetails.Attributes["alletech_product"]).Name.ToString();
+                                                        traceService.Trace("productName");
+                                                        Entity produtColl = service.Retrieve("product", ((EntityReference)feasibDetails.Attributes["alletech_product"]).Id, new ColumnSet("alletech_billingcycle"));
+                                                        if (produtColl.Attributes.Contains("alletech_billingcycle"))
+                                                        {
+                                                            billCycle = produtColl.GetAttributeValue<EntityReference>("alletech_billingcycle").Name.ToString();
+                                                        }
+                                                    }
+                                                    if (feasibDetails.Attributes.Contains("alletech_feasibilityidd"))
+                                                    {
+                                                        feasibilityID = feasibDetails.Attributes["alletech_feasibilityidd"].ToString();
+                                                        traceService.Trace("feasibilityID");
+                                                    }
+                                                    if (feasibDetails.Attributes.Contains("alletech_opportunity"))
+                                                    {
+                                                        oppGUID = ((EntityReference)feasibDetails.Attributes["alletech_opportunity"]).Id.ToString();
+                                                        traceService.Trace("oppGUID: " + oppGUID);
+                                                    }
+                                                    #endregion
+                                                    traceService.Trace("Before Email body");
+                                                    string emailbody = helper.getEmailBody(service, oppGUID, approver, feasibilityID, productName, billCycle);
+                                                    traceService.Trace("After Email body");
+                                                    Entity entEmail = new Entity("email");
+                                                    entEmail["subject"] = "Pending for your approval";
+                                                    entEmail["description"] = emailbody;
+
+                                                    Entity entTo = new Entity("activityparty");
+                                                    entTo["partyid"] = new EntityReference("systemuser", entApprover.Id);
+                                                    Entity[] entToList = { entTo };
+                                                    entEmail["to"] = entToList;
+
+                                                    Entity Queue = helper.GetResultByAttribute(service, "queue", "name", "DOA Approval", "queueid");
+
+                                                    if (Queue != null)
+                                                    {
+                                                        Entity entFrom = new Entity("activityparty");
+                                                        //entFrom["partyid"] = new EntityReference("systemuser", new Guid("1A9B2FAD-7334-E711-80DE-000D3AF224B9"));// crm support user
+                                                        entFrom["partyid"] = new EntityReference("queue", Queue.Id);
+                                                        Entity[] entFromList = { entFrom };
+                                                        entEmail["from"] = entFromList;
+                                                    }
+                                                    else
+                                                        throw new InvalidPluginExecutionException("DOA approval not available");
+
+                                                    entEmail["regardingobjectid"] = new EntityReference("spectra_approval", approvalId);
+                                                    Guid emailId = service.Create(entEmail);
+
+                                                    //Send email
+                                                    SendEmailRequest sendEmailReq = new SendEmailRequest()
+                                                    {
+                                                        EmailId = emailId,
+                                                        IssueSend = true
+                                                    };
+                                                    SendEmailResponse sendEmailRes = (SendEmailResponse)service.Execute(sendEmailReq);
                                                 }
-                                                if (feasibDetails.Attributes.Contains("alletech_feasibilityidd"))
-                                                {
-                                                    feasibilityID = feasibDetails.Attributes["alletech_feasibilityidd"].ToString();
-                                                    traceService.Trace("feasibilityID");
-                                                }
-                                                if (feasibDetails.Attributes.Contains("alletech_opportunity"))
-                                                {
-                                                    oppGUID = ((EntityReference)feasibDetails.Attributes["alletech_opportunity"]).Id.ToString();
-                                                    traceService.Trace("oppGUID: " + oppGUID);
-                                                }
-                                                #endregion
-                                                traceService.Trace("Before Email body");
-                                                string emailbody = helper.getEmailBody(service, oppGUID, approver, feasibilityID, productName, billCycle);
-                                                traceService.Trace("After Email body");
-                                                Entity entEmail = new Entity("email");
-                                                entEmail["subject"] = "Pending for your approval";
-                                                entEmail["description"] = emailbody;
-
-                                                Entity entTo = new Entity("activityparty");
-                                                entTo["partyid"] = new EntityReference("systemuser", entApprover.Id);
-                                                Entity[] entToList = { entTo };
-                                                entEmail["to"] = entToList;
-
-                                                Entity Queue = helper.GetResultByAttribute(service, "queue", "name", "DOA Approval", "queueid");
-
-                                                if (Queue != null)
-                                                {
-                                                    Entity entFrom = new Entity("activityparty");
-                                                    //entFrom["partyid"] = new EntityReference("systemuser", new Guid("1A9B2FAD-7334-E711-80DE-000D3AF224B9"));// crm support user
-                                                    entFrom["partyid"] = new EntityReference("queue", Queue.Id);
-                                                    Entity[] entFromList = { entFrom };
-                                                    entEmail["from"] = entFromList;
-                                                }
-                                                else
-                                                    throw new InvalidPluginExecutionException("DOA approval not available");
-
-                                                entEmail["regardingobjectid"] = new EntityReference("spectra_approval", approvalId);
-                                                Guid emailId = service.Create(entEmail);
-
-                                                //Send email
-                                                SendEmailRequest sendEmailReq = new SendEmailRequest()
-                                                {
-                                                    EmailId = emailId,
-                                                    IssueSend = true
-                                                };
-                                                SendEmailResponse sendEmailRes = (SendEmailResponse)service.Execute(sendEmailReq);
-
                                             }
                                         }
-
-                                        //Entity feas_Update = new Entity("alletech_feasibility");
-                                        //feas_Update.Id = context.PrimaryEntityId;
-                                        //feas_Update["spectra_approvalrequiredflag"] = new OptionSetValue(1);                                        
-                                        //service.Update(feas_Update);
                                     }
                                 }
                             }
