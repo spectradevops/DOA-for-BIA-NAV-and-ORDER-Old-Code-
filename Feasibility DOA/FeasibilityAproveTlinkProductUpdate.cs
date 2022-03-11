@@ -19,8 +19,8 @@ namespace Feasibility_DOA
 
             try
             {
-                if (context.Depth == 1)
-                {
+                //if (context.Depth == 1)
+                //{
                     Entity feasib = (Entity)context.InputParameters["Target"];
                     if (feasib.Attributes.Contains("spectra_approvalstatus"))
                     {
@@ -167,7 +167,7 @@ namespace Feasibility_DOA
                         }
                         #endregion
                     }
-                }
+               // }
             }
             catch (Exception ex)
             {

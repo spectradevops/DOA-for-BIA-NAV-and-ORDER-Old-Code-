@@ -227,34 +227,38 @@ namespace Feasibility_DOA
                                 {
                                     redundant = "Redundant";
                                     redundantValue = 2;
+                                    finalRedundant = redundant + ": (ISP not available)";
                                     #region Current running code
-                                    string[] Prjattr = { "alletech_pjcid", "alletech_totalcalculatedcost", "spectra_partnerselected", "spectra_ispname" }; // Change = 2 Added Partner Selected Attr in the column done by Madhu Vlabs for TPF flow on 07-08-2021
-                                    EntityCollection ProjcstColl = GetResultsByAttribute(service, "alletech_projectestimationcost", "alletech_pjcid", feasible.Id.ToString(), Prjattr);
-                                    if (ProjcstColl.Entities.Count > 0)
-                                    {
-                                        foreach (Entity prj in ProjcstColl.Entities)
-                                        {
-                                            if (feasible.GetAttribute‌​‌​Value<bool>("alletech_thirdpartyinstallation") == true)
-                                            {
-                                                if (prj.GetAttribute‌​‌​Value<bool>("spectra_partnerselected") == true) // Change = 3  Allow only Partner Selected YES done by Madhu Vlabs for TPF flow on 07-08-2021
-                                                {
-                                                    if (prj.Attributes.Contains("alletech_totalcalculatedcost"))
-                                                        redundant_amount += prj.GetAttributeValue<Money>("alletech_totalcalculatedcost").Value.ToString();
-                                                    if (prj.Attributes.Contains("spectra_ispname"))
-                                                        IspNameRedundant = prj.Attributes["spectra_ispname"].ToString();
-                                                }
-                                            }
-                                            else
-                                            {
-                                                if (prj.Attributes.Contains("alletech_totalcalculatedcost"))
-                                                    redundant_amount += prj.GetAttributeValue<Money>("alletech_totalcalculatedcost").Value.ToString();
-                                                IspNameRedundant = "Own";
-                                            }
-                                        }
-                                        // finalRedundant = redundant + ": " + redundant_amount + " (" + IspNameRedundant + ")";
-                                        finalRedundant = redundant + ": (ISP not available)";
-                                    }
 
+
+                                    #region Commented code 11-03-2022
+                                    //string[] Prjattr = { "alletech_pjcid", "alletech_totalcalculatedcost", "spectra_partnerselected", "spectra_ispname" }; // Change = 2 Added Partner Selected Attr in the column done by Madhu Vlabs for TPF flow on 07-08-2021
+                                    //EntityCollection ProjcstColl = GetResultsByAttribute(service, "alletech_projectestimationcost", "alletech_pjcid", feasible.Id.ToString(), Prjattr);
+                                    //if (ProjcstColl.Entities.Count > 0)
+                                    //{
+                                    //    foreach (Entity prj in ProjcstColl.Entities)
+                                    //    {
+                                    //        if (feasible.GetAttribute‌​‌​Value<bool>("alletech_thirdpartyinstallation") == true)
+                                    //        {
+                                    //            if (prj.GetAttribute‌​‌​Value<bool>("spectra_partnerselected") == true) // Change = 3  Allow only Partner Selected YES done by Madhu Vlabs for TPF flow on 07-08-2021
+                                    //            {
+                                    //                if (prj.Attributes.Contains("alletech_totalcalculatedcost"))
+                                    //                    redundant_amount += prj.GetAttributeValue<Money>("alletech_totalcalculatedcost").Value.ToString();
+                                    //                if (prj.Attributes.Contains("spectra_ispname"))
+                                    //                    IspNameRedundant = prj.Attributes["spectra_ispname"].ToString();
+                                    //            }
+                                    //        }
+                                    //        else
+                                    //        {
+                                    //            if (prj.Attributes.Contains("alletech_totalcalculatedcost"))
+                                    //                redundant_amount += prj.GetAttributeValue<Money>("alletech_totalcalculatedcost").Value.ToString();
+                                    //            IspNameRedundant = "Own";
+                                    //        }
+                                    //    }
+                                    //    // finalRedundant = redundant + ": " + redundant_amount + " (" + IspNameRedundant + ")";
+                                    //    finalRedundant = redundant + ": (ISP not available)";
+                                    //}
+                                    #endregion
                                     #endregion
                                 }
                             }
