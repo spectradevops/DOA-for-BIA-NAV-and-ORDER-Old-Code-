@@ -139,6 +139,7 @@ namespace Feasibility_DOA
                                                                                     <order attribute='alletech_feasibilityidd' descending='false' />
                                                                                     <filter type='and'>
                                                                                       <condition attribute='alletech_opportunity' operator='eq' value='" + ((EntityReference)_feasibility.Attributes["alletech_opportunity"]).Id + @"' />
+                                                                                      <condition attribute='alletech_routetype' operator='eq' value='0' />                                                                                    
                                                                                     </filter>
                                                                                   </entity>
                                                                                 </fetch>";
