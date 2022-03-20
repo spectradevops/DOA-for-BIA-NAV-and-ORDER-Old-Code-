@@ -140,22 +140,49 @@ namespace DOA
                                         #region Ip Address
                                         if (plantype == 569480002 && chargetype == 569480001)
                                         {
-                                            trace.Trace("If it is IP Address");
-
-                                            var cnt = prodId.Name.Substring(prodId.Name.IndexOf(searchData) + searchData.Length);
-                                            cnt = Regex.Replace(cnt, "[^0-9]+", string.Empty);
-                                            Int64 count = Convert.ToInt64(cnt);
-                                            //decimal percentAge = extendedAmt / count;
-
-                                            if (extendedAmt < _ipAddNoApprovalLimit)
+                                            trace.Trace("If it is Add On");
+                                            if (prodId.Name.ToLower().Contains("_ipaddress_"))
                                             {
-                                                trace.Trace("percentAge is less than _ipAddNoApprovalLimit");
-                                                approval = true;
+                                                #region Commented on 17_March_2022 by Madhu
+                                                var cnt = prodId.Name.Substring(prodId.Name.IndexOf(searchData) + searchData.Length);
+                                                cnt = Regex.Replace(cnt, "[^0-9]+", string.Empty);
+                                                Int64 count = Convert.ToInt64(cnt);
+                                                #endregion
+                                                //decimal percentAge = extendedAmt / count;
+
+                                                if (extendedAmt < _ipAddNoApprovalLimit)
+                                                {
+                                                    trace.Trace("percentAge is less than _ipAddNoApprovalLimit");
+                                                    approval = true;
+                                                }
+                                                else
+                                                {
+                                                    approval = false;
+                                                }
                                             }
+                                            #region New logic has been added on 17 March 2022
                                             else
                                             {
-                                                approval = false;
+                                                if (extendedAmt < price)
+                                                {
+                                                    trace.Trace("if extendedAmt < floorDisc");
+                                                    decimal percentAge = (price - extendedAmt) / price * 100;
+                                                    percentAge = decimal.Round(percentAge, 2, MidpointRounding.AwayFromZero);
+
+                                                    if (entPost.Contains("spectra_approvedpercentage") && percentAge <= (decimal)entPost["spectra_approvedpercentage"])
+                                                    {
+                                                        trace.Trace("percentAge <= (decimal)entPost[spectra_approvedpercentage]");
+                                                        approval = false;
+                                                    }
+                                                    else if ((!entPost.Contains("spectra_approvedpercentage")) || (entPost.Contains("spectra_approvedpercentage") && percentAge > (decimal)entPost["spectra_approvedpercentage"]))
+                                                    {
+                                                        approval = true;
+                                                    }
+                                                }
+                                                else
+                                                    approval = false;
                                             }
+                                            #endregion New logic has been added on 17 March 2022
                                         }
                                         #endregion
 

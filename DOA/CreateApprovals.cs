@@ -54,7 +54,6 @@ namespace DOA
                 //throw new Exception(""+context.PrimaryEntityId+" "+context.PrimaryEntityName);
                 if (OpportunityDetails.Attributes.Contains("ownerid"))
                 {
-
                     traceService.Trace("Inside IF");
                     #region New Changes done on 16-Sep-2020 by VLABS
                     Entity oppowner = service.Retrieve("systemuser", ((EntityReference)OpportunityDetails.Attributes["ownerid"]).Id, new ColumnSet("spectra_cityhead"));
@@ -103,7 +102,7 @@ namespace DOA
 
                 EntityReference prodseg = OpportunityDetails.GetAttributeValue<EntityReference>("alletech_productsegment");
 
-                EntityCollection entCollOppProd = getOppProducts(service, context.PrimaryEntityId, false);
+                EntityCollection entCollOppProd = getOppProducts(service, context.PrimaryEntityId, true);
 
                 foreach (Entity entOppProd in entCollOppProd.Entities)
                 {
@@ -113,7 +112,7 @@ namespace DOA
                         {
                             EntityReference prodId = (EntityReference)entOppProd["productid"];
 
-                            Entity entProd = service.Retrieve(prodId.LogicalName, prodId.Id, new ColumnSet("alletech_businesssegmentlookup", "alletech_plantype", "alletech_chargetype", "alletech_grossplaninvoicevalueinr"));
+                            Entity entProd = service.Retrieve(prodId.LogicalName, prodId.Id, new ColumnSet("name", "alletech_businesssegmentlookup", "alletech_plantype", "alletech_chargetype", "alletech_grossplaninvoicevalueinr"));
                             if (entProd.Contains("alletech_businesssegmentlookup") && ((EntityReference)entProd["alletech_businesssegmentlookup"]).Name.ToLower() == "business")
                             {
                                 decimal percentAge = 0;
@@ -123,18 +122,54 @@ namespace DOA
 
                                 if (plantype == 569480002 && chargetype == 569480001) //ip address
                                 {
-                                    var cnt = prodId.Name.Substring(prodId.Name.IndexOf(searchData) + searchData.Length);
-                                    cnt = Regex.Replace(cnt, "[^0-9]+", string.Empty);
-                                    Int64 count = Convert.ToInt64(cnt);
-                                    decimal price = ((Money)entOppProd["priceperunit"]).Value;
-
-                                    if (extendedAmt < 200)
+                                    string prodName = entProd.Attributes["name"].ToString();
+                                    if (prodName.ToLower().Contains("_ipaddress_"))
                                     {
+                                        var cnt = prodId.Name.Substring(prodId.Name.IndexOf(searchData) + searchData.Length);
+                                        cnt = Regex.Replace(cnt, "[^0-9]+", string.Empty);
+                                        Int64 count = Convert.ToInt64(cnt);
+                                        decimal price = ((Money)entOppProd["priceperunit"]).Value;
+
+                                        if (extendedAmt < 200)
+                                        {
+                                            percentAge = extendedAmt;
+                                            EntityCollection entCollAppConfig = getApprovalConfig(service, "IPADDRESS", null);//, percentAge);
+                                            foreach (Entity entAppConfig in entCollAppConfig.Entities)
+                                            {
+                                                if ((entAppConfig.Contains("spectra_quantity") && count >= Convert.ToInt64(entAppConfig["spectra_quantity"])) || !entAppConfig.Contains("spectra_quantity"))
+                                                {
+                                                    if (entAppConfig.Contains("spectra_minpercentage") && entAppConfig.Contains("spectra_maxpercentage")
+                                                        && (percentAge >= ((decimal)entAppConfig["spectra_minpercentage"])) && (percentAge <= ((decimal)entAppConfig["spectra_maxpercentage"])))
+                                                    {
+                                                        if (entAppConfig.Contains("spectra_orderby") && entAppConfig.Contains("spectra_approver"))
+                                                        {
+                                                            KeyValuePair<int, Guid> apprDuplicate = approvals.FirstOrDefault(a => a.Key == Convert.ToInt16(entAppConfig.FormattedValues["spectra_orderby"]));
+                                                            if (apprDuplicate.Equals(new KeyValuePair<int, Guid>()))
+                                                            {
+                                                                //approvals.Add(Convert.ToInt16(entAppConfig.FormattedValues["spectra_orderby"]), ((EntityReference)entAppConfig["spectra_approver"]).Id);
+                                                                KeyValuePair<int, Guid> apprDuplicateCond2 = approvals.FirstOrDefault(a => a.Value == ((EntityReference)entAppConfig["spectra_approver"]).Id);
+                                                                if (apprDuplicateCond2.Equals(new KeyValuePair<int, Guid>()))
+                                                                    approvals.Add(Convert.ToInt16(entAppConfig.FormattedValues["spectra_orderby"]), ((EntityReference)entAppConfig["spectra_approver"]).Id);
+                                                                else
+                                                                {
+                                                                    approvals.Remove(apprDuplicateCond2.Key);
+                                                                    approvals.Add(Convert.ToInt16(entAppConfig.FormattedValues["spectra_orderby"]), ((EntityReference)entAppConfig["spectra_approver"]).Id);
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    #region New Logic implemented by Madhu on 17 MArch 2022
+                                    else
+                                    {                                        
                                         percentAge = extendedAmt;
                                         EntityCollection entCollAppConfig = getApprovalConfig(service, "IPADDRESS", null);//, percentAge);
                                         foreach (Entity entAppConfig in entCollAppConfig.Entities)
                                         {
-                                            if ((entAppConfig.Contains("spectra_quantity") && count >= Convert.ToInt64(entAppConfig["spectra_quantity"])) || !entAppConfig.Contains("spectra_quantity"))
+                                            if (entAppConfig.Contains("spectra_quantity") && !entAppConfig.Contains("spectra_quantity"))
                                             {
                                                 if (entAppConfig.Contains("spectra_minpercentage") && entAppConfig.Contains("spectra_maxpercentage")
                                                     && (percentAge >= ((decimal)entAppConfig["spectra_minpercentage"])) && (percentAge <= ((decimal)entAppConfig["spectra_maxpercentage"])))
@@ -157,8 +192,9 @@ namespace DOA
                                                     }
                                                 }
                                             }
-                                        }
+                                        }                                       
                                     }
+                                    #endregion
                                 }
 
                                 //RC || OTC
