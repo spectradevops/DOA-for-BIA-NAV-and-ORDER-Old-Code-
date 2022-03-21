@@ -155,8 +155,8 @@ namespace Feasibility_DOA
                                                                             feasibUpdate["alletech_product"] = new EntityReference("product", prodColle.Entities[0].Id);
                                                                             service.Update(feasibUpdate);
                                                                         }
-                                                                        else
-                                                                        {
+                                                                        if (FSB.GetAttribute‌​‌​Value<bool>("alletech_routetype") == true)
+                                                                        { 
                                                                             feasibUpdate["alletech_redundent"] = false;
                                                                             service.Update(feasibUpdate);
                                                                         }

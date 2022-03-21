@@ -485,7 +485,7 @@ namespace DOA
                         #region New code on 09-Sep-2021
                         string primary = string.Empty, finalPrimary = string.Empty, finalRedundant = string.Empty, redundant = string.Empty, primary_amount = string.Empty, redundant_amount = string.Empty, IspName = string.Empty, IspNameRedundant = string.Empty;
                         int primaryValue = 0, redundantValue = 0;
-                        if (TempName2 == "Non-RFS" || TempName2 == "TP-F" || ((TempName2 == "B-RFS" || TempName2 == "P-RFS" || TempName2 == "C-RFS" || TempName2 == "A-RFS Type1" || TempName2 == "A-RFS Type2") && TempName == "Yes")) // Change = 1 Added A/B/C/P RFS status condition done by Madhu Vlabs for TPF flow on 07-08-2021
+                        if (TempName2 == "Non-RFS" || TempName2 == "TP-F" || ((TempName2 == "B-RFS" || TempName2 == "P-RFS" || TempName2 == "C-RFS" || TempName2 == "A-RFS Type1" || TempName2 == "A-RFS Type2" || TempName2 == "Pb-RFS" || TempName2 == "L2P-RFS" || TempName2 == "L2B-RFS" || TempName2 == "Cb-RFS Type1" || TempName2 == "Cb-RFS Type2") && TempName == "Yes")) // Change = 1 Added A/B/C/P RFS status condition done by Madhu Vlabs for TPF flow on 07-08-2021
                         {
                            // decimal amt = 0;
                             string[] feasiblityattr = { "alletech_feasibilityid", "alletech_routetype", "alletech_thirdpartyinstallation" };
