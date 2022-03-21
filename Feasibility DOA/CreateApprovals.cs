@@ -51,6 +51,7 @@ namespace Feasibility_DOA
                 string feasibilityID = string.Empty;
                 string billCycle = string.Empty;
                 string oppID = OpportunityID.Get(executionContext);
+                string remarks = string.Empty;
                 Dictionary<int, Guid> approvals = new Dictionary<int, Guid>();
                 Entity feasibDetails = service.Retrieve("alletech_feasibility", context.PrimaryEntityId, new ColumnSet("alletech_subreason", "createdby", "alletech_feasibilityidd", "alletech_busiensssegment", "alletech_product", "alletech_opportunity"));
                 traceService.Trace("got Feasibity details");
@@ -196,9 +197,14 @@ namespace Feasibility_DOA
                                                         oppGUID = ((EntityReference)feasibDetails.Attributes["alletech_opportunity"]).Id.ToString();
                                                         traceService.Trace("oppGUID: " + oppGUID);
                                                     }
+                                                    if (feasibDetails.Attributes.Contains("alletech_remark"))
+                                                    {
+                                                        remarks = feasibDetails.Attributes["alletech_remark"].ToString();
+                                                        traceService.Trace("remarks: " + remarks);
+                                                    }
                                                     #endregion
                                                     traceService.Trace("Before Email body");
-                                                    string emailbody = helper.getEmailBody(service, oppGUID, approver, feasibilityID, productName, billCycle);
+                                                    string emailbody = helper.getEmailBody(service, oppGUID, approver, feasibilityID, productName, billCycle, remarks);
                                                     traceService.Trace("After Email body");
                                                     Entity entEmail = new Entity("email");
                                                     entEmail["subject"] = "Pending for your approval";

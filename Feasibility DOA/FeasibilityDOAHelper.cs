@@ -12,7 +12,7 @@ namespace Feasibility_DOA
     class FeasibilityDOAHelper
     {
 
-        public string getEmailBody(IOrganizationService service, string opptyid, string Approver, string feasibilityID, string prodcutName, string billCycle)
+        public string getEmailBody(IOrganizationService service, string opptyid, string Approver, string feasibilityID, string prodcutName, string billCycle, string remarks)
         {
             #region Email Body creation
             string emailbody = null;
@@ -339,7 +339,7 @@ namespace Feasibility_DOA
                         <p><b>Remarks</b></p>
                     </td>
                     <td width='588' style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 440.65pt; height: 33pt; ' colspan='5'>
-                        <p align='center' text-align: center;'>" + Oppty.GetAttributeValue<string>("customerneed") + @"</p>
+                        <p align='center' text-align: center;'>" + remarks + @"</p>
                     </td>
                     </tr>";
                     #endregion
