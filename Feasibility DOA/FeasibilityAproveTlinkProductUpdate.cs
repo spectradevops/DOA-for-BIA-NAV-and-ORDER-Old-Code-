@@ -71,6 +71,9 @@ namespace Feasibility_DOA
                                         }
                                         if (_feasibility.Attributes.Contains("alletech_product"))
                                         {
+                                            Guid unit_ID = Guid.Empty;
+                                            Entity unitDetail = null;
+                                            string unitName = string.Empty;
                                             string productName = ((EntityReference)_feasibility.Attributes["alletech_product"]).Name.ToString() + "_T";
                                             string productFetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                                                                   <entity name='product'>
@@ -97,16 +100,17 @@ namespace Feasibility_DOA
                                             EntityCollection prodColle = service.RetrieveMultiple(new FetchExpression(productFetch));
                                             if (prodColle.Entities.Count > 0)
                                             {
-                                                Guid unit_ID = prodColle.Entities[0].GetAttributeValue<EntityReference>("defaultuomid").Id;
-                                                Entity unitDetail = service.Retrieve("uom", unit_ID, new ColumnSet("name"));
+                                                unit_ID = prodColle.Entities[0].GetAttributeValue<EntityReference>("defaultuomid").Id;
+                                                unitDetail = service.Retrieve("uom", unit_ID, new ColumnSet("name"));
                                                 if (unitDetail != null)
                                                 {
                                                     if (unitDetail.Attributes.Contains("name"))
                                                     {
-                                                        var unitName = unitDetail.Contains("name") ? unitDetail.GetAttributeValue<string>("name") : "";
+                                                        unitName = unitDetail.Contains("name") ? unitDetail.GetAttributeValue<string>("name") : "";
                                                         var planType = prodColle.Entities[0].Contains("alletech_plantype") ? prodColle.Entities[0].GetAttributeValue<OptionSetValue>("alletech_plantype").Value.ToString() : "0";
+                                                        var chargeType = prodColle.Entities[0].Contains("alletech_chargetype") ? prodColle.Entities[0].GetAttributeValue<OptionSetValue>("alletech_chargetype").Value.ToString() : "0";
 
-                                                        if (planType == "569480001")//Normal
+                                                        if (Convert.ToInt32(planType) == 569480001 && Convert.ToInt32(chargeType) == 569480000)//Normal & Package
                                                         {
                                                             Entity opportunityProduct = new Entity("opportunityproduct");
                                                             opportunityProduct["productid"] = new EntityReference("product", prodColle.Entities[0].Id);
@@ -121,12 +125,50 @@ namespace Feasibility_DOA
                                                             }
                                                             Guid opD = service.Create(opportunityProduct);
 
+                                                            QueryExpression query1_Child = new QueryExpression("alletech_productparent_productchild");
+                                                            query1_Child.ColumnSet = new ColumnSet(true);
+                                                            ConditionExpression cond1_Child = new ConditionExpression("productidone", ConditionOperator.Equal, prodColle.Entities[0].Id);
+                                                            query1_Child.Criteria.AddCondition(cond1_Child);
+                                                            EntityCollection coll1_Child = service.RetrieveMultiple(query1_Child);
+                                                            if (coll1_Child.Entities.Count > 0)
+                                                            {
+                                                                foreach (Entity item1_Child in coll1_Child.Entities)
+                                                                {
+                                                                    Entity childprod = service.Retrieve("product", (Guid)item1_Child.Attributes["productidtwo"], new ColumnSet(true));
+                                                                    if (childprod != null)
+                                                                    {
+                                                                        Entity oppoProduct = new Entity("opportunityproduct");
+                                                                        oppoProduct["productid"] = new EntityReference("product", childprod.Id);
+                                                                        oppoProduct["spectra_existingproduct"] = new EntityReference("product", childprod.Id);
+                                                                        oppoProduct["opportunityid"] = new EntityReference("opportunity", ((EntityReference)_feasibility.Attributes["alletech_opportunity"]).Id);
+                                                                        oppoProduct["quantity"] = 1m;
+                                                                        oppoProduct["manualdiscountamount"] = new Money(0);
+                                                                        oppoProduct["priceperunit"] = childprod.Attributes["alletech_grossplaninvoicevalueinr"];
+                                                                        //oppoProduct["extendedamount"] = (Money)childprod.Attributes["alletech_grossplaninvoicevalueinr"];
+                                                                        if (!string.IsNullOrEmpty(unitName))
+                                                                        {
+                                                                            oppoProduct["uomid"] = new EntityReference("uom", unit_ID);
+                                                                        }
+                                                                        Guid op = service.Create(oppoProduct);
+                                                                        if (op != Guid.Empty)
+                                                                        {
+                                                                            Entity opProd = service.Retrieve("opportunityproduct", op, new ColumnSet("extendedamount"));
+                                                                            Entity prct = new Entity("opportunityproduct");
+                                                                            prct.Id = opProd.Id;
+                                                                            prct["extendedamount"] = (Money)childprod.Attributes["alletech_grossplaninvoicevalueinr"];
+                                                                            service.Update(prct);
+                                                                        }
+                                                                    }
+
+                                                                }
+                                                            }
+
                                                             if (opD != null && opD != Guid.Empty)
                                                             {
                                                                 Entity opportunity = new Entity("opportunity");
                                                                 opportunity.Id = ((EntityReference)_feasibility.Attributes["alletech_opportunity"]).Id;
                                                                 //opportunity["alletech_product"] = new EntityReference("product", prodColle.Entities[0].Id);
-                                                                opportunity["alletech_getrelatedproducts"] = true;
+                                                                //opportunity["alletech_getrelatedproducts"] = true;
                                                                 opportunity["alletech_redundancyrequired"] = false;
                                                                 opportunity["spectra_lastmiletype"] = new OptionSetValue(2);
                                                                 service.Update(opportunity);
@@ -138,6 +180,7 @@ namespace Feasibility_DOA
                                                                                     <attribute name='createdon' />
                                                                                     <order attribute='alletech_feasibilityidd' descending='false' />
                                                                                     <filter type='and'>
+                                                                                      <condition attribute='alletech_routetype' operator='eq' value='0' />
                                                                                       <condition attribute='alletech_opportunity' operator='eq' value='" + ((EntityReference)_feasibility.Attributes["alletech_opportunity"]).Id + @"' />
                                                                                     </filter>
                                                                                   </entity>
@@ -150,14 +193,9 @@ namespace Feasibility_DOA
                                                                         Entity feasibUpdate = new Entity("alletech_feasibility");
                                                                         feasibUpdate.Id = FSB.Id;
                                                                         if (FSB.GetAttribute‌​‌​Value<bool>("alletech_routetype") == false)
-                                                                        {                                                                          
+                                                                        {
                                                                             feasibUpdate["alletech_redundent"] = false;
                                                                             feasibUpdate["alletech_product"] = new EntityReference("product", prodColle.Entities[0].Id);
-                                                                            service.Update(feasibUpdate);
-                                                                        }
-                                                                        if (FSB.GetAttribute‌​‌​Value<bool>("alletech_routetype") == true)
-                                                                        { 
-                                                                            feasibUpdate["alletech_redundent"] = false;
                                                                             service.Update(feasibUpdate);
                                                                         }
                                                                     }

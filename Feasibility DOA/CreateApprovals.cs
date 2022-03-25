@@ -53,7 +53,7 @@ namespace Feasibility_DOA
                 string oppID = OpportunityID.Get(executionContext);
                 string remarks = string.Empty;
                 Dictionary<int, Guid> approvals = new Dictionary<int, Guid>();
-                Entity feasibDetails = service.Retrieve("alletech_feasibility", context.PrimaryEntityId, new ColumnSet("alletech_subreason", "createdby", "alletech_feasibilityidd", "alletech_busiensssegment", "alletech_product", "alletech_opportunity"));
+                Entity feasibDetails = service.Retrieve("alletech_feasibility", context.PrimaryEntityId, new ColumnSet("alletech_remark", "alletech_subreason", "createdby", "alletech_feasibilityidd", "alletech_busiensssegment", "alletech_product", "alletech_opportunity"));
                 traceService.Trace("got Feasibity details");
                 if (feasibDetails.Attributes.Contains("alletech_subreason"))
                 {
@@ -67,6 +67,7 @@ namespace Feasibility_DOA
                                                     <attribute name='alletech_routetype' />
                                                     <attribute name='alletech_feasiblitystatus' />
                                                     <attribute name='alletech_opportunityid' />
+                                                    <attribute name='alletech_opportunity' />
                                                     <order attribute='alletech_routetype' descending='false' />
                                                     <filter type='and'>
                                                       <condition attribute='alletech_thirdpartyinstallation' operator='eq' value='1' />
@@ -96,7 +97,7 @@ namespace Feasibility_DOA
                                                         <attribute name='spectra_approvalconfigid' />
                                                         <order attribute='spectra_name' descending='false' />
                                                         <filter type='and'>
-                                                          <condition attribute='spectra_name' operator='eq' value='FEASIB_MSD' />
+                                                          <condition attribute='spectra_name' operator='eq' value='MBIAT_FEASIBILITY' />
                                                         </filter>
                                                       </entity>
                                                     </fetch>";
@@ -228,7 +229,17 @@ namespace Feasibility_DOA
                                                     else
                                                         throw new InvalidPluginExecutionException("DOA approval not available");
 
+
+                                                    Entity oppty = helper.GetResultByAttribute(service, "opportunity", "opportunityid", ((EntityReference)FES.Attributes["alletech_opportunity"]).Id.ToString(), "ownerid");
+                                                    if (oppty != null)
+                                                    {
+                                                        Entity entcc1 = new Entity("activityparty");
+                                                        entcc1["partyid"] = oppty.GetAttributeValue<EntityReference>("ownerid");
+                                                        Entity[] entccList = { entcc1 };
+                                                        entEmail["cc"] = entccList;
+                                                    }
                                                     entEmail["regardingobjectid"] = new EntityReference("spectra_approval", approvalId);
+
                                                     Guid emailId = service.Create(entEmail);
 
                                                     //Send email

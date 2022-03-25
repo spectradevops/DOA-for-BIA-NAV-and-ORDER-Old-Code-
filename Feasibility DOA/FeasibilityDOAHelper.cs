@@ -64,40 +64,44 @@ namespace Feasibility_DOA
                     else
                         TempName = null;
                     emailbody += @"<tr style='height: 15pt;'>
-                        <td  style='border-width: 0px 1pt 1pt; border-style: none solid solid; padding: 0in 5.4pt; width: 106.35pt; height: 15pt;'>
-                        <p><b>Customer Name</b></p></td>
-                        <td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 72.65pt; height: 15pt;'>
-                        <p align='center' text-align: center;'>" + TempName + @"</p></td>";
-
-                    emailbody += @"<td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 98pt; height: 15pt;'>
+                        <td  style='border-width: 0px 0px 1pt 1pt; border-style: none none solid solid;padding: 0in 5.4pt; width: 106.35pt; height: 15pt; '>
+                            <p><b>Customer Name</b></p>
+                        </td>
+                        <td  style='border-width: 0px 1pt 1pt; border-style: none solid solid;padding: 0in 5.4pt; width: 72.65pt; height: 15pt; '>
+                            <p align='center' text-align: center;'>" + TempName + @"</p>
+                        </td>";
+                    emailbody += @" <td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 98pt; height: 15pt; '>
                         <p><b>Opportunity ID</b></p>
                         </td>
-                        <td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 89pt; height: 15pt;'>
-                            <p align='center' text-align: center;'>" + Oppty.GetAttributeValue<string>("alletech_oppurtunityid") + @"</p>
-                        </td>";
+                        <td width='360' style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none; border-color: rgb(0, 0, 0) black windowtext rgb(0, 0, 0); padding: 0in 5.4pt; width: 3.75in; height: 15pt; ' colspan='3'>
+                            <p align='center' text-align: center;' style='font-size: 8pt;'>" + Oppty.GetAttributeValue<string>("alletech_oppurtunityid") + @"</p>
+                        </td>
+                        </tr>";
+                    //emailbody += @"<tr style='height: 15pt;'>
+                    //    <td  style='border-width: 0px 1pt 1pt; border-style: none solid solid; padding: 0in 5.4pt; width: 106.35pt; height: 15pt;'>
+                    //    <p><b>Customer Name</b></p></td>
+                    //    <td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 72.65pt; height: 15pt;'>
+                    //    <p align='center' text-align: center;'>" + TempName + @"</p></td>";
 
+                    //emailbody += @"<td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 98pt; height: 15pt;'>
+                    //    <p><b>Opportunity ID</b></p>
+                    //    </td>
+                    //    <td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 89pt; height: 15pt;'>
+                    //        <p align='center' text-align: center;'>" + Oppty.GetAttributeValue<string>("alletech_oppurtunityid") + @"</p>
+                    //    </td>";                   
+                    #endregion
+
+                    #region Row 3
                     if (Oppty.Attributes.Contains("alletech_city"))
                         TempName = Oppty.GetAttributeValue<EntityReference>("alletech_city").Name;
                     else
                         TempName = null;
-
-                    emailbody += @"<td width='93' style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 70pt; height: 15pt; '>
-                        <p><b>City</b></p>
-                        </td>
-                        <td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 111pt; height: 15pt; '>
-                            <p align='center' text-align: center;'>" + TempName + @"</p>
-                        </td>";
-
-                    emailbody += "</tr>";
-                    #endregion
-
-                    #region Row 3
                     emailbody += @"<tr style='height: 15pt;'>
                         <td  style='border-width: 0px 0px 1pt 1pt; border-style: none none solid solid;padding: 0in 5.4pt; width: 106.35pt; height: 15pt; '>
-                            <p><b>Product</b></p>
+                            <p><b>City</b></p>
                         </td>
                         <td  style='border-width: 0px 1pt 1pt; border-style: none solid solid;padding: 0in 5.4pt; width: 72.65pt; height: 15pt; '>
-                            <p align='center' text-align: center;'>" + prodcutName + @"</p>
+                            <p align='center' text-align: center;'>" + TempName + @"</p>
                         </td>";
                     emailbody += @" <td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 98pt; height: 15pt; '>
                         <p><b>Feasibility ID</b></p>
@@ -106,8 +110,6 @@ namespace Feasibility_DOA
                             <p align='center' text-align: center;' style='font-size: 8pt;'>" + feasibilityID + @"</p>
                         </td>
                         </tr>";
-
-
                     #endregion
 
                     #region Row 4
