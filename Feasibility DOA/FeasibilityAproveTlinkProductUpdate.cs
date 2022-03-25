@@ -172,6 +172,7 @@ namespace Feasibility_DOA
                                                                 //opportunity["alletech_getrelatedproducts"] = true;
                                                                 opportunity["alletech_redundancyrequired"] = false;
                                                                 opportunity["spectra_lastmiletype"] = new OptionSetValue(2);
+                                                                opportunity["alletech_product"] = new EntityReference("product", prodColle.Entities[0].Id);
                                                                 service.Update(opportunity);
 
                                                                 string feasibFetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
