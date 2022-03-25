@@ -78,6 +78,7 @@ namespace Feasibility_DOA
                                             string productFetch = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
                                                                   <entity name='product'>
                                                                     <attribute name='alletech_plantype' />
+                                                                    <attribute name='alletech_chargetype' />
                                                                     <attribute name='defaultuomid' />
                                                                     <attribute name='productid' />
                                                                     <order attribute='productnumber' descending='false' />
