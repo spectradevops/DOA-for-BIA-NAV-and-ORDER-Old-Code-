@@ -69,7 +69,7 @@ namespace DOA
                                         }
                                     }
                                 }
-                                else if (prodId.Name.ToLower().EndsWith("rc") || prodId.Name.ToLower().EndsWith("otc"))// || prodId.Name.ToLower().EndsWith("ip"))
+                                else if (prodId.Name.ToLower().Contains("rc") || prodId.Name.ToLower().Contains("otc"))// || prodId.Name.ToLower().EndsWith("ip"))
                                 {
                                     EntityReference oppId = (EntityReference)entTraget["opportunityid"];
                                     Entity entOpp = service.Retrieve(oppId.LogicalName, oppId.Id, new ColumnSet("alletech_businesssegmentglb", "statuscode"));
