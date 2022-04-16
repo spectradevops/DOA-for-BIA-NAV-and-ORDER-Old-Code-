@@ -169,7 +169,7 @@ namespace Feasibility_DOA
                                                                 Entity opportunity = new Entity("opportunity");
                                                                 opportunity.Id = ((EntityReference)_feasibility.Attributes["alletech_opportunity"]).Id;
                                                                 //opportunity["alletech_product"] = new EntityReference("product", prodColle.Entities[0].Id);
-                                                                //opportunity["alletech_getrelatedproducts"] = true;
+                                                                opportunity["alletech_productpkgcount"] = 1;
                                                                 opportunity["alletech_redundancyrequired"] = false;
                                                                 opportunity["spectra_lastmiletype"] = new OptionSetValue(2);
                                                                 opportunity["alletech_product"] = new EntityReference("product", prodColle.Entities[0].Id);
