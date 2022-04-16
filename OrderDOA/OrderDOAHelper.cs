@@ -448,6 +448,16 @@ namespace OrderDOA
             return service.RetrieveMultiple(query);
         }
 
+        public EntityCollection getApprovalConfigB2B(IOrganizationService service, string appConfigNameType, string prefix)//, decimal percentAge)
+        {
+            QueryExpression query = new QueryExpression("spectra_approvalconfig");
+            query.ColumnSet = new ColumnSet("spectra_approver", "spectra_name", "spectra_orderby", "spectra_minpercentage", "spectra_maxpercentage", "spectra_quantity");//spectra_percentage
+            query.Criteria.AddCondition(new ConditionExpression("spectra_name", ConditionOperator.Equal, prefix + appConfigNameType.ToUpper()));
+            query.Criteria.AddCondition(new ConditionExpression("spectra_productsegment", ConditionOperator.NotNull));
+            query.Orders.Add(new OrderExpression("spectra_minpercentage", OrderType.Ascending));
+            query.Orders.Add(new OrderExpression("spectra_orderby", OrderType.Ascending));
+            return service.RetrieveMultiple(query);
+        }
         public Entity GetResultByAttribute(IOrganizationService _service, string entityName, string attrName, string attrValue, string column)
         {
             try

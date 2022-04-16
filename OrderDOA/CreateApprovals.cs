@@ -99,29 +99,34 @@ namespace OrderDOA
                         }*/
                         #endregion
 
-                        #region Adding SRM HEAD
-                        EntityCollection SRMcoll = helper.getApprovalConfig(service, "SRMHead", "B2BUP_");
+                        #region Adding SRM HEAD commented on 15-APRIL-2022
+                        //EntityCollection SRMcoll = helper.getApprovalConfig(service, "SRMHead", "B2BUP_");
 
-                        if (SRMcoll.Entities.Count > 0)
-                        {
-                            if (SRMcoll.Entities[0].Contains("spectra_approver"))
-                                approvals.Add(0, SRMcoll.Entities[0].GetAttributeValue<EntityReference>("spectra_approver").Id);
-                        }
-                        else
-                            throw new InvalidPluginExecutionException("SRM Head not added in approval config");
+                        //if (SRMcoll.Entities.Count > 0)
+                        //{
+                        //    if (SRMcoll.Entities[0].Contains("spectra_approver"))
+                        //        approvals.Add(0, SRMcoll.Entities[0].GetAttributeValue<EntityReference>("spectra_approver").Id);
+                        //}
+                        //else
+                        //    throw new InvalidPluginExecutionException("SRM Head not added in approval config");
+                        #endregion
+
+                        #region new Code 15-04-2022
+
                         #endregion
 
                         #region Order Products level data capture
                         EntityCollection entCollOppProd = getOppProducts(service, context.PrimaryEntityId, false);
 
                         bool RCdiscount = false;
-
+                        string produName = string.Empty;
                         foreach (Entity entOppProd in entCollOppProd.Entities)
                         {
                             if (entOppProd.Contains("spectra_approvalrequried") && (bool)entOppProd["spectra_approvalrequried"])
                             {
                                 if (entOppProd.Contains("productdescription"))
                                 {
+                                    produName = entOppProd.Attributes["productdescription"].ToString();
                                     trace.Trace("Write in product");
                                     QueryExpression query = new QueryExpression("product");
                                     query.ColumnSet = new ColumnSet("name");
@@ -201,7 +206,7 @@ namespace OrderDOA
                                         #endregion
 
                                         #region RC || OTC
-                                        else if ((chargetype == 569480001 || chargetype == 569480002) && !RCdiscount)
+                                        else if ((chargetype == 569480001 || produName.Contains("OTC")) && !RCdiscount) // chargetype == 569480002) && !RCdiscount)
                                         {
                                             if (entOppProd.Contains("priceperunit"))
                                             {
@@ -212,7 +217,7 @@ namespace OrderDOA
                                                     percentAge = decimal.Round(percentAge, 2, MidpointRounding.AwayFromZero);
 
                                                     //EntityCollection entCollAppConfig = getApprovalConfig(service, (prodId.Name.ToLower().EndsWith("rc") ? "RC" : (prodId.Name.ToLower().EndsWith("otc") ? "OTC" : "IPADDRESS")));//, percentAge);
-                                                    EntityCollection entCollAppConfig = helper.getApprovalConfig(service, (chargetype == 569480001 ? "RC" : "OTC"), "B2BUP_");
+                                                    EntityCollection entCollAppConfig = helper.getApprovalConfigB2B(service, (chargetype == 569480001 ? "B2B_RC" : "B2B_OTC"), "");
                                                     foreach (Entity entAppConfig in entCollAppConfig.Entities)
                                                     {
                                                         if (entAppConfig.Contains("spectra_minpercentage") && entAppConfig.Contains("spectra_maxpercentage")
