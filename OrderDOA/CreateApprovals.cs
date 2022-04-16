@@ -42,6 +42,7 @@ namespace OrderDOA
             {
                 try
                 {
+                    int approvalCount = 0;
                     Dictionary<int, Guid> approvals = new Dictionary<int, Guid>();
                     //Entity account = null;
                     Entity ProdEntity = null;
@@ -54,7 +55,7 @@ namespace OrderDOA
                     traceService.Trace("got order details");
                     //throw new InvalidPluginExecutionException("got order details");
 
-                    traceService.Trace("priority code : "+ OrdDetails.GetAttributeValue<OptionSetValue>("prioritycode").Value);
+                    traceService.Trace("priority code : " + OrdDetails.GetAttributeValue<OptionSetValue>("prioritycode").Value);
 
                     //Permanent
                     if (OrdDetails.GetAttributeValue<OptionSetValue>("prioritycode").Value == 111260000)
@@ -111,13 +112,9 @@ namespace OrderDOA
                         //    throw new InvalidPluginExecutionException("SRM Head not added in approval config");
                         #endregion
 
-                        #region new Code 15-04-2022
-
-                        #endregion
-
                         #region Order Products level data capture
-                        EntityCollection entCollOppProd = getOppProducts(service, context.PrimaryEntityId, false);
 
+                        EntityCollection entCollOppProd = getOppProducts(service, context.PrimaryEntityId, false);
                         bool RCdiscount = false;
                         string produName = string.Empty;
                         foreach (Entity entOppProd in entCollOppProd.Entities)
@@ -242,9 +239,11 @@ namespace OrderDOA
                                                             }
                                                         }
                                                     }
-
                                                     if (chargetype == 569480001 && approvals.Count > 1)
+                                                    {
+                                                        approvalCount = approvals.Count;
                                                         continue;
+                                                    }
                                                 }
                                             }
                                         }
@@ -405,41 +404,35 @@ namespace OrderDOA
                             entEmail["to"] = entToList;
 
                             #region CC
-                            //List<Entity> entccList = new List<Entity>();
-                            //if (accountdetails.Attributes.Contains("spectra_servicerelationshipmanagerid"))
-                            //{
-                            //    Temp = new Entity("activityparty");
-                            //    Temp["partyid"] = accountdetails.GetAttributeValue<EntityReference>("spectra_servicerelationshipmanagerid");
 
-                            //    entccList.Add(Temp);
-                            //}
+                            List<Entity> entccList = new List<Entity>();
+                            if (accountdetails.Attributes.Contains("spectra_servicerelationshipmanagerid"))
+                            {
+                                Temp = new Entity("activityparty");
+                                Temp["partyid"] = accountdetails.GetAttributeValue<EntityReference>("spectra_servicerelationshipmanagerid");
 
-                            //EntityCollection CCcoll = helper.getApprovalConfig(service, "CC", "B2BUP_");
-                            //if (CCcoll.Entities.Count > 0)
-                            //{
-                            //    if (CCcoll.Entities[0].Contains("spectra_approver"))
-                            //    {
-                            //        Temp = new Entity("activityparty");
-                            //        Temp["partyid"] = CCcoll.Entities[0].GetAttributeValue<EntityReference>("spectra_approver");
+                                entccList.Add(Temp);
+                            }
+                            if (approvalCount == 4)
+                            {
+                                EntityCollection CCcoll = helper.getApprovalConfig(service, "CC", "B2B_");
+                                if (CCcoll.Entities.Count > 0)
+                                {
+                                    if (CCcoll.Entities[0].Contains("spectra_approver"))
+                                    {
+                                        Temp = new Entity("activityparty");
+                                        Temp["partyid"] = CCcoll.Entities[0].GetAttributeValue<EntityReference>("spectra_approver");
 
-                            //        entccList.Add(Temp);
-                            //    }
-                            //}
+                                        entccList.Add(Temp);
+                                    }
+                                }
+                            }
+                            Temp = new Entity("activityparty");
+                            Temp["partyid"] = accountdetails.GetAttributeValue<EntityReference>("ownerid");
+                            entccList.Add(Temp);
 
-                            //Temp = new Entity("activityparty");
-                            //Temp["partyid"] = accountdetails.GetAttributeValue<EntityReference>("ownerid");
-                            //entccList.Add(Temp);
-
-                            //Entity user = helper.GetResultByAttribute(service, "systemuser", "systemuserid", accountdetails.GetAttributeValue<EntityReference>("ownerid").Id.ToString(), "parentsystemuserid");
-                            //if (user.Attributes.Contains("parentsystemuserid"))
-                            //{
-                            //    Temp = new Entity("activityparty");
-                            //    Temp["partyid"] = user.GetAttributeValue<EntityReference>("parentsystemuserid");
-
-                            //    entccList.Add(Temp);
-                            //}
-
-                            //entEmail["cc"] = entccList.ToArray();
+                            entEmail["cc"] = entccList.ToArray();
+                            // }
                             #endregion
 
                             Entity Queue = helper.GetResultByAttribute(service, "queue", "name", "DOA Approval", "queueid");
