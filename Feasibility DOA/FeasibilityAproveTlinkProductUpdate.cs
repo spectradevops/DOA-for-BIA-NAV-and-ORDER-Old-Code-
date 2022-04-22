@@ -172,6 +172,7 @@ namespace Feasibility_DOA
                                                                 opportunity["alletech_productpkgcount"] = 1;
                                                                 opportunity["alletech_redundancyrequired"] = false;
                                                                 opportunity["spectra_lastmiletype"] = new OptionSetValue(2);
+                                                                opportunity["spectra_showcreateareaorbuildingbutton"] = new OptionSetValue(1);
                                                                 opportunity["alletech_product"] = new EntityReference("product", prodColle.Entities[0].Id);
                                                                 service.Update(opportunity);
 
