@@ -60,44 +60,26 @@ namespace OrderDOA
                     //Permanent
                     if (OrdDetails.GetAttributeValue<OptionSetValue>("prioritycode").Value == 111260000)
                     {
-                        #region Adding City head to approval list
-                        //updated for City Head Change
-                        /*if (OrdDetails.Attributes.Contains("customerid"))
+                        #region Adding City head to approval list                        
+                        Entity account = null;
+                        if (OrdDetails.Attributes.Contains("customerid"))
                         {
                             account = service.Retrieve("account", ((EntityReference)OrdDetails.Attributes["customerid"]).Id, new ColumnSet("ownerid", "spectra_servicerelationshipmanagerid"));
-                        }
-                        //throw new Exception(""+context.PrimaryEntityId+" "+context.PrimaryEntityName);
-                        if (account.Attributes.Contains("spectra_servicerelationshipmanagerid"))
-                        {
-                            traceService.Trace("Inside IF");
-                            Entity oppowner = service.Retrieve("systemuser", ((EntityReference)account.Attributes["ownerid"]).Id, new ColumnSet("parentsystemuserid"));
-
-                            if (oppowner.Attributes.Contains("parentsystemuserid"))
+                            if (account.Attributes.Contains("spectra_servicerelationshipmanagerid"))
                             {
-                                Entity entCity = service.Retrieve("alletech_city", ((EntityReference)oppowner.Attributes["alletech_operatingcity"]).Id, new ColumnSet("spectra_cityheadid"));
-                                if (entCity.Contains("spectra_cityheadid"))
+                                traceService.Trace("Inside IF");
+                                Entity oppowner = service.Retrieve("systemuser", ((EntityReference)account.Attributes["spectra_servicerelationshipmanagerid"]).Id, new ColumnSet("spectra_cityhead"));
+
+                                if (oppowner.Attributes.Contains("spectra_cityhead"))
                                 {
-                                    approvals.Add(0, ((EntityReference)entCity["spectra_cityheadid"]).Id);
+                                    approvals.Add(0, ((EntityReference)oppowner.Attributes["spectra_cityhead"]).Id);
                                 }
                                 else
-                                    throw new InvalidPluginExecutionException("City Head for the selected city is null, please contact System Administrator");
-                            }
-                            else
-                            {
-                                traceService.Trace("Inside else");
-                                //throw new Exception("else part");
-                                if (City.Get(executionContext).Id != null)
                                 {
-                                    Entity entCity = service.Retrieve("alletech_city", City.Get(executionContext).Id, new ColumnSet("spectra_cityheadid"));
-                                    if (entCity.Contains("spectra_cityheadid"))
-                                    {
-                                        approvals.Add(0, ((EntityReference)entCity["spectra_cityheadid"]).Id);
-                                    }
-                                    else
-                                        throw new InvalidPluginExecutionException("City Head for the selected city is null, please contact System Administrator");
+                                    throw new InvalidPluginExecutionException("City Head is not mapped for " + ((EntityReference)account.Attributes["spectra_servicerelationshipmanagerid"]).Name.ToString() + ", please contact sales co-ordinater for City Head mapping.");
                                 }
                             }
-                        }*/
+                        }
                         #endregion
 
                         #region Adding SRM HEAD commented on 15-APRIL-2022
@@ -406,13 +388,13 @@ namespace OrderDOA
                             #region CC
 
                             List<Entity> entccList = new List<Entity>();
-                            if (accountdetails.Attributes.Contains("spectra_servicerelationshipmanagerid"))
-                            {
-                                Temp = new Entity("activityparty");
-                                Temp["partyid"] = accountdetails.GetAttributeValue<EntityReference>("spectra_servicerelationshipmanagerid");
+                            //if (accountdetails.Attributes.Contains("spectra_servicerelationshipmanagerid"))
+                            //{
+                            //    Temp = new Entity("activityparty");
+                            //    Temp["partyid"] = accountdetails.GetAttributeValue<EntityReference>("spectra_servicerelationshipmanagerid");
 
-                                entccList.Add(Temp);
-                            }
+                            //    entccList.Add(Temp);
+                            //}
                             if (approvalCount == 4)
                             {
                                 EntityCollection CCcoll = helper.getApprovalConfig(service, "CC", "B2B_");
@@ -427,9 +409,9 @@ namespace OrderDOA
                                     }
                                 }
                             }
-                            Temp = new Entity("activityparty");
-                            Temp["partyid"] = accountdetails.GetAttributeValue<EntityReference>("ownerid");
-                            entccList.Add(Temp);
+                            //Temp = new Entity("activityparty");
+                            //Temp["partyid"] = accountdetails.GetAttributeValue<EntityReference>("ownerid");
+                            //entccList.Add(Temp);
 
                             entEmail["cc"] = entccList.ToArray();
                             // }

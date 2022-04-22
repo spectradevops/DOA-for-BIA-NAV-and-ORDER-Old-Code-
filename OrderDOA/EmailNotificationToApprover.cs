@@ -137,13 +137,13 @@ namespace OrderDOA
 
                         #region CC
                         List<Entity> entccList = new List<Entity>();
-                        if (accountdetails.Attributes.Contains("spectra_servicerelationshipmanagerid"))
-                        {
-                            Temp = new Entity("activityparty");
-                            Temp["partyid"] = accountdetails.GetAttributeValue<EntityReference>("spectra_servicerelationshipmanagerid");
+                        //if (accountdetails.Attributes.Contains("spectra_servicerelationshipmanagerid"))
+                        //{
+                        //    Temp = new Entity("activityparty");
+                        //    Temp["partyid"] = accountdetails.GetAttributeValue<EntityReference>("spectra_servicerelationshipmanagerid");
 
-                            entccList.Add(Temp);
-                        }
+                        //    entccList.Add(Temp);
+                        //}
 
                         EntityCollection CCcoll = helper.getApprovalConfig(service, "CC", "B2BUP_");
                         if(CCcoll.Entities.Count>0)
@@ -157,18 +157,18 @@ namespace OrderDOA
                             }
                         }
 
-                        Temp = new Entity("activityparty");
-                        Temp["partyid"] = accountdetails.GetAttributeValue<EntityReference>("ownerid");
-                        entccList.Add(Temp);
+                        //Temp = new Entity("activityparty");
+                        //Temp["partyid"] = accountdetails.GetAttributeValue<EntityReference>("ownerid");
+                        //entccList.Add(Temp);
 
-                        Entity user = helper.GetResultByAttribute(service, "systemuser", "systemuserid", accountdetails.GetAttributeValue<EntityReference>("ownerid").Id.ToString(), "parentsystemuserid");
-                        if (user.Attributes.Contains("parentsystemuserid"))
-                        {
-                            Temp = new Entity("activityparty");
-                            Temp["partyid"] = user.GetAttributeValue<EntityReference>("parentsystemuserid");
+                        //Entity user = helper.GetResultByAttribute(service, "systemuser", "systemuserid", accountdetails.GetAttributeValue<EntityReference>("ownerid").Id.ToString(), "parentsystemuserid");
+                        //if (user.Attributes.Contains("parentsystemuserid"))
+                        //{
+                        //    Temp = new Entity("activityparty");
+                        //    Temp["partyid"] = user.GetAttributeValue<EntityReference>("parentsystemuserid");
 
-                            entccList.Add(Temp);
-                        }
+                        //    entccList.Add(Temp);
+                        //}
 
                         entEmail["cc"] = entccList.ToArray();
                         #endregion
