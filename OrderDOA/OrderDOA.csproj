@@ -60,6 +60,7 @@
     <Compile Include="ApporveApprovalsFromEmail.cs" />
     <Compile Include="CreateApprovals.cs" />
     <Compile Include="DeactivateAllApprovalsOnReject.cs" />
+    <Compile Include="Get_Order_Related_Products.cs" />
     <Compile Include="OrderDOAHelper.cs" />
     <Compile Include="EmailNotificationToApprover.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
