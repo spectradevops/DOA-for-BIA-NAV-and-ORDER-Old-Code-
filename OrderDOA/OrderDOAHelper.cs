@@ -153,7 +153,7 @@ namespace OrderDOA
                         <p align='center' text-align: center;'>" + Businesssegment + @"</p>
                     </td>
                     <td width='119' style='padding: 0in 5.4pt; border: 1pt solid windowtext; width: 89pt; height: 15pt; '>
-                        <p><b>SRM Name</b></p>
+                        <p><b>Account Manager</b></p>
                     </td>
                     <td width='241' style='padding: 0in 5.4pt; border: 1pt solid windowtext; width: 181pt; height: 15pt; ' colspan='2'>
                         <p align='center' text-align: center;'>" + SRM + @"</p>
@@ -199,7 +199,7 @@ namespace OrderDOA
                                 <p align ='center' text-align: 'center;'>" + accountname + @"</p></td>
 
                                 <td width ='131' style='border-width: 1pt 1pt 1pt 0px; border-style: solid solid solid none;  padding: 0in 5.4pt; width: 98pt; height: 15pt; '>
-                                <p><b> CAN ID </b></p></td>
+                                <p><b> Service ID </b></p></td>
                                 <td width ='119' style='border-width: 1pt 1pt 1pt 0px; border-style: solid solid solid none;  padding: 0in 5.4pt; width: 89pt; height: 15pt; '>
                                 
                                 <p align ='center' text-align: 'center;'>" + CANID + @"</p></td>
