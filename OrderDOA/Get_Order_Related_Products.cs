@@ -104,85 +104,30 @@ namespace OrderDOA
                                     }
 
                                     #region checking config
-                                    if (subtypename != string.Empty && subtypename != "Downgrade")
+                                    // if (subtypename != string.Empty && subtypename != "Downgrade")
+                                    // {
+                                    #region checking Opportunity products for existing products
+                                    /*EntityCollection Oppor = Getdetails(service, tracingService, "opportunity", "parentaccountid", _account.Id);
+
+                                    if (Oppor != null && Oppor.Entities.Count > 0)
                                     {
-                                        #region checking Opportunity products for existing products
-                                        /*EntityCollection Oppor = Getdetails(service, tracingService, "opportunity", "parentaccountid", _account.Id);
-
-                                        if (Oppor != null && Oppor.Entities.Count > 0)
+                                        EntityCollection OpporProduct = Getdetails(service, tracingService, "opportunityproduct", "opportunityid", Oppor.Entities[0].Id);
+                                        foreach (Entity OP in OpporProduct.Entities)
                                         {
-                                            EntityCollection OpporProduct = Getdetails(service, tracingService, "opportunityproduct", "opportunityid", Oppor.Entities[0].Id);
-                                            foreach (Entity OP in OpporProduct.Entities)
+                                            if (((((EntityReference)OP.Attributes["productid"])).Name).Contains("OTC"))
                                             {
-                                                if (((((EntityReference)OP.Attributes["productid"])).Name).Contains("OTC"))
+                                                tracingService.Trace("Product Name contains OTC");
+                                                Money otcmoney = (Money)OP.Attributes["priceperunit"];
+
+                                                tracingService.Trace("OrderBandwidth : " + OrderBandwidth);
+                                                tracingService.Trace("AccountBandwidth : " + AccountBandwidth);
+
+                                                if (OrderBandwidth == AccountBandwidth)
                                                 {
-                                                    tracingService.Trace("Product Name contains OTC");
-                                                    Money otcmoney = (Money)OP.Attributes["priceperunit"];
-
-                                                    tracingService.Trace("OrderBandwidth : " + OrderBandwidth);
-                                                    tracingService.Trace("AccountBandwidth : " + AccountBandwidth);
-
-                                                    if (OrderBandwidth == AccountBandwidth)
-                                                    {
-                                                        newOTC.Value = 0;
-                                                    }
-                                                    else
-                                                    {
-                                                        //retrieve OTC from Config Entity
-                                                        EntityCollection OTCConfig = GetOTCdetails(service, tracingService, "spectra_onetimecharges", new OptionSetValue(111260000), new Money(otcmoney.Value), new OptionSetValue(OrderBandwidth), new OptionSetValue(AccountBandwidth));
-
-                                                        if (OTCConfig != null && OTCConfig.Entities.Count > 0)
-                                                        {
-                                                            //if Previous OTC on Opportunity is 25000
-                                                            if (otcmoney.Value == 25000)
-                                                            {
-                                                                tracingService.Trace("Previous OTC Value is 25000");
-                                                                if (OTCConfig.Entities[0].Attributes.Contains("spectra_newotc"))
-                                                                    newOTC = (Money)OTCConfig.Entities[0].Attributes["spectra_newotc"];
-                                                                else
-                                                                    throw new Exception("New OTC value is not configured in the OTC config");
-                                                            }
-                                                            //if Previous OTC on Opportunity is 100000
-                                                            else if (otcmoney.Value == 100000)
-                                                            {
-                                                                tracingService.Trace("Previous OTC Value is 100000");
-                                                                if (OTCConfig.Entities[0].Attributes.Contains("spectra_newotc"))
-                                                                    newOTC = (Money)OTCConfig.Entities[0].Attributes["spectra_newotc"];
-                                                                else
-                                                                    throw new Exception("New OTC value is not configured in the OTC config");
-                                                            }
-                                                        }
-                                                        else
-                                                        {
-                                                            throw new Exception("OTC Config doesnt exist for required upgrade");
-                                                        }
-                                                    }
+                                                    newOTC.Value = 0;
                                                 }
-                                            }
-                                        }*/
-                                        #endregion
-
-                                        #region Checking product relation and getting products
-                                        //else
-                                        //{
-                                        tracingService.Trace("Checking product relation and getting products");
-                                        QueryExpression query1_Child = new QueryExpression("alletech_productparent_productchild");
-                                        query1_Child.ColumnSet = new ColumnSet(true);
-                                        ConditionExpression cond1_Child = new ConditionExpression("productidone", ConditionOperator.Equal, ((EntityReference)_account.Attributes["alletech_product"]).Id);
-                                        query1_Child.Criteria.AddCondition(cond1_Child);
-                                        EntityCollection coll1_Child = service.RetrieveMultiple(query1_Child);
-
-                                        tracingService.Trace("child count : " + coll1_Child.Entities.Count);
-
-                                        if (coll1_Child != null && coll1_Child.Entities.Count > 0)
-                                        {
-                                            foreach (Entity product2 in coll1_Child.Entities)
-                                            {
-                                                Entity childProd = service.Retrieve("product", (Guid)product2["productidtwo"], new ColumnSet(true));
-
-                                                if ((childProd.Attributes["name"].ToString()).Contains("OTC"))
+                                                else
                                                 {
-                                                    Money otcmoney = (Money)childProd.Attributes["alletech_grossplaninvoicevalueinr"];
                                                     //retrieve OTC from Config Entity
                                                     EntityCollection OTCConfig = GetOTCdetails(service, tracingService, "spectra_onetimecharges", new OptionSetValue(111260000), new Money(otcmoney.Value), new OptionSetValue(OrderBandwidth), new OptionSetValue(AccountBandwidth));
 
@@ -196,7 +141,6 @@ namespace OrderDOA
                                                                 newOTC = (Money)OTCConfig.Entities[0].Attributes["spectra_newotc"];
                                                             else
                                                                 throw new Exception("New OTC value is not configured in the OTC config");
-
                                                         }
                                                         //if Previous OTC on Opportunity is 100000
                                                         else if (otcmoney.Value == 100000)
@@ -215,9 +159,65 @@ namespace OrderDOA
                                                 }
                                             }
                                         }
-                                        //}
-                                        #endregion
-                                    }
+                                    }*/
+                                    #endregion
+
+                                    #region Checking product relation and getting products : Commented on 28 April 2022
+                                    ////else
+                                    ////{
+                                    //tracingService.Trace("Checking product relation and getting products");
+                                    //QueryExpression query1_Child = new QueryExpression("alletech_productparent_productchild");
+                                    //query1_Child.ColumnSet = new ColumnSet(true);
+                                    //ConditionExpression cond1_Child = new ConditionExpression("productidone", ConditionOperator.Equal, ((EntityReference)_account.Attributes["alletech_product"]).Id);
+                                    //query1_Child.Criteria.AddCondition(cond1_Child);
+                                    //EntityCollection coll1_Child = service.RetrieveMultiple(query1_Child);
+
+                                    //tracingService.Trace("child count : " + coll1_Child.Entities.Count);
+
+                                    //if (coll1_Child != null && coll1_Child.Entities.Count > 0)
+                                    //{
+                                    //    foreach (Entity product2 in coll1_Child.Entities)
+                                    //    {
+                                    //        Entity childProd = service.Retrieve("product", (Guid)product2["productidtwo"], new ColumnSet(true));
+
+                                    //        if ((childProd.Attributes["name"].ToString()).Contains("OTC"))
+                                    //        {
+                                    //            Money otcmoney = (Money)childProd.Attributes["alletech_grossplaninvoicevalueinr"];
+                                    //            //retrieve OTC from Config Entity
+                                    //            EntityCollection OTCConfig = GetOTCdetails(service, tracingService, "spectra_onetimecharges", new OptionSetValue(111260000), new Money(otcmoney.Value), new OptionSetValue(OrderBandwidth), new OptionSetValue(AccountBandwidth));
+
+                                    //            if (OTCConfig != null && OTCConfig.Entities.Count > 0)
+                                    //            {
+                                    //                //if Previous OTC on Opportunity is 25000
+                                    //                if (otcmoney.Value == 25000)
+                                    //                {
+                                    //                    tracingService.Trace("Previous OTC Value is 25000");
+                                    //                    if (OTCConfig.Entities[0].Attributes.Contains("spectra_newotc"))
+                                    //                        newOTC = (Money)OTCConfig.Entities[0].Attributes["spectra_newotc"];
+                                    //                    else
+                                    //                        throw new Exception("New OTC value is not configured in the OTC config");
+
+                                    //                }
+                                    //                //if Previous OTC on Opportunity is 100000
+                                    //                else if (otcmoney.Value == 100000)
+                                    //                {
+                                    //                    tracingService.Trace("Previous OTC Value is 100000");
+                                    //                    if (OTCConfig.Entities[0].Attributes.Contains("spectra_newotc"))
+                                    //                        newOTC = (Money)OTCConfig.Entities[0].Attributes["spectra_newotc"];
+                                    //                    else
+                                    //                        throw new Exception("New OTC value is not configured in the OTC config");
+                                    //                }
+                                    //            }
+                                    //            else
+                                    //            {
+                                    //                throw new Exception("OTC Config doesnt exist for required upgrade");
+                                    //            }
+                                    //        }
+                                    //    }
+                                    //}
+                                    ////}
+                                    #endregion
+                                    //  }
                                     #endregion
 
                                     EntityReference building = (EntityReference)_account.Attributes["alletech_buildingname"];
@@ -282,120 +282,120 @@ namespace OrderDOA
                                                             Guid childpro = new Guid((item1.Attributes["productidtwo"].ToString()));
                                                             Entity _new_producttest = service.Retrieve("product", childpro, new ColumnSet(true));
 
-                                                            if (subtypename != string.Empty && subtypename == "Downgrade")
+                                                            //if (subtypename != string.Empty && subtypename == "Downgrade") // Commented on 28 latest April
+                                                            //{// Commented on 28 latest April
+                                                            #region For Degrade
+
+                                                            //For Downgrade Remove OTC
+                                                            //if (!(_new_producttest.Attributes["name"].ToString()).Contains("OTC")) //  Commented on 26th April 2022
+                                                            // {
+                                                            OptionSetValue statuscode = (OptionSetValue)_new_producttest.Attributes["statuscode"];
+
+                                                            if (statuscode.Value == 1)
                                                             {
-                                                                #region For Degrade
-
-                                                                //For Downgrade Remove OTC
-                                                                //if (!(_new_producttest.Attributes["name"].ToString()).Contains("OTC")) //  Commented on 26th April 2022
-                                                                // {
-                                                                OptionSetValue statuscode = (OptionSetValue)_new_producttest.Attributes["statuscode"];
-
-                                                                if (statuscode.Value == 1)
+                                                                QueryExpression query2 = new QueryExpression("productpricelevel");
+                                                                query2.ColumnSet = new ColumnSet(true);
+                                                                FilterExpression filter = new FilterExpression(LogicalOperator.And);
+                                                                ConditionExpression cond2 = new ConditionExpression("pricelevelid", ConditionOperator.Equal, pricelist.Id);
+                                                                ConditionExpression cond3 = new ConditionExpression("productid", ConditionOperator.Equal, _new_producttest.Id);
+                                                                filter.AddCondition(cond2);
+                                                                filter.AddCondition(cond3);
+                                                                query2.Criteria.AddFilter(filter);
+                                                                EntityCollection coll2 = service.RetrieveMultiple(query2);
+                                                                tracingService.Trace("Price list item retrieval completed" + coll2.Entities.Count);
+                                                                if (coll2.Entities.Count > 0)
                                                                 {
-                                                                    QueryExpression query2 = new QueryExpression("productpricelevel");
-                                                                    query2.ColumnSet = new ColumnSet(true);
-                                                                    FilterExpression filter = new FilterExpression(LogicalOperator.And);
-                                                                    ConditionExpression cond2 = new ConditionExpression("pricelevelid", ConditionOperator.Equal, pricelist.Id);
-                                                                    ConditionExpression cond3 = new ConditionExpression("productid", ConditionOperator.Equal, _new_producttest.Id);
-                                                                    filter.AddCondition(cond2);
-                                                                    filter.AddCondition(cond3);
-                                                                    query2.Criteria.AddFilter(filter);
-                                                                    EntityCollection coll2 = service.RetrieveMultiple(query2);
-                                                                    tracingService.Trace("Price list item retrieval completed" + coll2.Entities.Count);
-                                                                    if (coll2.Entities.Count > 0)
+                                                                    foreach (Entity item3 in coll2.Entities)
                                                                     {
-                                                                        foreach (Entity item3 in coll2.Entities)
+
+                                                                        Entity obj_listItem = service.Retrieve(item3.LogicalName, item3.Id, new ColumnSet(true));
+                                                                        tracingService.Trace("Before Productid");
+                                                                        Guid productidorder = ((EntityReference)(obj_listItem.Attributes["productid"])).Id;
+                                                                        tracingService.Trace("Before amount");
+                                                                        Money amount = (Money)obj_listItem.Attributes["amount"];
+                                                                        tracingService.Trace("Before uomid");
+                                                                        EntityReference uom = (EntityReference)obj_listItem.Attributes["uomid"];
+                                                                        tracingService.Trace("Assignment Completed");
+
+                                                                        //Create Order Product Records
+                                                                        Entity new_Opp_Product = new Entity("salesorderdetail");
+
+                                                                        new_Opp_Product["productid"] = new EntityReference("product", productidorder);
+                                                                        new_Opp_Product["priceperunit"] = amount;
+                                                                        new_Opp_Product["salesorderid"] = new EntityReference(_order.LogicalName, _order.Id);
+                                                                        new_Opp_Product["uomid"] = uom;
+                                                                        new_Opp_Product["quantity"] = (decimal)1;
+                                                                        service.Create(new_Opp_Product);
+                                                                        tracingService.Trace("Order Product create for child Product and Price List");
+
+                                                                    }
+
+                                                                    #region Check For Childs For Related Product
+                                                                    if (_new_producttest.Attributes.Contains("alletech_chargetype"))
+                                                                    {
+                                                                        if (((OptionSetValue)(_new_producttest.Attributes["alletech_chargetype"])).Value == 569480000)
                                                                         {
+                                                                            tracingService.Trace("If Charge Type is Package then retrieve child product related childs");
+                                                                            QueryExpression query1_Child = new QueryExpression("alletech_productparent_productchild");
+                                                                            query1_Child.ColumnSet = new ColumnSet(true);
 
-                                                                            Entity obj_listItem = service.Retrieve(item3.LogicalName, item3.Id, new ColumnSet(true));
-                                                                            tracingService.Trace("Before Productid");
-                                                                            Guid productidorder = ((EntityReference)(obj_listItem.Attributes["productid"])).Id;
-                                                                            tracingService.Trace("Before amount");
-                                                                            Money amount = (Money)obj_listItem.Attributes["amount"];
-                                                                            tracingService.Trace("Before uomid");
-                                                                            EntityReference uom = (EntityReference)obj_listItem.Attributes["uomid"];
-                                                                            tracingService.Trace("Assignment Completed");
+                                                                            ConditionExpression cond1_Child = new ConditionExpression("productidone", ConditionOperator.Equal, _new_producttest.Id);
 
-                                                                            //Create Order Product Records
-                                                                            Entity new_Opp_Product = new Entity("salesorderdetail");
+                                                                            query1_Child.Criteria.AddCondition(cond1_Child);
+                                                                            EntityCollection coll1_Child = service.RetrieveMultiple(query1_Child);
 
-                                                                            new_Opp_Product["productid"] = new EntityReference("product", productidorder);
-                                                                            new_Opp_Product["priceperunit"] = amount;
-                                                                            new_Opp_Product["salesorderid"] = new EntityReference(_order.LogicalName, _order.Id);
-                                                                            new_Opp_Product["uomid"] = uom;
-                                                                            new_Opp_Product["quantity"] = (decimal)1;
-                                                                            service.Create(new_Opp_Product);
-                                                                            tracingService.Trace("Order Product create for child Product and Price List");
-
-                                                                        }
-
-                                                                        #region Check For Childs For Related Product
-                                                                        if (_new_producttest.Attributes.Contains("alletech_chargetype"))
-                                                                        {
-                                                                            if (((OptionSetValue)(_new_producttest.Attributes["alletech_chargetype"])).Value == 569480000)
+                                                                            if (childproducts.Entities.Count > 0)
                                                                             {
-                                                                                tracingService.Trace("If Charge Type is Package then retrieve child product related childs");
-                                                                                QueryExpression query1_Child = new QueryExpression("alletech_productparent_productchild");
-                                                                                query1_Child.ColumnSet = new ColumnSet(true);
-
-                                                                                ConditionExpression cond1_Child = new ConditionExpression("productidone", ConditionOperator.Equal, _new_producttest.Id);
-
-                                                                                query1_Child.Criteria.AddCondition(cond1_Child);
-                                                                                EntityCollection coll1_Child = service.RetrieveMultiple(query1_Child);
-
-                                                                                if (childproducts.Entities.Count > 0)
+                                                                                foreach (Entity item1_Child in coll1_Child.Entities)
                                                                                 {
-                                                                                    foreach (Entity item1_Child in coll1_Child.Entities)
+                                                                                    tracingService.Trace("Child product is having Child products");
+                                                                                    Guid childchildpro = new Guid((item1.Attributes["productidtwo"].ToString()));
+                                                                                    Entity _new_producttest_Child = service.Retrieve("product", childchildpro, new ColumnSet(true));
+
+
+                                                                                    QueryExpression query2_Child = new QueryExpression("productpricelevel");
+                                                                                    query2_Child.ColumnSet = new ColumnSet(true);
+                                                                                    FilterExpression filter_Child = new FilterExpression(LogicalOperator.And);
+                                                                                    ConditionExpression cond2_Child = new ConditionExpression("pricelevelid", ConditionOperator.Equal, pricelist.Id);
+                                                                                    ConditionExpression cond3_Child = new ConditionExpression("productid", ConditionOperator.Equal, _new_producttest_Child.Id);
+
+                                                                                    filter_Child.AddCondition(cond2_Child);
+                                                                                    filter_Child.AddCondition(cond3_Child);
+                                                                                    query2_Child.Criteria.AddFilter(filter_Child);
+                                                                                    EntityCollection coll2_Child = service.RetrieveMultiple(query2_Child);
+                                                                                    tracingService.Trace("Child-child product related procelist item retrieval completed");
+                                                                                    if (coll2_Child.Entities.Count > 0)
                                                                                     {
-                                                                                        tracingService.Trace("Child product is having Child products");
-                                                                                        Guid childchildpro = new Guid((item1.Attributes["productidtwo"].ToString()));
-                                                                                        Entity _new_producttest_Child = service.Retrieve("product", childchildpro, new ColumnSet(true));
-
-
-                                                                                        QueryExpression query2_Child = new QueryExpression("productpricelevel");
-                                                                                        query2_Child.ColumnSet = new ColumnSet(true);
-                                                                                        FilterExpression filter_Child = new FilterExpression(LogicalOperator.And);
-                                                                                        ConditionExpression cond2_Child = new ConditionExpression("pricelevelid", ConditionOperator.Equal, pricelist.Id);
-                                                                                        ConditionExpression cond3_Child = new ConditionExpression("productid", ConditionOperator.Equal, _new_producttest_Child.Id);
-
-                                                                                        filter_Child.AddCondition(cond2_Child);
-                                                                                        filter_Child.AddCondition(cond3_Child);
-                                                                                        query2_Child.Criteria.AddFilter(filter_Child);
-                                                                                        EntityCollection coll2_Child = service.RetrieveMultiple(query2_Child);
-                                                                                        tracingService.Trace("Child-child product related procelist item retrieval completed");
-                                                                                        if (coll2_Child.Entities.Count > 0)
+                                                                                        foreach (Entity item3_Child in coll2_Child.Entities)
                                                                                         {
-                                                                                            foreach (Entity item3_Child in coll2_Child.Entities)
-                                                                                            {
-                                                                                                Entity obj_listItem_Child = service.Retrieve(item3_Child.LogicalName, item3_Child.Id, new ColumnSet(true)); ;
+                                                                                            Entity obj_listItem_Child = service.Retrieve(item3_Child.LogicalName, item3_Child.Id, new ColumnSet(true)); ;
 
-                                                                                                Guid productidorderchild = ((EntityReference)(obj_listItem_Child.Attributes["productid"])).Id;
-                                                                                                Money amountchild = (Money)obj_listItem_Child.Attributes["amount"];
-                                                                                                EntityReference uomchild = (EntityReference)obj_listItem_Child.Attributes["uomid"];
+                                                                                            Guid productidorderchild = ((EntityReference)(obj_listItem_Child.Attributes["productid"])).Id;
+                                                                                            Money amountchild = (Money)obj_listItem_Child.Attributes["amount"];
+                                                                                            EntityReference uomchild = (EntityReference)obj_listItem_Child.Attributes["uomid"];
 
-                                                                                                Entity new_Opp_Product_Child = new Entity("salesorderdetail");
+                                                                                            Entity new_Opp_Product_Child = new Entity("salesorderdetail");
 
-                                                                                                new_Opp_Product_Child["productid"] = new EntityReference("product", productidorderchild);
-                                                                                                new_Opp_Product_Child["priceperunit"] = amountchild;
-                                                                                                new_Opp_Product_Child["salesorderid"] = new EntityReference(_order.LogicalName, _order.Id);
-                                                                                                new_Opp_Product_Child["uomid"] = uomchild;
-                                                                                                new_Opp_Product_Child["quantity"] = (decimal)1;
-                                                                                                service.Create(new_Opp_Product_Child);
-                                                                                                tracingService.Trace("Order Product created for Child-Child Product and to its Proce List");
-                                                                                            }
-                                                                                        }
-                                                                                        else
-                                                                                        {
-                                                                                            //No Price List Item Configured For Selected Price List  
+                                                                                            new_Opp_Product_Child["productid"] = new EntityReference("product", productidorderchild);
+                                                                                            new_Opp_Product_Child["priceperunit"] = amountchild;
+                                                                                            new_Opp_Product_Child["salesorderid"] = new EntityReference(_order.LogicalName, _order.Id);
+                                                                                            new_Opp_Product_Child["uomid"] = uomchild;
+                                                                                            new_Opp_Product_Child["quantity"] = (decimal)1;
+                                                                                            service.Create(new_Opp_Product_Child);
+                                                                                            tracingService.Trace("Order Product created for Child-Child Product and to its Proce List");
                                                                                         }
                                                                                     }
-                                                                                }
-                                                                                else
-                                                                                {
-                                                                                    //Product Does not contain child products
+                                                                                    else
+                                                                                    {
+                                                                                        //No Price List Item Configured For Selected Price List  
+                                                                                    }
                                                                                 }
                                                                             }
+                                                                            else
+                                                                            {
+                                                                                //Product Does not contain child products
+                                                                            }
+                                                                            // }
                                                                         }
                                                                         #endregion
                                                                     }
@@ -403,157 +403,159 @@ namespace OrderDOA
                                                                 // }
                                                                 #endregion
                                                             }
-                                                            else
-                                                            {
-                                                                #region For Upgrade
-                                                                string Productname = _new_producttest.Attributes["name"].ToString();
-                                                                OptionSetValue statuscode = (OptionSetValue)_new_producttest.Attributes["statuscode"];
+                                                            #region Commented latest 28 April 2022
+                                                            //else
+                                                            //{
+                                                            //    #region For Upgrade
+                                                            //    string Productname = _new_producttest.Attributes["name"].ToString();
+                                                            //    OptionSetValue statuscode = (OptionSetValue)_new_producttest.Attributes["statuscode"];
 
-                                                                if (statuscode.Value == 1)
-                                                                {
-                                                                    QueryExpression query2 = new QueryExpression("productpricelevel");
-                                                                    query2.ColumnSet = new ColumnSet(true);
-                                                                    FilterExpression filter = new FilterExpression(LogicalOperator.And);
-                                                                    ConditionExpression cond2 = new ConditionExpression("pricelevelid", ConditionOperator.Equal, pricelist.Id);
-                                                                    ConditionExpression cond3 = new ConditionExpression("productid", ConditionOperator.Equal, _new_producttest.Id);
-                                                                    filter.AddCondition(cond2);
-                                                                    filter.AddCondition(cond3);
-                                                                    query2.Criteria.AddFilter(filter);
-                                                                    EntityCollection coll2 = service.RetrieveMultiple(query2);
-                                                                    tracingService.Trace("Price list item retrieval completed" + coll2.Entities.Count);
-                                                                    if (coll2.Entities.Count > 0)
-                                                                    {
-                                                                        foreach (Entity obj_listItem in coll2.Entities)
-                                                                        {
-                                                                            tracingService.Trace("Create Order Product");
-                                                                            //Entity obj_listItem = service.Retrieve(item3.LogicalName, item3.Id, new ColumnSet(true));
-                                                                            Guid productidorder = ((EntityReference)(obj_listItem.Attributes["productid"])).Id;
-                                                                            string productname = ((EntityReference)(obj_listItem.Attributes["productid"])).Name;
-                                                                            Money amount = (Money)obj_listItem.Attributes["amount"];
-                                                                            EntityReference uom = (EntityReference)obj_listItem.Attributes["uomid"];
-
-
-                                                                            //Create Order Product Records
-                                                                            if (productname.Contains("OTC"))
-                                                                            {
-                                                                                if (newOTC.Value > 0)
-                                                                                {
-                                                                                    tracingService.Trace("Product Contains OTC");
-                                                                                    Entity new_Opp_Product = new Entity("salesorderdetail");
-                                                                                    new_Opp_Product["priceperunit"] = newOTC;
-                                                                                    new_Opp_Product["salesorderid"] = new EntityReference(_order.LogicalName, _order.Id);
-                                                                                    new_Opp_Product["quantity"] = (decimal)1;
-                                                                                    new_Opp_Product["isproductoverridden"] = true;
-                                                                                    new_Opp_Product["baseamount"] = newOTC;
-                                                                                    new_Opp_Product["productdescription"] = productname;
-                                                                                    service.Create(new_Opp_Product);
-                                                                                    tracingService.Trace("OTC Order Product got created");
-                                                                                }
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                tracingService.Trace("Product does not Contains OTC");
-                                                                                Entity new_Opp_Product = new Entity("salesorderdetail");
-                                                                                new_Opp_Product["productid"] = new EntityReference("product", productidorder);
-                                                                                new_Opp_Product["priceperunit"] = amount;
-                                                                                new_Opp_Product["salesorderid"] = new EntityReference(_order.LogicalName, _order.Id);
-                                                                                new_Opp_Product["uomid"] = uom;
-                                                                                new_Opp_Product["quantity"] = (decimal)1;
-                                                                                service.Create(new_Opp_Product);
-                                                                                tracingService.Trace("RC Order Product got created");
-                                                                            }
-                                                                        }
-
-                                                                        #region Check For Childs For Related Product
-                                                                        if (_new_producttest.Attributes.Contains("alletech_chargetype"))
-                                                                        {
-                                                                            if (((OptionSetValue)(_new_producttest.Attributes["alletech_chargetype"])).Value == 569480000)
-                                                                            {
-                                                                                tracingService.Trace("If Charge Type is Package then retrieve child product related childs");
-                                                                                QueryExpression query1_Child = new QueryExpression("alletech_productparent_productchild");
-                                                                                query1_Child.ColumnSet = new ColumnSet(true);
-
-                                                                                ConditionExpression cond1_Child = new ConditionExpression("productidone", ConditionOperator.Equal, _new_producttest.Id);
-
-                                                                                query1_Child.Criteria.AddCondition(cond1_Child);
-                                                                                EntityCollection coll1_Child = service.RetrieveMultiple(query1_Child);
-
-                                                                                if (childproducts.Entities.Count > 0)
-                                                                                {
-                                                                                    foreach (Entity item1_Child in coll1_Child.Entities)
-                                                                                    {
-                                                                                        tracingService.Trace("Child product is having Child products");
-                                                                                        Guid childchildpro = new Guid((item1.Attributes["productidtwo"].ToString()));
-                                                                                        Entity _new_producttest_Child = service.Retrieve("product", childchildpro, new ColumnSet(true));
+                                                            //    if (statuscode.Value == 1)
+                                                            //    {
+                                                            //        QueryExpression query2 = new QueryExpression("productpricelevel");
+                                                            //        query2.ColumnSet = new ColumnSet(true);
+                                                            //        FilterExpression filter = new FilterExpression(LogicalOperator.And);
+                                                            //        ConditionExpression cond2 = new ConditionExpression("pricelevelid", ConditionOperator.Equal, pricelist.Id);
+                                                            //        ConditionExpression cond3 = new ConditionExpression("productid", ConditionOperator.Equal, _new_producttest.Id);
+                                                            //        filter.AddCondition(cond2);
+                                                            //        filter.AddCondition(cond3);
+                                                            //        query2.Criteria.AddFilter(filter);
+                                                            //        EntityCollection coll2 = service.RetrieveMultiple(query2);
+                                                            //        tracingService.Trace("Price list item retrieval completed" + coll2.Entities.Count);
+                                                            //        if (coll2.Entities.Count > 0)
+                                                            //        {
+                                                            //            foreach (Entity obj_listItem in coll2.Entities)
+                                                            //            {
+                                                            //                tracingService.Trace("Create Order Product");
+                                                            //                //Entity obj_listItem = service.Retrieve(item3.LogicalName, item3.Id, new ColumnSet(true));
+                                                            //                Guid productidorder = ((EntityReference)(obj_listItem.Attributes["productid"])).Id;
+                                                            //                string productname = ((EntityReference)(obj_listItem.Attributes["productid"])).Name;
+                                                            //                Money amount = (Money)obj_listItem.Attributes["amount"];
+                                                            //                EntityReference uom = (EntityReference)obj_listItem.Attributes["uomid"];
 
 
-                                                                                        QueryExpression query2_Child = new QueryExpression("productpricelevel");
-                                                                                        query2_Child.ColumnSet = new ColumnSet(true);
-                                                                                        FilterExpression filter_Child = new FilterExpression(LogicalOperator.And);
-                                                                                        ConditionExpression cond2_Child = new ConditionExpression("pricelevelid", ConditionOperator.Equal, pricelist.Id);
-                                                                                        ConditionExpression cond3_Child = new ConditionExpression("productid", ConditionOperator.Equal, _new_producttest_Child.Id);
-                                                                                        filter_Child.AddCondition(cond2_Child);
-                                                                                        filter_Child.AddCondition(cond3_Child);
-                                                                                        query2_Child.Criteria.AddFilter(filter_Child);
-                                                                                        EntityCollection coll2_Child = service.RetrieveMultiple(query2_Child);
-                                                                                        tracingService.Trace("Child-child product related procelist item retrieval completed");
-                                                                                        if (coll2_Child.Entities.Count > 0)
-                                                                                        {
-                                                                                            foreach (Entity item3_Child in coll2_Child.Entities)
-                                                                                            {
-                                                                                                Entity obj_listItem_Child = service.Retrieve(item3_Child.LogicalName, item3_Child.Id, new ColumnSet(true)); ;
+                                                            //                //Create Order Product Records
+                                                            //                if (productname.Contains("OTC"))
+                                                            //                {
+                                                            //                    if (newOTC.Value > 0)
+                                                            //                    {
+                                                            //                        tracingService.Trace("Product Contains OTC");
+                                                            //                        Entity new_Opp_Product = new Entity("salesorderdetail");
+                                                            //                        new_Opp_Product["priceperunit"] = newOTC;
+                                                            //                        new_Opp_Product["salesorderid"] = new EntityReference(_order.LogicalName, _order.Id);
+                                                            //                        new_Opp_Product["quantity"] = (decimal)1;
+                                                            //                        new_Opp_Product["isproductoverridden"] = true;
+                                                            //                        new_Opp_Product["baseamount"] = newOTC;
+                                                            //                        new_Opp_Product["productdescription"] = productname;
+                                                            //                        service.Create(new_Opp_Product);
+                                                            //                        tracingService.Trace("OTC Order Product got created");
+                                                            //                    }
+                                                            //                }
+                                                            //                else
+                                                            //                {
+                                                            //                    tracingService.Trace("Product does not Contains OTC");
+                                                            //                    Entity new_Opp_Product = new Entity("salesorderdetail");
+                                                            //                    new_Opp_Product["productid"] = new EntityReference("product", productidorder);
+                                                            //                    new_Opp_Product["priceperunit"] = amount;
+                                                            //                    new_Opp_Product["salesorderid"] = new EntityReference(_order.LogicalName, _order.Id);
+                                                            //                    new_Opp_Product["uomid"] = uom;
+                                                            //                    new_Opp_Product["quantity"] = (decimal)1;
+                                                            //                    service.Create(new_Opp_Product);
+                                                            //                    tracingService.Trace("RC Order Product got created");
+                                                            //                }
+                                                            //            }
 
-                                                                                                Guid productidorderchild = ((EntityReference)(obj_listItem_Child.Attributes["productid"])).Id;
-                                                                                                string ChildProdName = ((EntityReference)(obj_listItem_Child.Attributes["productid"])).Name;
-                                                                                                Money amountchild = (Money)obj_listItem_Child.Attributes["amount"];
-                                                                                                EntityReference uomchild = (EntityReference)obj_listItem_Child.Attributes["uomid"];
+                                                            //            #region Check For Childs For Related Product
+                                                            //            if (_new_producttest.Attributes.Contains("alletech_chargetype"))
+                                                            //            {
+                                                            //                if (((OptionSetValue)(_new_producttest.Attributes["alletech_chargetype"])).Value == 569480000)
+                                                            //                {
+                                                            //                    tracingService.Trace("If Charge Type is Package then retrieve child product related childs");
+                                                            //                    QueryExpression query1_Child = new QueryExpression("alletech_productparent_productchild");
+                                                            //                    query1_Child.ColumnSet = new ColumnSet(true);
 
-                                                                                                Entity new_Opp_Product_Child = new Entity("salesorderdetail");
-                                                                                                //Create Order Product Records
-                                                                                                if (ChildProdName.Contains("OTC"))
-                                                                                                {
-                                                                                                    tracingService.Trace("Child Product Contains OTC");
-                                                                                                    new_Opp_Product_Child["priceperunit"] = newOTC;
-                                                                                                    new_Opp_Product_Child["salesorderid"] = new EntityReference(_order.LogicalName, _order.Id);
-                                                                                                    new_Opp_Product_Child["quantity"] = (decimal)1;
-                                                                                                    new_Opp_Product_Child["isproductoverridden"] = true;
-                                                                                                    new_Opp_Product_Child["baseamount"] = newOTC;
-                                                                                                    new_Opp_Product_Child["productdescription"] = ChildProdName;
-                                                                                                    service.Create(new_Opp_Product_Child);
-                                                                                                    tracingService.Trace("Child OTC Order Product got created");
-                                                                                                }
-                                                                                                else
-                                                                                                {
-                                                                                                    tracingService.Trace("Child Product doesnot Contains OTC");
-                                                                                                    new_Opp_Product_Child["productid"] = new EntityReference("product", productidorderchild);
-                                                                                                    new_Opp_Product_Child["priceperunit"] = amountchild;
-                                                                                                    new_Opp_Product_Child["salesorderid"] = new EntityReference(_order.LogicalName, _order.Id);
-                                                                                                    new_Opp_Product_Child["uomid"] = uomchild;
-                                                                                                    new_Opp_Product_Child["quantity"] = (decimal)1;
-                                                                                                    service.Create(new_Opp_Product_Child);
-                                                                                                    tracingService.Trace("Child RC Order Product got created");
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                        else
-                                                                                        {
-                                                                                            //No Price List Item Configured For Selected Price List  
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                                else
-                                                                                {
-                                                                                    //Product Does not contain child products
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                        #endregion
+                                                            //                    ConditionExpression cond1_Child = new ConditionExpression("productidone", ConditionOperator.Equal, _new_producttest.Id);
 
-                                                                    }
-                                                                }
+                                                            //                    query1_Child.Criteria.AddCondition(cond1_Child);
+                                                            //                    EntityCollection coll1_Child = service.RetrieveMultiple(query1_Child);
 
-                                                                #endregion
-                                                            }
+                                                            //                    if (childproducts.Entities.Count > 0)
+                                                            //                    {
+                                                            //                        foreach (Entity item1_Child in coll1_Child.Entities)
+                                                            //                        {
+                                                            //                            tracingService.Trace("Child product is having Child products");
+                                                            //                            Guid childchildpro = new Guid((item1.Attributes["productidtwo"].ToString()));
+                                                            //                            Entity _new_producttest_Child = service.Retrieve("product", childchildpro, new ColumnSet(true));
+
+
+                                                            //                            QueryExpression query2_Child = new QueryExpression("productpricelevel");
+                                                            //                            query2_Child.ColumnSet = new ColumnSet(true);
+                                                            //                            FilterExpression filter_Child = new FilterExpression(LogicalOperator.And);
+                                                            //                            ConditionExpression cond2_Child = new ConditionExpression("pricelevelid", ConditionOperator.Equal, pricelist.Id);
+                                                            //                            ConditionExpression cond3_Child = new ConditionExpression("productid", ConditionOperator.Equal, _new_producttest_Child.Id);
+                                                            //                            filter_Child.AddCondition(cond2_Child);
+                                                            //                            filter_Child.AddCondition(cond3_Child);
+                                                            //                            query2_Child.Criteria.AddFilter(filter_Child);
+                                                            //                            EntityCollection coll2_Child = service.RetrieveMultiple(query2_Child);
+                                                            //                            tracingService.Trace("Child-child product related procelist item retrieval completed");
+                                                            //                            if (coll2_Child.Entities.Count > 0)
+                                                            //                            {
+                                                            //                                foreach (Entity item3_Child in coll2_Child.Entities)
+                                                            //                                {
+                                                            //                                    Entity obj_listItem_Child = service.Retrieve(item3_Child.LogicalName, item3_Child.Id, new ColumnSet(true)); ;
+
+                                                            //                                    Guid productidorderchild = ((EntityReference)(obj_listItem_Child.Attributes["productid"])).Id;
+                                                            //                                    string ChildProdName = ((EntityReference)(obj_listItem_Child.Attributes["productid"])).Name;
+                                                            //                                    Money amountchild = (Money)obj_listItem_Child.Attributes["amount"];
+                                                            //                                    EntityReference uomchild = (EntityReference)obj_listItem_Child.Attributes["uomid"];
+
+                                                            //                                    Entity new_Opp_Product_Child = new Entity("salesorderdetail");
+                                                            //                                    //Create Order Product Records
+                                                            //                                    if (ChildProdName.Contains("OTC"))
+                                                            //                                    {
+                                                            //                                        tracingService.Trace("Child Product Contains OTC");
+                                                            //                                        new_Opp_Product_Child["priceperunit"] = newOTC;
+                                                            //                                        new_Opp_Product_Child["salesorderid"] = new EntityReference(_order.LogicalName, _order.Id);
+                                                            //                                        new_Opp_Product_Child["quantity"] = (decimal)1;
+                                                            //                                        new_Opp_Product_Child["isproductoverridden"] = true;
+                                                            //                                        new_Opp_Product_Child["baseamount"] = newOTC;
+                                                            //                                        new_Opp_Product_Child["productdescription"] = ChildProdName;
+                                                            //                                        service.Create(new_Opp_Product_Child);
+                                                            //                                        tracingService.Trace("Child OTC Order Product got created");
+                                                            //                                    }
+                                                            //                                    else
+                                                            //                                    {
+                                                            //                                        tracingService.Trace("Child Product doesnot Contains OTC");
+                                                            //                                        new_Opp_Product_Child["productid"] = new EntityReference("product", productidorderchild);
+                                                            //                                        new_Opp_Product_Child["priceperunit"] = amountchild;
+                                                            //                                        new_Opp_Product_Child["salesorderid"] = new EntityReference(_order.LogicalName, _order.Id);
+                                                            //                                        new_Opp_Product_Child["uomid"] = uomchild;
+                                                            //                                        new_Opp_Product_Child["quantity"] = (decimal)1;
+                                                            //                                        service.Create(new_Opp_Product_Child);
+                                                            //                                        tracingService.Trace("Child RC Order Product got created");
+                                                            //                                    }
+                                                            //                                }
+                                                            //                            }
+                                                            //                            else
+                                                            //                            {
+                                                            //                                //No Price List Item Configured For Selected Price List  
+                                                            //                            }
+                                                            //                        }
+                                                            //                    }
+                                                            //                    else
+                                                            //                    {
+                                                            //                        //Product Does not contain child products
+                                                            //                    }
+                                                            //                }
+                                                            //            }
+                                                            //            #endregion
+
+                                                            //        }
+                                                            //    }
+
+                                                            //    #endregion
+                                                            //}
+                                                            #endregion
                                                         }
                                                     }
                                                 }
