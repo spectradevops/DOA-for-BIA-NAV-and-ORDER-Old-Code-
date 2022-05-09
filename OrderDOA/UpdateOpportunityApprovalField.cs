@@ -78,7 +78,7 @@ namespace OrderDOA
                                         }
                                     }
                                 }
-                                else if (prodId.Name.ToLower().EndsWith("rc") || prodId.Name.ToLower().EndsWith("otc"))// || prodId.Name.ToLower().EndsWith("ip"))
+                                else if (prodId.Name.ToLower().EndsWith("rc"))// || prodId.Name.ToLower().EndsWith("otc"))// || prodId.Name.ToLower().EndsWith("ip"))
                                 {
                                     EntityReference oppId = (EntityReference)entTraget["salesorderid"];
                                     Entity entOpp = service.Retrieve(oppId.LogicalName, oppId.Id, new ColumnSet(true));
@@ -182,9 +182,15 @@ namespace OrderDOA
                                 {
                                     trace.Trace("Contains Business Segment as Business");
                                     //decimal extendedAmt = ((Money)entPost["extendedamount"]).Value;
-                                    decimal postmanualdiscount = ((Money)entPost["manualdiscountamount"]).Value;
-                                    decimal floorDisc = ((Money)entPost["priceperunit"]).Value;
-                                    decimal extendedAmt = floorDisc - postmanualdiscount;
+                                    decimal postmanualdiscount = 0, floorDisc =0, extendedAmt = 0;
+                                    if (entPost.Attributes.Contains("manualdiscountamount"))                                    
+                                        postmanualdiscount = ((Money)entPost["manualdiscountamount"]).Value;
+
+                                    if (entPost.Attributes.Contains("priceperunit"))
+                                        floorDisc = ((Money)entPost["priceperunit"]).Value;
+                                                                       
+                                    extendedAmt = floorDisc - postmanualdiscount;
+                                    trace.Trace("extendedAmt");
 
                                     int chargetype = entProd.GetAttributeValue<OptionSetValue>("alletech_chargetype").Value;
                                     int plantype = entProd.GetAttributeValue<OptionSetValue>("alletech_plantype").Value;
@@ -215,7 +221,7 @@ namespace OrderDOA
                                     #endregion
 
                                     #region RC || OTC
-                                    else if(plantype == 569480001 &&(chargetype == 569480001 || chargetype == 569480002))
+                                    else if(plantype == 569480001 && chargetype == 569480001)// || chargetype == 569480002))
                                     {
                                         if (extendedAmt < floorDisc)
                                         {

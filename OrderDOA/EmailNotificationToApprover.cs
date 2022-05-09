@@ -122,6 +122,105 @@ namespace OrderDOA
 
                         traceService.Trace("approver : " + approver);
 
+                        #region Upgrade or DownGrade Check 09-May-2022
+                        //Entity AccountPorduct = null;
+                        //Entity OrderPorduct = null;
+                        //int AccountBandwidth = 0;
+                        //int OrderBandwidth = 0;
+                        //int accFrequency = 0;
+                        //int caseFrequency = 0;
+                        //string UpgradeDowngradeStatus = string.Empty;
+                        //Entity _account = (Entity)service.Retrieve("account", ((EntityReference)(orderdetails.Attributes["customerid"])).Id, new ColumnSet("alletech_businesssegment", "alletech_buildingname", "alletech_product"));
+                        //if (_account.Attributes.Contains("alletech_product"))
+                        //{
+                        //    //  tracingService.Trace("Account is having Product");
+                        //    AccountPorduct = service.Retrieve("product", ((EntityReference)_account.Attributes["alletech_product"]).Id, new ColumnSet("alletech_productsegment", "alletech_bandwidthmaster", "alletech_billingcycle"));
+
+                        //    if (AccountPorduct.Attributes.Contains("alletech_billingcycle"))
+                        //    {
+                        //        Entity billingFrequency = service.Retrieve("alletech_billingcycle", ((EntityReference)AccountPorduct.Attributes["alletech_billingcycle"]).Id, new ColumnSet("alletech_monthinbillingcycle"));
+                        //        if (billingFrequency.Attributes.Contains("alletech_monthinbillingcycle"))
+                        //        {
+                        //            accFrequency = Convert.ToInt32(billingFrequency.Attributes["alletech_monthinbillingcycle"]);
+                        //        }
+                        //    }
+                        //    if (AccountPorduct.Attributes.Contains("alletech_bandwidthmaster"))
+                        //    {
+                        //        string optionText = AccountPorduct.FormattedValues["alletech_bandwidthmaster"].ToString();
+                        //        string optionB = string.Empty;
+                        //        for (int i = 0; i < optionText.Length; i++)
+                        //        {
+                        //            if (Char.IsDigit(optionText[i]))
+                        //                optionB += optionText[i];
+                        //        }
+                        //        if (optionB.Length > 0)
+                        //        {
+                        //            AccountBandwidth = int.Parse(optionB);
+                        //        }
+                        //    }
+                        //    else
+                        //    {
+                        //        throw new Exception("Bandwidth is empty for the current Product, please map the bandwidth on product" + ((EntityReference)_account.Attributes["alletech_product"]).Id);
+                        //    }
+                        //}
+                        //else
+                        //{
+                        //    throw new Exception("Account is not associated with any of the product");
+                        //}
+
+                        //OrderPorduct = service.Retrieve("product", ((EntityReference)orderdetails.Attributes["spectra_product"]).Id, new ColumnSet("alletech_bandwidthmaster", "alletech_billingcycle"));
+                        //if (OrderPorduct.Attributes.Contains("alletech_billingcycle"))
+                        //{
+                        //    Entity billingFrequency = service.Retrieve("alletech_billingcycle", ((EntityReference)OrderPorduct.Attributes["alletech_billingcycle"]).Id, new ColumnSet("alletech_monthinbillingcycle"));
+                        //    if (billingFrequency.Attributes.Contains("alletech_monthinbillingcycle"))
+                        //    {
+                        //        caseFrequency = Convert.ToInt32(billingFrequency.Attributes["alletech_monthinbillingcycle"]);
+                        //    }
+                        //}
+                        //if (OrderPorduct.Attributes.Contains("alletech_bandwidthmaster"))
+                        //{
+                        //    string optionText = OrderPorduct.FormattedValues["alletech_bandwidthmaster"].ToString();
+                        //    string optionB = string.Empty;
+                        //    for (int i = 0; i < optionText.Length; i++)
+                        //    {
+                        //        if (Char.IsDigit(optionText[i]))
+                        //            optionB += optionText[i];
+                        //    }
+                        //    if (optionB.Length > 0)
+                        //    {
+                        //        OrderBandwidth = int.Parse(optionB);
+                        //    }
+                        //}
+                        //else
+                        //{
+                        //    throw new Exception("Bandwidth is empty for the Upgraded Product, please map the bandwidth on product");
+                        //}
+
+                        //if (OrderBandwidth < AccountBandwidth)
+                        //{
+                        //    UpgradeDowngradeStatus = "Downgrade";
+                        //}
+                        //else if (OrderBandwidth > AccountBandwidth)
+                        //{
+                        //    UpgradeDowngradeStatus = "Upgrade";
+                        //}
+                        //else
+                        //{
+                        //    if (OrderBandwidth == AccountBandwidth)
+                        //    {
+                        //        if (caseFrequency < accFrequency)
+                        //        {
+                        //            UpgradeDowngradeStatus = "Downgrade";
+                        //        }
+                        //        else
+                        //        {
+                        //            UpgradeDowngradeStatus = "Upgrade";
+                        //        }
+                        //    }
+                        //}
+
+                        #endregion Ends here
+
                         string emailbody = helper.getEmailBody(service, approver, orderdetails, accountdetails, casedetails, customersegment, billcycle,arc, traceService);
 
                         Entity entEmail = new Entity("email");

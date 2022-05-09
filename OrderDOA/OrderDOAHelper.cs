@@ -35,6 +35,7 @@ namespace OrderDOA
                 string Caseid = string.Empty;
                 int uptype = 0;
                 string opptysubtable = "";
+                string SubType = string.Empty, SubSubType = string.Empty;
 
                 trace.Trace("order details Started");
                 //Order Details
@@ -114,6 +115,16 @@ namespace OrderDOA
                     {
                         Typeofrequest = ((EntityReference)sr.Attributes["alletech_subdisposition"]).Name;
                     }
+                    //Typeofrequest Upgrade or Down grade
+                    if (sr.Attributes.Contains("alletech_subdisposition"))
+                    {
+                        Typeofrequest = ((EntityReference)sr.Attributes["alletech_subdisposition"]).Name;
+                        SubType = ((EntityReference)sr.Attributes["alletech_subdisposition"]).Name.ToString();
+                    }
+                    if (sr.Attributes.Contains("alletech_disposition"))
+                    {
+                        SubSubType = ((EntityReference)sr.Attributes["alletech_disposition"]).Name.ToString();
+                    }
                     //Case ID
                     if (sr.Attributes.Contains("alletech_caseidcrm"))
                     {
@@ -127,7 +138,7 @@ namespace OrderDOA
                 emailbody += "Hi " + Approver + ",<br/><br/>";
                 //type
                 if (uptype == 111260000)
-                    emailbody += "Approval of "+ Typeofrequest + " for order " + OrderID + ",<br/>";
+                    emailbody += "Approval of "+ Typeofrequest + " for order Id " + OrderID + ",<br/>";
                 else if (uptype == 111260001)
                     emailbody += "Approval of Temporary Upgradation for order " + OrderID + ",<br/>";
                 else if (uptype == 111260002)
@@ -157,7 +168,7 @@ namespace OrderDOA
                     </td>
                     <td width='241' style='padding: 0in 5.4pt; border: 1pt solid windowtext; width: 181pt; height: 15pt; ' colspan='2'>
                         <p align='center' text-align: center;'>" + SRM + @"</p>
-                    </td>
+                    </td>                   
                 </tr>";
 
                 }
@@ -183,6 +194,23 @@ namespace OrderDOA
                                 <p align ='center' text-align: 'center;'>" + SRM + @"</p></td></tr>";
                 }
 
+                #endregion
+
+                #region New Row added
+                emailbody += @"<tr style='height: 15pt;'>
+                    <td width='239' style='padding: 0in 5.4pt; border: 1pt solid windowtext; width: 179pt; height: 15pt; ' colspan='2'>
+                        <p align='center' text-align: center;'><b>Type</b></p>
+                    </td>
+                    <td width='131' style='padding: 0in 5.4pt; border: 1pt solid windowtext; width: 98pt; height: 15pt; '>
+                        <p align='center' text-align: center;'>" + SubType + @"</p>
+                    </td>
+                    <td width='119' style='padding: 0in 5.4pt; border: 1pt solid windowtext; width: 89pt; height: 15pt; '>
+                        <p><b>Sub Type</b></p>
+                    </td>
+                    <td width='241' style='padding: 0in 5.4pt; border: 1pt solid windowtext; width: 181pt; height: 15pt; ' colspan='2'>
+                        <p align='center' text-align: center;'>" + SubSubType + @"</p>
+                    </td>                 
+                </tr>";
                 #endregion
 
                 #region Row 2
@@ -296,7 +324,7 @@ namespace OrderDOA
 
                                 decimal price = 0, extnamt = 0, percentAge = 0;
                                 //if (prodname.EndsWith("RC") || prodname.EndsWith("OTC") || plan == 569480002) //addon plan type
-                                if (charge == 569480001 || charge == 569480002 || plan == 569480002) //addon plan type
+                                if (charge == 569480001)// || charge == 569480002 || plan == 569480002) //addon plan type
                                 {
                                     price = ordprod.GetAttributeValue<Money>("priceperunit").Value;
                                     Opptyvalues[0] = price.ToString();
