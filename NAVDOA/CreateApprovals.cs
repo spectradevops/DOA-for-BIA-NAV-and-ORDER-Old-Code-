@@ -131,7 +131,7 @@ namespace NAVDOA
                 string emailbody = helper.getEmailBody(service,postImg, CHO.Name,Type);
 
                 Entity entEmail = new Entity("email");
-                entEmail["subject"] = "Pending for your approval";
+                entEmail["subject"] = "Pending for your approval #" + approvalId.ToString().ToUpper() + "#";
                 entEmail["description"] = emailbody;
                 
                 Entity entTo = new Entity("activityparty");

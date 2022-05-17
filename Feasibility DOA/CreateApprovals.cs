@@ -208,7 +208,7 @@ namespace Feasibility_DOA
                                                     string emailbody = helper.getEmailBody(service, oppGUID, approver, feasibilityID, productName, billCycle, remarks);
                                                     traceService.Trace("After Email body");
                                                     Entity entEmail = new Entity("email");
-                                                    entEmail["subject"] = "Pending for your approval";
+                                                    entEmail["subject"] = "Pending for your approval #" + approvalId.ToString().ToUpper() + "#";
                                                     entEmail["description"] = emailbody;
 
                                                     Entity entTo = new Entity("activityparty");
