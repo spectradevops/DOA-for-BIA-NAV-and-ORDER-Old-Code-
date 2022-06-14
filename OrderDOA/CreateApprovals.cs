@@ -478,7 +478,7 @@ namespace OrderDOA
 
                             #region Creating EMail
                             Entity entEmail = new Entity("email");
-                            entEmail["subject"] = "Pending for your approval";
+                            entEmail["subject"] = "Pending for your approval #" + approvalId.ToString().ToUpper() + "#";
                             entEmail["description"] = emailbody;
 
                             Entity Temp = new Entity();
