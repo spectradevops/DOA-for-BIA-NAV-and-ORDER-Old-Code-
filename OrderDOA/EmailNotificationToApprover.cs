@@ -224,7 +224,7 @@ namespace OrderDOA
                         string emailbody = helper.getEmailBody(service, approver, orderdetails, accountdetails, casedetails, customersegment, billcycle,arc, traceService);
 
                         Entity entEmail = new Entity("email");
-                        entEmail["subject"] = "Pending for your approval";
+                        entEmail["subject"] = "Pending for your approval #" + nextApprovalId.Id.ToString().ToUpper() + "#";  // "Pending for your approval";
                         entEmail["description"] = emailbody;
 
                         //To
