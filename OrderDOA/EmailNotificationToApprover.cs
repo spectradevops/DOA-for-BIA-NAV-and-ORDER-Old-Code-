@@ -236,13 +236,23 @@ namespace OrderDOA
 
                         #region CC
                         List<Entity> entccList = new List<Entity>();
-                        //if (accountdetails.Attributes.Contains("spectra_servicerelationshipmanagerid"))
-                        //{
-                        //    Temp = new Entity("activityparty");
-                        //    Temp["partyid"] = accountdetails.GetAttributeValue<EntityReference>("spectra_servicerelationshipmanagerid");
+                        #region CC added on 08-Spe-2022                        
+                        if (accountdetails.Attributes.Contains("spectra_servicerelationshipmanagerid"))
+                        {
+                            Temp = new Entity("activityparty");
+                            Temp["partyid"] = accountdetails.GetAttributeValue<EntityReference>("spectra_servicerelationshipmanagerid");
+                            entccList.Add(Temp);
 
-                        //    entccList.Add(Temp);
-                        //}
+                            Entity user = helper.GetResultByAttribute(service, "systemuser", "systemuserid", accountdetails.GetAttributeValue<EntityReference>("spectra_servicerelationshipmanagerid").Id.ToString(), "parentsystemuserid");
+                            if (user.Attributes.Contains("parentsystemuserid"))
+                            {
+                                Temp = new Entity("activityparty");
+                                Temp["partyid"] = user.GetAttributeValue<EntityReference>("parentsystemuserid");
+                                entccList.Add(Temp);
+
+                            }
+                        }
+                        #endregion
 
                         EntityCollection CCcoll = helper.getApprovalConfig(service, "CC", "B2BUP_");
                         if(CCcoll.Entities.Count>0)
