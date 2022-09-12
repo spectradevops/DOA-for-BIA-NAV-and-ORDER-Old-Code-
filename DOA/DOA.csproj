@@ -45,7 +45,7 @@
       <HintPath>..\..\..\References\Microsoft.Xrm.Sdk.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xrm.Sdk.Workflow">
-      <HintPath>C:\Users\vlabs.014\Desktop\SDK 2015\SDK\Bin\Microsoft.Xrm.Sdk.Workflow.dll</HintPath>
+      <HintPath>..\OrderDOA\bin\Debug\Microsoft.Xrm.Sdk.Workflow.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />

@@ -40,7 +40,6 @@ namespace DOA
                     #region Constructing HTML
                     emailbody = "<html><body><div>";
                     emailbody += "Hi " + Approver + ",<br/><br/>";
-                    emailbody += "<p style = 'color: black; font-family: ' Arial',sans-serif; font-size: 10pt;'><b> Approval of price deviation for order : "+ Oppty.GetAttributeValue<string>("alletech_oppurtunityid") + " </b></p>";
                     emailbody += "<p style = 'color: black; font-family: ' Arial',sans-serif; font-size: 10pt;'><b> Order Details </b></p>";
                     emailbody += "<table class='MsoNormalTable' style='width:547pt;font-family: Arial,sans-serif; font-size: 9pt; border-collapse: collapse;' border='0' cellspacing='0' cellpadding='0'><tbody>";
 
@@ -75,43 +74,44 @@ namespace DOA
                         TempName = null;
 
                     #region Code Commented on 27_sep_2021
-                            //if (isMAC)
-                            //{
-                            //    emailbody += @"<tr style='height: 15pt;'>
                             //    <td  style='border-width: 0px 1pt 1pt; border-style: none solid solid; padding: 0in 5.4pt; width: 106.35pt; height: 15pt;'>
-                            //    <p><b>Customer Name</b></p></td>
-                            //    <td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 72.65pt; height: 15pt;' colspan='2'>
-                            //    <p align='center' text-align: center;'>" + TempName + @"</p></td>";
-
-                            //    emailbody += @"<td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 98pt; height: 15pt;'>
-                            //    <p><b>Opportunity ID</b></p>
-                            //    </td>
-                            //    <td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 89pt; height: 15pt;' colspan='2'>
-                            //        <p align='center' text-align: center;'>" + Oppty.GetAttributeValue<string>("alletech_oppurtunityid") + @"</p>
-                            //    </td>";
-                            //}
-                            #endregion
-                   // else
+                    //if (isMAC)
                     //{
-                        emailbody += @"<tr style='height: 15pt;'>
+                    //    emailbody += @"<tr style='height: 15pt;'>
+                    //    <td  style='border-width: 0px 1pt 1pt; border-style: none solid solid; padding: 0in 5.4pt; width: 106.35pt; height: 15pt;'>
+                    //    <p><b>Customer Name</b></p></td>
+                    //    <td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 72.65pt; height: 15pt;' colspan='2'>
+                    //    <p align='center' text-align: center;'>" + TempName + @"</p></td>";
+
+                    //    emailbody += @"<td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 98pt; height: 15pt;'>
+                    //    <p><b>Opportunity ID</b></p>
+                    //    </td>
+                    //    <td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 89pt; height: 15pt;' colspan='2'>
+                    //        <p align='center' text-align: center;'>" + Oppty.GetAttributeValue<string>("alletech_oppurtunityid") + @"</p>
+                    //    </td>";
+                    //}
+                    #endregion
+                    // else
+                    //{
+                    emailbody += @"<tr style='height: 15pt;'>
                         <td  style='border-width: 0px 1pt 1pt; border-style: none solid solid; padding: 0in 5.4pt; width: 106.35pt; height: 15pt;'>
                         <p><b>Customer Name</b></p></td>
                         <td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 72.65pt; height: 15pt;'>
                         <p align='center' text-align: center;'>" + TempName + @"</p></td>";
 
-                        emailbody += @"<td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 98pt; height: 15pt;'>
+                    emailbody += @"<td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 98pt; height: 15pt;'>
                         <p><b>Opportunity ID</b></p>
                         </td>
                         <td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 89pt; height: 15pt;'>
                             <p align='center' text-align: center;'>" + Oppty.GetAttributeValue<string>("alletech_oppurtunityid") + @"</p>
                         </td>";
 
-                        if (Oppty.Attributes.Contains("alletech_city"))
-                            TempName = Oppty.GetAttributeValue<EntityReference>("alletech_city").Name;
-                        else
-                            TempName = null;
+                    if (Oppty.Attributes.Contains("alletech_city"))
+                        TempName = Oppty.GetAttributeValue<EntityReference>("alletech_city").Name;
+                    else
+                        TempName = null;
 
-                        emailbody += @"<td width='93' style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 70pt; height: 15pt; '>
+                    emailbody += @"<td width='93' style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 70pt; height: 15pt; '>
                         <p><b>City</b></p>
                         </td>
                         <td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 111pt; height: 15pt; '>
@@ -122,267 +122,267 @@ namespace DOA
                     emailbody += "</tr>";
                     #endregion
 
-                        #region Code Commented on 27_Sep_2021
+                    #region Code Commented on 27_Sep_2021
 
-                        //if (isMAC)
-                        //{
-                        //    #region End A
-
-                        //    emailbody += @"<tr style='height: 15pt;'>
-                        //    <td style='border-width: 1pt 1pt 1pt 1pt; border-style: solid solid solid solid;  padding: 0in 5.4pt; width: 89pt; height: 15pt; background-color: rgb(217, 217, 217);' colspan='6'><b>END A</b></td>
-                        //    </tr>";
-
-                        //    #region Row 3.1
-                        //    emailbody += "<tr style='height: 15pt;'>";
-
-                        //    if (Oppty.Attributes.Contains("alletech_city"))
-                        //        TempName = Oppty.GetAttributeValue<EntityReference>("alletech_city").Name;
-                        //    else
-                        //        TempName = null;
-
-                        //    emailbody += @"<td width='93' style='border-width: 1pt 1pt 1pt 1pt; border-style: solid solid solid solid;  padding: 0in 5.4pt; width: 70pt; height: 15pt; '>
-                        //    <p><b>City</b></p>
-                        //    </td>
-                        //    <td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 111pt; height: 15pt; '>
-                        //        <p align='center' text-align: center;'>" + TempName + @"</p>
-                        //    </td>";
-
-                        //    if (Oppty.Attributes.Contains("alletech_area"))
-                        //        TempName = Oppty.GetAttributeValue<EntityReference>("alletech_area").Name;
-                        //    else
-                        //        TempName = null;
-
-                        //    emailbody += @"<td  style='border-width: 0px 1pt 1pt; border-style: none solid solid; padding: 0in 5.4pt; width: 106.35pt; height: 15pt; '>
-                        //        <p><b>Area</b></p>
-                        //    </td>
-                        //    <td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 72.65pt; height: 15pt; '>
-                        //        <p align='center' text-align: center;'>" + TempName + @"</p>
-                        //    </td>";
-
-
-                        //    if (Oppty.Attributes.Contains("alletech_buildingname"))
-                        //    {
-                        //        TempName = Oppty.GetAttributeValue<EntityReference>("alletech_buildingname").Name;
-
-                        //        Entity building = GetResultByAttribute(service, "alletech_building", "alletech_buildingid", Oppty.GetAttributeValue<EntityReference>("alletech_buildingname").Id.ToString(), "alletech_buildingstatus");
-
-                        //        if (building != null && building.Attributes.Contains("alletech_buildingstatus"))
-                        //        {
-                        //            TempName2 = getBuildingStatusValue(building.GetAttributeValue<OptionSetValue>("alletech_buildingstatus").Value);
-                        //        }
-                        //    }
-                        //    else
-                        //    {
-                        //        TempName = null;
-                        //        TempName2 = null;
-                        //    }
-
-                        //    emailbody += @" <td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 98pt; height: 15pt; '>
-                        //    <p><b>Building Name</b></p>
-                        //    </td>
-                        //    <td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 89pt; height: 15pt; '>
-                        //        <p align='center' text-align: center;'>" + TempName + @"</p>
-                        //    </td>
-                        //    </tr>";
-                        //    #endregion
-
-                        //    #region Row 3.2
-                        //    emailbody += @"<tr style='height: 15pt;'>";
-
-                        //    emailbody += @"<td width='93' style='border-width: 1pt 1pt 1pt 1pt; border-style: solid solid solid solid;  padding: 0in 5.4pt; width: 70pt; height: 15pt; '>
-                        //    <p><b>Building Status</b></p>
-                        //    </td>
-                        //    <td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 111pt; height: 15pt; '>
-                        //        <p align='center' text-align: center;'>" + TempName2 + @"</p>
-                        //    </td>";
-
-                        //    if (Oppty.Attributes.Contains("alletech_redundancyrequired") && Oppty.GetAttributeValue<bool>("alletech_redundancyrequired"))
-                        //        TempName = "Yes";
-                        //    else
-                        //        TempName = "No";
-
-                        //    emailbody += @"<td  style='border-width: 0px 0px 1pt 1pt; border-style: none none solid solid;padding: 0in 5.4pt; width: 106.35pt; height: 15pt; '>
-                        //    <p><b>Redundancy required</b></p>
-                        //    </td>
-                        //    <td  style='border-width: 0px 1pt 1pt; border-style: none solid solid;padding: 0in 5.4pt; width: 72.65pt; height: 15pt; '>
-                        //        <p align='center' text-align: center;'>" + TempName + @"</p>
-                        //    </td>";
-
-                        //    if (TempName2 == "Non-RFS" || TempName2 == "TP-F" || ((TempName2 == "B-RFS" || TempName2 == "P-RFS" || TempName2 == "C-RFS" || TempName2 == "A-RFS Type1" || TempName2 == "A-RFS Type2") && TempName == "Yes")) // Change = 1 Added A/B/C/P RFS status condition done by Madhu Vlabs for TPF flow on 07-08-2021
-                        //    {
-                        //        decimal amt = 0;
-                        //        string[] feasiblityattr = { "alletech_feasibilityid" };
-                        //        EntityCollection feasibleColl = GetResultsByAttributes(service, "alletech_feasibility", "alletech_opportunity", opptyid,"pcl_addresstype","1", feasiblityattr);
-
-                        //        if (feasibleColl.Entities.Count > 0)
-                        //        {
-                        //            foreach (Entity feasible in feasibleColl.Entities)
-                        //            {
-                        //                string[] Prjattr = { "alletech_pjcid", "alletech_totalcalculatedcost", "spectra_partnerselected" }; // Change = 2 Added Partner Selected Attr in the column done by Madhu Vlabs for TPF flow on 07-08-2021
-                        //                EntityCollection ProjcstColl = GetResultsByAttribute(service, "alletech_projectestimationcost", "alletech_pjcid", feasible.Id.ToString(), Prjattr);
-                        //                if (ProjcstColl.Entities.Count > 0)
-                        //                {
-                        //                    foreach (Entity prj in ProjcstColl.Entities)
-                        //                    {
-                        //                        if (prj.GetAttribute‌​‌​Value<bool>("spectra_partnerselected") == true) // Change = 3  Allow only Partner Selected YES done by Madhu Vlabs for TPF flow on 07-08-2021
-                        //                        {
-                        //                            if (prj.Attributes.Contains("alletech_totalcalculatedcost"))
-                        //                                amt = prj.GetAttributeValue<Money>("alletech_totalcalculatedcost").Value;
-                        //                        }
-                        //                    }
-                        //                }
-                        //                if (TempName == "No")
-                        //                    break;
-                        //            }
-                        //        }
-                        //        TempName = amt.ToString();
-                        //    }
-                        //    else
-                        //        TempName = null;
-
-                        //    emailbody += @" <td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 98pt; height: 15pt; '>
-                        //    <p><b>Connectivity Cost</b></p>
-                        //    </td>
-                        //    <td width='360' style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none; border-color: rgb(0, 0, 0) black windowtext rgb(0, 0, 0); padding: 0in 5.4pt; width: 3.75in; height: 15pt;'>
-                        //        <p align='center' text-align: center;' style='font-size: 8pt;'>" + TempName +  @"</p>
-                        //    </td>
-                        //    </tr>";
-                        //    #endregion
-
-                        //    #endregion
-
-                        //    #region End B
-                        //    emailbody += @"<tr style='height: 15pt;'>
-                        //    <td style='border-width: 1pt 1pt 1pt 1pt; border-style: solid solid solid solid;  padding: 0in 5.4pt; width: 89pt; height: 15pt; background-color: rgb(217, 217, 217);' colspan='6'><b>END B</b></td>
-                        //    </tr>";
-
-                        //    Entity END_B = GetResultByAttribute(service, "alletech_installationaddress", "alletech_opportunity", opptyid, "all");
-
-                        //    #region Row 4.1
-                        //    emailbody += "<tr style='height: 15pt;'>";
-
-                        //    if (END_B.Attributes.Contains("alletech_city"))
-                        //         TempName = END_B.GetAttributeValue<EntityReference>("alletech_city").Name;
-                        //    else
-                        //        TempName = null;
-
-                        //    emailbody += @"<td width='93' style='border-width: 1pt 1pt 1pt 1pt; border-style: solid solid solid solid;  padding: 0in 5.4pt; width: 70pt; height: 15pt; '>
-                        //    <p><b>City</b></p>
-                        //    </td>
-                        //    <td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 111pt; height: 15pt; '>
-                        //        <p align='center' text-align: center;'>" + TempName + @"</p>
-                        //    </td>";
-
-                        //    if (END_B.Attributes.Contains("alletech_area"))
-                        //        TempName = END_B.GetAttributeValue<EntityReference>("alletech_area").Name;
-                        //    else
-                        //        TempName = null;
-
-                        //    emailbody += @"<td  style='border-width: 0px 1pt 1pt; border-style: none solid solid; padding: 0in 5.4pt; width: 106.35pt; height: 15pt; '>
-                        //        <p><b>Area</b></p>
-                        //    </td>
-                        //    <td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 72.65pt; height: 15pt; '>
-                        //        <p align='center' text-align: center;'>" + TempName + @"</p>
-                        //    </td>";
-
-
-                        //    if (END_B.Attributes.Contains("alletech_buildingnamelookup"))
-                        //    {
-                        //        TempName = END_B.GetAttributeValue<EntityReference>("alletech_buildingnamelookup").Name;
-
-                        //        Entity building = GetResultByAttribute(service, "alletech_building", "alletech_buildingid", END_B.GetAttributeValue<EntityReference>("alletech_buildingnamelookup").Id.ToString(), "alletech_buildingstatus");
-
-                        //        if (building != null && building.Attributes.Contains("alletech_buildingstatus"))
-                        //        {
-                        //            TempName2 = getBuildingStatusValue(building.GetAttributeValue<OptionSetValue>("alletech_buildingstatus").Value);
-                        //        }
-                        //    }
-                        //    else
-                        //    {
-                        //        TempName = null;
-                        //        TempName2 = null;
-                        //    }
-
-                        //    emailbody += @" <td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 98pt; height: 15pt; '>
-                        //    <p><b>Building Name</b></p>
-                        //    </td>
-                        //    <td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 89pt; height: 15pt; '>
-                        //        <p align='center' text-align: center;'>" + TempName + @"</p>
-                        //    </td></tr>";
-                        //    #endregion
-
-                        //    #region Row 4.2
-                        //    emailbody += "<tr style='height: 15pt;'>";
-
-                        //    emailbody += @"<td width='93' style='border-width: 1pt 1pt 1pt 1pt; border-style: solid solid solid solid;  padding: 0in 5.4pt; width: 70pt; height: 15pt; '>
-                        //    <p><b>Building Status</b></p>
-                        //    </td>
-                        //    <td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 111pt; height: 15pt; '>
-                        //        <p align='center' text-align: center;'>" + TempName2 + @"</p>
-                        //    </td>";
-
-                        //    if (Oppty.Attributes.Contains("alletech_redundancyrequired") && Oppty.GetAttributeValue<bool>("alletech_redundancyrequired"))
-                        //        TempName = "Yes";
-                        //    else
-                        //        TempName = "No";
-
-                        //    emailbody += @"<td  style='border-width: 0px 0px 1pt 1pt; border-style: none none solid solid;padding: 0in 5.4pt; width: 106.35pt; height: 15pt; '>
-                        //    <p><b>Redundancy required</b></p>
-                        //    </td>
-                        //    <td  style='border-width: 0px 1pt 1pt; border-style: none solid solid;padding: 0in 5.4pt; width: 72.65pt; height: 15pt; '>
-                        //        <p align='center' text-align: center;'>" + TempName + @"</p>
-                        //    </td>";
-
-                        //    if (TempName2 == "Non-RFS" || TempName2 == "TP-F" || ((TempName2 == "B-RFS" || TempName2 == "P-RFS" || TempName2 == "C-RFS" || TempName2 == "A-RFS Type1" || TempName2 == "A-RFS Type2") && TempName == "Yes"))
-                        //    {
-                        //        decimal amt = 0;
-                        //        string[] feasiblityattr = { "alletech_feasibilityid" };
-                        //        EntityCollection feasibleColl = GetResultsByAttributes(service, "alletech_feasibility", "alletech_opportunity", opptyid, "pcl_addresstype", "2", feasiblityattr);
-
-                        //        if (feasibleColl.Entities.Count > 0)
-                        //        {
-                        //            foreach (Entity feasible in feasibleColl.Entities)
-                        //            {
-                        //                string[] Prjattr = { "alletech_pjcid", "alletech_totalcalculatedcost" };
-                        //                EntityCollection ProjcstColl = GetResultsByAttribute(service, "alletech_projectestimationcost", "alletech_pjcid", feasible.Id.ToString(), Prjattr);
-                        //                if (ProjcstColl.Entities.Count > 0)
-                        //                {
-                        //                    foreach (Entity prj in ProjcstColl.Entities)
-                        //                    {
-                        //                        if (prj.Attributes.Contains("alletech_totalcalculatedcost"))
-                        //                            amt += prj.GetAttributeValue<Money>("alletech_totalcalculatedcost").Value;
-                        //                    }
-                        //                }
-                        //                if (TempName == "No")
-                        //                    break;
-                        //            }
-                        //        }
-                        //        TempName = amt.ToString();
-                        //    }
-                        //    else
-                        //        TempName = null;
-
-                        //    emailbody += @" <td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 98pt; height: 15pt; '>
-                        //    <p><b>Connectivity Cost</b></p>
-                        //    </td>
-                        //    <td width='360' style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none; border-color: rgb(0, 0, 0) black windowtext rgb(0, 0, 0); padding: 0in 5.4pt; width: 3.75in; height: 15pt;'>
-                        //        <p align='center' text-align: center;' style='font-size: 8pt;'>" + TempName + @"</p>
-                        //    </td>
-                        //    </tr>";
-                        //    #endregion
-
-                        //    #endregion 
-                        //}
-                        #endregion
-                   // else
+                    //if (isMAC)
                     //{
-                        #region Row 3
-                        if (Oppty.Attributes.Contains("alletech_area"))
-                            TempName = Oppty.GetAttributeValue<EntityReference>("alletech_area").Name;
-                        else
-                            TempName = null;
+                    //    #region End A
 
-                        emailbody += @"<tr style='height: 15pt;'>
+                    //    emailbody += @"<tr style='height: 15pt;'>
+                    //    <td style='border-width: 1pt 1pt 1pt 1pt; border-style: solid solid solid solid;  padding: 0in 5.4pt; width: 89pt; height: 15pt; background-color: rgb(217, 217, 217);' colspan='6'><b>END A</b></td>
+                    //    </tr>";
+
+                    //    #region Row 3.1
+                    //    emailbody += "<tr style='height: 15pt;'>";
+
+                    //    if (Oppty.Attributes.Contains("alletech_city"))
+                    //        TempName = Oppty.GetAttributeValue<EntityReference>("alletech_city").Name;
+                    //    else
+                    //        TempName = null;
+
+                    //    emailbody += @"<td width='93' style='border-width: 1pt 1pt 1pt 1pt; border-style: solid solid solid solid;  padding: 0in 5.4pt; width: 70pt; height: 15pt; '>
+                    //    <p><b>City</b></p>
+                    //    </td>
+                    //    <td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 111pt; height: 15pt; '>
+                    //        <p align='center' text-align: center;'>" + TempName + @"</p>
+                    //    </td>";
+
+                    //    if (Oppty.Attributes.Contains("alletech_area"))
+                    //        TempName = Oppty.GetAttributeValue<EntityReference>("alletech_area").Name;
+                    //    else
+                    //        TempName = null;
+
+                    //    emailbody += @"<td  style='border-width: 0px 1pt 1pt; border-style: none solid solid; padding: 0in 5.4pt; width: 106.35pt; height: 15pt; '>
+                    //        <p><b>Area</b></p>
+                    //    </td>
+                    //    <td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 72.65pt; height: 15pt; '>
+                    //        <p align='center' text-align: center;'>" + TempName + @"</p>
+                    //    </td>";
+
+
+                    //    if (Oppty.Attributes.Contains("alletech_buildingname"))
+                    //    {
+                    //        TempName = Oppty.GetAttributeValue<EntityReference>("alletech_buildingname").Name;
+
+                    //        Entity building = GetResultByAttribute(service, "alletech_building", "alletech_buildingid", Oppty.GetAttributeValue<EntityReference>("alletech_buildingname").Id.ToString(), "alletech_buildingstatus");
+
+                    //        if (building != null && building.Attributes.Contains("alletech_buildingstatus"))
+                    //        {
+                    //            TempName2 = getBuildingStatusValue(building.GetAttributeValue<OptionSetValue>("alletech_buildingstatus").Value);
+                    //        }
+                    //    }
+                    //    else
+                    //    {
+                    //        TempName = null;
+                    //        TempName2 = null;
+                    //    }
+
+                    //    emailbody += @" <td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 98pt; height: 15pt; '>
+                    //    <p><b>Building Name</b></p>
+                    //    </td>
+                    //    <td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 89pt; height: 15pt; '>
+                    //        <p align='center' text-align: center;'>" + TempName + @"</p>
+                    //    </td>
+                    //    </tr>";
+                    //    #endregion
+
+                    //    #region Row 3.2
+                    //    emailbody += @"<tr style='height: 15pt;'>";
+
+                    //    emailbody += @"<td width='93' style='border-width: 1pt 1pt 1pt 1pt; border-style: solid solid solid solid;  padding: 0in 5.4pt; width: 70pt; height: 15pt; '>
+                    //    <p><b>Building Status</b></p>
+                    //    </td>
+                    //    <td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 111pt; height: 15pt; '>
+                    //        <p align='center' text-align: center;'>" + TempName2 + @"</p>
+                    //    </td>";
+
+                    //    if (Oppty.Attributes.Contains("alletech_redundancyrequired") && Oppty.GetAttributeValue<bool>("alletech_redundancyrequired"))
+                    //        TempName = "Yes";
+                    //    else
+                    //        TempName = "No";
+
+                    //    emailbody += @"<td  style='border-width: 0px 0px 1pt 1pt; border-style: none none solid solid;padding: 0in 5.4pt; width: 106.35pt; height: 15pt; '>
+                    //    <p><b>Redundancy required</b></p>
+                    //    </td>
+                    //    <td  style='border-width: 0px 1pt 1pt; border-style: none solid solid;padding: 0in 5.4pt; width: 72.65pt; height: 15pt; '>
+                    //        <p align='center' text-align: center;'>" + TempName + @"</p>
+                    //    </td>";
+
+                    //    if (TempName2 == "Non-RFS" || TempName2 == "TP-F" || ((TempName2 == "B-RFS" || TempName2 == "P-RFS" || TempName2 == "C-RFS" || TempName2 == "A-RFS Type1" || TempName2 == "A-RFS Type2") && TempName == "Yes")) // Change = 1 Added A/B/C/P RFS status condition done by Madhu Vlabs for TPF flow on 07-08-2021
+                    //    {
+                    //        decimal amt = 0;
+                    //        string[] feasiblityattr = { "alletech_feasibilityid" };
+                    //        EntityCollection feasibleColl = GetResultsByAttributes(service, "alletech_feasibility", "alletech_opportunity", opptyid,"pcl_addresstype","1", feasiblityattr);
+
+                    //        if (feasibleColl.Entities.Count > 0)
+                    //        {
+                    //            foreach (Entity feasible in feasibleColl.Entities)
+                    //            {
+                    //                string[] Prjattr = { "alletech_pjcid", "alletech_totalcalculatedcost", "spectra_partnerselected" }; // Change = 2 Added Partner Selected Attr in the column done by Madhu Vlabs for TPF flow on 07-08-2021
+                    //                EntityCollection ProjcstColl = GetResultsByAttribute(service, "alletech_projectestimationcost", "alletech_pjcid", feasible.Id.ToString(), Prjattr);
+                    //                if (ProjcstColl.Entities.Count > 0)
+                    //                {
+                    //                    foreach (Entity prj in ProjcstColl.Entities)
+                    //                    {
+                    //                        if (prj.GetAttribute‌​‌​Value<bool>("spectra_partnerselected") == true) // Change = 3  Allow only Partner Selected YES done by Madhu Vlabs for TPF flow on 07-08-2021
+                    //                        {
+                    //                            if (prj.Attributes.Contains("alletech_totalcalculatedcost"))
+                    //                                amt = prj.GetAttributeValue<Money>("alletech_totalcalculatedcost").Value;
+                    //                        }
+                    //                    }
+                    //                }
+                    //                if (TempName == "No")
+                    //                    break;
+                    //            }
+                    //        }
+                    //        TempName = amt.ToString();
+                    //    }
+                    //    else
+                    //        TempName = null;
+
+                    //    emailbody += @" <td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 98pt; height: 15pt; '>
+                    //    <p><b>Connectivity Cost</b></p>
+                    //    </td>
+                    //    <td width='360' style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none; border-color: rgb(0, 0, 0) black windowtext rgb(0, 0, 0); padding: 0in 5.4pt; width: 3.75in; height: 15pt;'>
+                    //        <p align='center' text-align: center;' style='font-size: 8pt;'>" + TempName +  @"</p>
+                    //    </td>
+                    //    </tr>";
+                    //    #endregion
+
+                    //    #endregion
+
+                    //    #region End B
+                    //    emailbody += @"<tr style='height: 15pt;'>
+                    //    <td style='border-width: 1pt 1pt 1pt 1pt; border-style: solid solid solid solid;  padding: 0in 5.4pt; width: 89pt; height: 15pt; background-color: rgb(217, 217, 217);' colspan='6'><b>END B</b></td>
+                    //    </tr>";
+
+                    //    Entity END_B = GetResultByAttribute(service, "alletech_installationaddress", "alletech_opportunity", opptyid, "all");
+
+                    //    #region Row 4.1
+                    //    emailbody += "<tr style='height: 15pt;'>";
+
+                    //    if (END_B.Attributes.Contains("alletech_city"))
+                    //         TempName = END_B.GetAttributeValue<EntityReference>("alletech_city").Name;
+                    //    else
+                    //        TempName = null;
+
+                    //    emailbody += @"<td width='93' style='border-width: 1pt 1pt 1pt 1pt; border-style: solid solid solid solid;  padding: 0in 5.4pt; width: 70pt; height: 15pt; '>
+                    //    <p><b>City</b></p>
+                    //    </td>
+                    //    <td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 111pt; height: 15pt; '>
+                    //        <p align='center' text-align: center;'>" + TempName + @"</p>
+                    //    </td>";
+
+                    //    if (END_B.Attributes.Contains("alletech_area"))
+                    //        TempName = END_B.GetAttributeValue<EntityReference>("alletech_area").Name;
+                    //    else
+                    //        TempName = null;
+
+                    //    emailbody += @"<td  style='border-width: 0px 1pt 1pt; border-style: none solid solid; padding: 0in 5.4pt; width: 106.35pt; height: 15pt; '>
+                    //        <p><b>Area</b></p>
+                    //    </td>
+                    //    <td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 72.65pt; height: 15pt; '>
+                    //        <p align='center' text-align: center;'>" + TempName + @"</p>
+                    //    </td>";
+
+
+                    //    if (END_B.Attributes.Contains("alletech_buildingnamelookup"))
+                    //    {
+                    //        TempName = END_B.GetAttributeValue<EntityReference>("alletech_buildingnamelookup").Name;
+
+                    //        Entity building = GetResultByAttribute(service, "alletech_building", "alletech_buildingid", END_B.GetAttributeValue<EntityReference>("alletech_buildingnamelookup").Id.ToString(), "alletech_buildingstatus");
+
+                    //        if (building != null && building.Attributes.Contains("alletech_buildingstatus"))
+                    //        {
+                    //            TempName2 = getBuildingStatusValue(building.GetAttributeValue<OptionSetValue>("alletech_buildingstatus").Value);
+                    //        }
+                    //    }
+                    //    else
+                    //    {
+                    //        TempName = null;
+                    //        TempName2 = null;
+                    //    }
+
+                    //    emailbody += @" <td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 98pt; height: 15pt; '>
+                    //    <p><b>Building Name</b></p>
+                    //    </td>
+                    //    <td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 89pt; height: 15pt; '>
+                    //        <p align='center' text-align: center;'>" + TempName + @"</p>
+                    //    </td></tr>";
+                    //    #endregion
+
+                    //    #region Row 4.2
+                    //    emailbody += "<tr style='height: 15pt;'>";
+
+                    //    emailbody += @"<td width='93' style='border-width: 1pt 1pt 1pt 1pt; border-style: solid solid solid solid;  padding: 0in 5.4pt; width: 70pt; height: 15pt; '>
+                    //    <p><b>Building Status</b></p>
+                    //    </td>
+                    //    <td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 111pt; height: 15pt; '>
+                    //        <p align='center' text-align: center;'>" + TempName2 + @"</p>
+                    //    </td>";
+
+                    //    if (Oppty.Attributes.Contains("alletech_redundancyrequired") && Oppty.GetAttributeValue<bool>("alletech_redundancyrequired"))
+                    //        TempName = "Yes";
+                    //    else
+                    //        TempName = "No";
+
+                    //    emailbody += @"<td  style='border-width: 0px 0px 1pt 1pt; border-style: none none solid solid;padding: 0in 5.4pt; width: 106.35pt; height: 15pt; '>
+                    //    <p><b>Redundancy required</b></p>
+                    //    </td>
+                    //    <td  style='border-width: 0px 1pt 1pt; border-style: none solid solid;padding: 0in 5.4pt; width: 72.65pt; height: 15pt; '>
+                    //        <p align='center' text-align: center;'>" + TempName + @"</p>
+                    //    </td>";
+
+                    //    if (TempName2 == "Non-RFS" || TempName2 == "TP-F" || ((TempName2 == "B-RFS" || TempName2 == "P-RFS" || TempName2 == "C-RFS" || TempName2 == "A-RFS Type1" || TempName2 == "A-RFS Type2") && TempName == "Yes"))
+                    //    {
+                    //        decimal amt = 0;
+                    //        string[] feasiblityattr = { "alletech_feasibilityid" };
+                    //        EntityCollection feasibleColl = GetResultsByAttributes(service, "alletech_feasibility", "alletech_opportunity", opptyid, "pcl_addresstype", "2", feasiblityattr);
+
+                    //        if (feasibleColl.Entities.Count > 0)
+                    //        {
+                    //            foreach (Entity feasible in feasibleColl.Entities)
+                    //            {
+                    //                string[] Prjattr = { "alletech_pjcid", "alletech_totalcalculatedcost" };
+                    //                EntityCollection ProjcstColl = GetResultsByAttribute(service, "alletech_projectestimationcost", "alletech_pjcid", feasible.Id.ToString(), Prjattr);
+                    //                if (ProjcstColl.Entities.Count > 0)
+                    //                {
+                    //                    foreach (Entity prj in ProjcstColl.Entities)
+                    //                    {
+                    //                        if (prj.Attributes.Contains("alletech_totalcalculatedcost"))
+                    //                            amt += prj.GetAttributeValue<Money>("alletech_totalcalculatedcost").Value;
+                    //                    }
+                    //                }
+                    //                if (TempName == "No")
+                    //                    break;
+                    //            }
+                    //        }
+                    //        TempName = amt.ToString();
+                    //    }
+                    //    else
+                    //        TempName = null;
+
+                    //    emailbody += @" <td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 98pt; height: 15pt; '>
+                    //    <p><b>Connectivity Cost</b></p>
+                    //    </td>
+                    //    <td width='360' style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none; border-color: rgb(0, 0, 0) black windowtext rgb(0, 0, 0); padding: 0in 5.4pt; width: 3.75in; height: 15pt;'>
+                    //        <p align='center' text-align: center;' style='font-size: 8pt;'>" + TempName + @"</p>
+                    //    </td>
+                    //    </tr>";
+                    //    #endregion
+
+                    //    #endregion 
+                    //}
+                    #endregion
+                    // else
+                    //{
+                    #region Row 3
+                    if (Oppty.Attributes.Contains("alletech_area"))
+                        TempName = Oppty.GetAttributeValue<EntityReference>("alletech_area").Name;
+                    else
+                        TempName = null;
+
+                    emailbody += @"<tr style='height: 15pt;'>
                         <td  style='border-width: 0px 1pt 1pt; border-style: none solid solid; padding: 0in 5.4pt; width: 106.35pt; height: 15pt; '>
                             <p><b>Area</b></p>
                         </td>
@@ -391,48 +391,48 @@ namespace DOA
                         </td>";
 
 
-                        if (Oppty.Attributes.Contains("alletech_buildingname"))
+                    if (Oppty.Attributes.Contains("alletech_buildingname"))
+                    {
+                        TempName = Oppty.GetAttributeValue<EntityReference>("alletech_buildingname").Name;
+
+                        Entity building = GetResultByAttribute(service, "alletech_building", "alletech_buildingid", Oppty.GetAttributeValue<EntityReference>("alletech_buildingname").Id.ToString(), "alletech_buildingstatus");
+
+                        if (building != null && building.Attributes.Contains("alletech_buildingstatus"))
                         {
-                            TempName = Oppty.GetAttributeValue<EntityReference>("alletech_buildingname").Name;
-
-                            Entity building = GetResultByAttribute(service, "alletech_building", "alletech_buildingid", Oppty.GetAttributeValue<EntityReference>("alletech_buildingname").Id.ToString(), "alletech_buildingstatus");
-
-                            if (building != null && building.Attributes.Contains("alletech_buildingstatus"))
-                            {
-                                TempName2 = getBuildingStatusValue(building.GetAttributeValue<OptionSetValue>("alletech_buildingstatus").Value);
-                            }
+                            TempName2 = getBuildingStatusValue(building.GetAttributeValue<OptionSetValue>("alletech_buildingstatus").Value);
                         }
-                        else
-                            TempName = null;
+                    }
+                    else
+                        TempName = null;
 
-                        emailbody += @" <td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 98pt; height: 15pt; '>
+                    emailbody += @" <td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 98pt; height: 15pt; '>
                         <p><b>Building Name</b></p>
                         </td>
                         <td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 89pt; height: 15pt; '>
                             <p align='center' text-align: center;'>" + TempName + @"</p>
                         </td>";
 
-                        if (Oppty.Attributes.Contains("alletech_city"))
-                            TempName = Oppty.GetAttributeValue<EntityReference>("alletech_city").Name;
-                        else
-                            TempName = null;
+                    if (Oppty.Attributes.Contains("alletech_city"))
+                        TempName = Oppty.GetAttributeValue<EntityReference>("alletech_city").Name;
+                    else
+                        TempName = null;
 
-                        emailbody += @"<td width='93' style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 70pt; height: 15pt; '>
+                    emailbody += @"<td width='93' style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 70pt; height: 15pt; '>
                         <p><b>Building Status</b></p>
                         </td>
                         <td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 111pt; height: 15pt; '>
                             <p align='center' text-align: center;'>" + TempName2 + @"</p>
                         </td>
                         </tr>";
-                        #endregion
+                    #endregion
 
-                        #region Row 4
-                        if (Oppty.Attributes.Contains("alletech_redundancyrequired") && Oppty.GetAttributeValue<bool>("alletech_redundancyrequired"))
-                            TempName = "Yes";
-                        else
-                            TempName = "No";
+                    #region Row 4
+                    if (Oppty.Attributes.Contains("alletech_redundancyrequired") && Oppty.GetAttributeValue<bool>("alletech_redundancyrequired"))
+                        TempName = "Yes";
+                    else
+                        TempName = "No";
 
-                        emailbody += @"<tr style='height: 15pt;'>
+                    emailbody += @"<tr style='height: 15pt;'>
                         <td  style='border-width: 0px 0px 1pt 1pt; border-style: none none solid solid;padding: 0in 5.4pt; width: 106.35pt; height: 15pt; '>
                             <p><b>Redundancy required</b></p>
                         </td>
@@ -440,240 +440,246 @@ namespace DOA
                             <p align='center' text-align: center;'>" + TempName + @"</p>
                         </td>";
 
-                        #region Code commented on 8th Sep 2021
-                        //        if (TempName2 == "Non-RFS" || TempName2 == "TP-F" || ((TempName2 == "B-RFS" || TempName2 == "P-RFS" || TempName2 == "C-RFS" || TempName2 == "A-RFS Type1" || TempName2 == "A-RFS Type2") && TempName == "Yes")) // Change = 1 Added A/B/C/P RFS status condition done by Madhu Vlabs for TPF flow on 07-08-2021
-                        //        {
-                        //            decimal amt = 0;
-                        //            string[] feasiblityattr = { "alletech_feasibilityid" };
-                        //            EntityCollection feasibleColl = GetResultsByAttribute(service, "alletech_feasibility", "alletech_opportunity", opptyid, feasiblityattr);
+                    #region Code commented on 8th Sep 2021
+                    //        if (TempName2 == "Non-RFS" || TempName2 == "TP-F" || ((TempName2 == "B-RFS" || TempName2 == "P-RFS" || TempName2 == "C-RFS" || TempName2 == "A-RFS Type1" || TempName2 == "A-RFS Type2") && TempName == "Yes")) // Change = 1 Added A/B/C/P RFS status condition done by Madhu Vlabs for TPF flow on 07-08-2021
+                    //        {
+                    //            decimal amt = 0;
+                    //            string[] feasiblityattr = { "alletech_feasibilityid" };
+                    //            EntityCollection feasibleColl = GetResultsByAttribute(service, "alletech_feasibility", "alletech_opportunity", opptyid, feasiblityattr);
 
-                        //            if (feasibleColl.Entities.Count > 0)
-                        //            {
-                        //                foreach (Entity feasible in feasibleColl.Entities)
-                        //                {
-                        //                    string[] Prjattr = { "alletech_pjcid", "alletech_totalcalculatedcost", "spectra_partnerselected" }; // Change = 2 Added Partner Selected Attr in the column done by Madhu Vlabs for TPF flow on 07-08-2021
-                        //                    EntityCollection ProjcstColl = GetResultsByAttribute(service, "alletech_projectestimationcost", "alletech_pjcid", feasible.Id.ToString(), Prjattr);
-                        //                    if (ProjcstColl.Entities.Count > 0)
-                        //                    {
-                        //                        foreach (Entity prj in ProjcstColl.Entities)
-                        //                        {
-                        //                            if (prj.GetAttribute‌​‌​Value<bool>("spectra_partnerselected") == true) // Change = 3  Allow only Partner Selected YES done by Madhu Vlabs for TPF flow on 07-08-2021
-                        //                            {
-                        //                                if (prj.Attributes.Contains("alletech_totalcalculatedcost"))
-                        //                                    amt = prj.GetAttributeValue<Money>("alletech_totalcalculatedcost").Value;
-                        //                            }
-                        //                        }
-                        //                    }
-                        //                    if (TempName == "No")
-                        //                        break;
-                        //                }
-                        //            }
-                        //            TempName = amt.ToString();
-                        //        }
-                        //        else
-                        //            TempName = null;
+                    //            if (feasibleColl.Entities.Count > 0)
+                    //            {
+                    //                foreach (Entity feasible in feasibleColl.Entities)
+                    //                {
+                    //                    string[] Prjattr = { "alletech_pjcid", "alletech_totalcalculatedcost", "spectra_partnerselected" }; // Change = 2 Added Partner Selected Attr in the column done by Madhu Vlabs for TPF flow on 07-08-2021
+                    //                    EntityCollection ProjcstColl = GetResultsByAttribute(service, "alletech_projectestimationcost", "alletech_pjcid", feasible.Id.ToString(), Prjattr);
+                    //                    if (ProjcstColl.Entities.Count > 0)
+                    //                    {
+                    //                        foreach (Entity prj in ProjcstColl.Entities)
+                    //                        {
+                    //                            if (prj.GetAttribute‌​‌​Value<bool>("spectra_partnerselected") == true) // Change = 3  Allow only Partner Selected YES done by Madhu Vlabs for TPF flow on 07-08-2021
+                    //                            {
+                    //                                if (prj.Attributes.Contains("alletech_totalcalculatedcost"))
+                    //                                    amt = prj.GetAttributeValue<Money>("alletech_totalcalculatedcost").Value;
+                    //                            }
+                    //                        }
+                    //                    }
+                    //                    if (TempName == "No")
+                    //                        break;
+                    //                }
+                    //            }
+                    //            TempName = amt.ToString();
+                    //        }
+                    //        else
+                    //            TempName = null;
 
-                        //        emailbody += @" <td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 98pt; height: 15pt; '>
-                        //        <p><b>Connectivity Cost</b></p>
-                        //    </td>
-                        //    <td width='360' style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none; border-color: rgb(0, 0, 0) black windowtext rgb(0, 0, 0); padding: 0in 5.4pt; width: 3.75in; height: 15pt; ' colspan='3'>
-                        //        <p align='center' text-align: center;' style='font-size: 8pt;'>" + TempName + @"</p>
-                        //    </td>
-                        //</tr>";
-                        #endregion
+                    //        emailbody += @" <td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 98pt; height: 15pt; '>
+                    //        <p><b>Connectivity Cost</b></p>
+                    //    </td>
+                    //    <td width='360' style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none; border-color: rgb(0, 0, 0) black windowtext rgb(0, 0, 0); padding: 0in 5.4pt; width: 3.75in; height: 15pt; ' colspan='3'>
+                    //        <p align='center' text-align: center;' style='font-size: 8pt;'>" + TempName + @"</p>
+                    //    </td>
+                    //</tr>";
+                    #endregion
 
-                        #region New code on 09-Sep-2021
-                        string primary = string.Empty, finalPrimary = string.Empty, finalRedundant = string.Empty, redundant = string.Empty, primary_amount = string.Empty, redundant_amount = string.Empty, IspName = string.Empty, IspNameRedundant = string.Empty;
-                        int primaryValue = 0, redundantValue = 0;
-                        if (TempName2 == "Non-RFS" || TempName2 == "TP-F" || ((TempName2 == "B-RFS" || TempName2 == "P-RFS" || TempName2 == "C-RFS" || TempName2 == "A-RFS Type1" || TempName2 == "A-RFS Type2" || TempName2 == "Pb-RFS" || TempName2 == "L2P-RFS" || TempName2 == "L2B-RFS" || TempName2 == "Cb-RFS Type1" || TempName2 == "Cb-RFS Type2") && TempName == "Yes")) // Change = 1 Added A/B/C/P RFS status condition done by Madhu Vlabs for TPF flow on 07-08-2021
+                    #region New code on 09-Sep-2021
+                    string primary = string.Empty, finalPrimary = string.Empty, finalRedundant = string.Empty, redundant = string.Empty, primary_amount = string.Empty, redundant_amount = string.Empty, IspName = string.Empty, IspNameRedundant = string.Empty;
+                    int primaryValue = 0, redundantValue = 0;
+                    if (TempName2 == "Non-RFS" || TempName2 == "TP-F" || ((TempName2 == "B-RFS" || TempName2 == "P-RFS" || TempName2 == "C-RFS" || TempName2 == "A-RFS Type1" || TempName2 == "A-RFS Type2" || TempName2 == "Pb-RFS" || TempName2 == "L2P-RFS" || TempName2 == "L2B-RFS" || TempName2 == "Cb-RFS Type1" || TempName2 == "Cb-RFS Type2") && TempName == "Yes")) // Change = 1 Added A/B/C/P RFS status condition done by Madhu Vlabs for TPF flow on 07-08-2021
+                    {
+                        // decimal amt = 0;
+                        string[] feasiblityattr = { "alletech_feasibilityid", "alletech_routetype", "alletech_thirdpartyinstallation" };
+                        EntityCollection feasibleColl = GetResultsByAttribute(service, "alletech_feasibility", "alletech_opportunity", opptyid, feasiblityattr);
+
+                        if (feasibleColl.Entities.Count > 0)
                         {
-                           // decimal amt = 0;
-                            string[] feasiblityattr = { "alletech_feasibilityid", "alletech_routetype", "alletech_thirdpartyinstallation" };
-                            EntityCollection feasibleColl = GetResultsByAttribute(service, "alletech_feasibility", "alletech_opportunity", opptyid, feasiblityattr);
-
-                            if (feasibleColl.Entities.Count > 0)
+                            foreach (Entity feasible in feasibleColl.Entities)
                             {
-                                foreach (Entity feasible in feasibleColl.Entities)
+                                if (feasible.Attributes.Contains("alletech_routetype"))
                                 {
-                                    if (feasible.Attributes.Contains("alletech_routetype"))
+                                    if (feasible.GetAttribute‌​‌​Value<bool>("alletech_routetype") == false)
                                     {
-                                        if (feasible.GetAttribute‌​‌​Value<bool>("alletech_routetype") == false)
+                                        primary = "Primary";
+                                        primaryValue = 1;
+                                        #region Current running code
+                                        string[] Prjattr = { "alletech_pjcid", "alletech_totalcalculatedcost", "spectra_partnerselected", "spectra_ispname" }; // Change = 2 Added Partner Selected Attr in the column done by Madhu Vlabs for TPF flow on 07-08-2021
+                                        EntityCollection ProjcstColl = GetResultsByAttribute(service, "alletech_projectestimationcost", "alletech_pjcid", feasible.Id.ToString(), Prjattr);
+                                        if (ProjcstColl.Entities.Count > 0)
                                         {
-                                            primary = "Primary";
-                                            primaryValue = 1;
-                                            #region Current running code
-                                            string[] Prjattr = { "alletech_pjcid", "alletech_totalcalculatedcost", "spectra_partnerselected", "spectra_ispname" }; // Change = 2 Added Partner Selected Attr in the column done by Madhu Vlabs for TPF flow on 07-08-2021
-                                            EntityCollection ProjcstColl = GetResultsByAttribute(service, "alletech_projectestimationcost", "alletech_pjcid", feasible.Id.ToString(), Prjattr);
-                                            if (ProjcstColl.Entities.Count > 0)
+                                            foreach (Entity prj in ProjcstColl.Entities)
                                             {
-                                                foreach (Entity prj in ProjcstColl.Entities)
-                                                {
-                                                    if (feasible.Attributes.Contains("alletech_thirdpartyinstallation"))
-                                                    {
-                                                        if (feasible.GetAttribute‌​‌​Value<bool>("alletech_thirdpartyinstallation") == true)
-                                                        {
-                                                            if (prj.GetAttribute‌​‌​Value<bool>("spectra_partnerselected") == true) // Change = 3  Allow only Partner Selected YES done by Madhu Vlabs for TPF flow on 07-08-2021
-                                                            {
-                                                                if (prj.Attributes.Contains("alletech_totalcalculatedcost"))
-                                                                    primary_amount += prj.GetAttributeValue<Money>("alletech_totalcalculatedcost").Value.ToString();
-                                                                if (prj.Attributes.Contains("spectra_ispname"))
-                                                                    IspName = prj.Attributes["spectra_ispname"].ToString();
-                                                            }
-                                                        }
-                                                        else
-                                                        {
-                                                            if (prj.Attributes.Contains("alletech_totalcalculatedcost"))
-                                                                primary_amount += prj.GetAttributeValue<Money>("alletech_totalcalculatedcost").Value.ToString();
-                                                            IspName = "Own";
-                                                        }
-                                                    }
-                                                }
-                                                finalPrimary = primary + ": " + primary_amount + " (" + IspName + ")";
-                                            }
-                                           // if (TempName == "No")
-                                             //   break;
-                                            #endregion
-                                        }
-                                        else if (feasible.GetAttribute‌​‌​Value<bool>("alletech_routetype") == true)
-                                        {
-                                            redundant = "Redundant";
-                                            redundantValue = 2;
-                                            #region Current running code
-                                            string[] Prjattr = { "alletech_pjcid", "alletech_totalcalculatedcost", "spectra_partnerselected", "spectra_ispname" }; // Change = 2 Added Partner Selected Attr in the column done by Madhu Vlabs for TPF flow on 07-08-2021
-                                            EntityCollection ProjcstColl = GetResultsByAttribute(service, "alletech_projectestimationcost", "alletech_pjcid", feasible.Id.ToString(), Prjattr);
-                                            if (ProjcstColl.Entities.Count > 0)
-                                            {
-                                                foreach (Entity prj in ProjcstColl.Entities)
+                                                if (feasible.Attributes.Contains("alletech_thirdpartyinstallation"))
                                                 {
                                                     if (feasible.GetAttribute‌​‌​Value<bool>("alletech_thirdpartyinstallation") == true)
                                                     {
                                                         if (prj.GetAttribute‌​‌​Value<bool>("spectra_partnerselected") == true) // Change = 3  Allow only Partner Selected YES done by Madhu Vlabs for TPF flow on 07-08-2021
                                                         {
-                                                            if (prj.Attributes.Contains("alletech_totalcalculatedcost"))
-                                                                redundant_amount += prj.GetAttributeValue<Money>("alletech_totalcalculatedcost").Value.ToString();
-                                                            if (prj.Attributes.Contains("spectra_ispname"))
-                                                                IspNameRedundant = prj.Attributes["spectra_ispname"].ToString();
+                                                            #region Commented on 12-Sep-2022 As per MS WiFi process
+                                                            //if (prj.Attributes.Contains("alletech_totalcalculatedcost"))
+                                                            //        primary_amount += prj.GetAttributeValue<Money>("alletech_totalcalculatedcost").Value.ToString();
+                                                            //    if (prj.Attributes.Contains("spectra_ispname"))
+                                                            //        IspName = prj.Attributes["spectra_ispname"].ToString();
+                                                            #endregion
+                                                            IspName = "TP";
                                                         }
                                                     }
                                                     else
                                                     {
                                                         if (prj.Attributes.Contains("alletech_totalcalculatedcost"))
-                                                            redundant_amount += prj.GetAttributeValue<Money>("alletech_totalcalculatedcost").Value.ToString();
-                                                        IspNameRedundant = "Own";
+                                                            primary_amount += prj.GetAttributeValue<Money>("alletech_totalcalculatedcost").Value.ToString();
+                                                        IspName = "Own";
                                                     }
                                                 }
-                                                finalRedundant = redundant + ": " + redundant_amount + " (" + IspNameRedundant + ")";
                                             }
-                                            ///if (TempName == "No")
-                                               // break;
-                                            #endregion
+                                            finalPrimary = primary + ": " + primary_amount + " (" + IspName + ")";
                                         }
+                                        // if (TempName == "No")
+                                        //   break;
+                                        #endregion
+                                    }
+                                    else if (feasible.GetAttribute‌​‌​Value<bool>("alletech_routetype") == true)
+                                    {
+                                        redundant = "Redundant";
+                                        redundantValue = 2;
+                                        #region Current running code
+                                        string[] Prjattr = { "alletech_pjcid", "alletech_totalcalculatedcost", "spectra_partnerselected", "spectra_ispname" }; // Change = 2 Added Partner Selected Attr in the column done by Madhu Vlabs for TPF flow on 07-08-2021
+                                        EntityCollection ProjcstColl = GetResultsByAttribute(service, "alletech_projectestimationcost", "alletech_pjcid", feasible.Id.ToString(), Prjattr);
+                                        if (ProjcstColl.Entities.Count > 0)
+                                        {
+                                            foreach (Entity prj in ProjcstColl.Entities)
+                                            {
+                                                if (feasible.GetAttribute‌​‌​Value<bool>("alletech_thirdpartyinstallation") == true)
+                                                {
+                                                    if (prj.GetAttribute‌​‌​Value<bool>("spectra_partnerselected") == true) // Change = 3  Allow only Partner Selected YES done by Madhu Vlabs for TPF flow on 07-08-2021
+                                                    {
+                                                        #region Commented on 12-Sep-2022 As per MS WiFi process
+                                                        //if (prj.Attributes.Contains("alletech_totalcalculatedcost"))
+                                                        //    redundant_amount += prj.GetAttributeValue<Money>("alletech_totalcalculatedcost").Value.ToString();
+                                                        //if (prj.Attributes.Contains("spectra_ispname"))
+                                                        //    IspNameRedundant = prj.Attributes["spectra_ispname"].ToString();
+                                                        #endregion
+                                                        IspNameRedundant = "TP";
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    if (prj.Attributes.Contains("alletech_totalcalculatedcost"))
+                                                        redundant_amount += prj.GetAttributeValue<Money>("alletech_totalcalculatedcost").Value.ToString();
+                                                    IspNameRedundant = "Own";
+                                                }
+                                            }
+                                            finalRedundant = redundant + ": " + redundant_amount + " (" + IspNameRedundant + ")";
+                                        }
+                                        ///if (TempName == "No")
+                                        // break;
+                                        #endregion
                                     }
                                 }
                             }
-                            //TempName = amt.ToString();
                         }
-                        // else
-                        string seperated = string.Empty;
-                        if (primaryValue == 1 && redundantValue == 2)
-                        {
-                            seperated = " / ";
-                        }
+                        //TempName = amt.ToString();
+                    }
+                    // else
+                    string seperated = string.Empty;
+                    if (primaryValue == 1 && redundantValue == 2)
+                    {
+                        seperated = " / ";
+                    }
 
-                        emailbody += @" <td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 98pt; height: 15pt; '>
+                    emailbody += @" <td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 98pt; height: 15pt; '>
                         <p><b>Connectivity Cost</b></p>
                     </td>
                     <td width='360' style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none; border-color: rgb(0, 0, 0) black windowtext rgb(0, 0, 0); padding: 0in 5.4pt; width: 3.75in; height: 15pt; ' colspan='3'>
                         <p align='center' text-align: center;' style='font-size: 8pt;'>" + finalPrimary + seperated + finalRedundant + @"</p>
                     </td>
                 </tr>";
-                        #endregion
-
-                        #endregion
-                    }
-
-                    #region Checking OpptyProds
-                    string[] Opptyvalues = new string[4];
-                    TempName = null; TempName2 = null;
-                    string opptysubtable = "";
-
-                    string[] opptyprodattr = { "productid", "priceperunit", "manualdiscountamount", "extendedamount" };
-                    EntityCollection opptyProds = GetResultsByAttribute(service, "opportunityproduct", "opportunityid", opptyid, opptyprodattr);
-
-                    if (opptyProds.Entities.Count > 0)
-                    {
-                        foreach (Entity opptyprod in opptyProds.Entities)
-                        {
-
-                            string prodname = opptyprod.GetAttributeValue<EntityReference>("productid").Name;
-                            try
-                            {
-                                string[] prodattr = { "alletech_billingcycle", "alletech_plantype", "alletech_chargetype" };
-                                Entity prod = GetResultByAttribute(service, "product", "productid", opptyprod.GetAttributeValue<EntityReference>("productid").Id.ToString(), prodattr);
-
-                                int plan = prod.GetAttributeValue<OptionSetValue>("alletech_plantype").Value;
-                                int charge = prod.GetAttributeValue<OptionSetValue>("alletech_chargetype").Value;
-
-                                decimal price = 0, extnamt = 0, percentAge = 0;
-
-                                //RC||OTC||Addon
-                                if (charge == 569480001 || charge == 569480002 || plan == 569480002) //addon plan type
-                                {
-                                    price = opptyprod.GetAttributeValue<Money>("priceperunit").Value;
-                                    Opptyvalues[0] = price.ToString();
-
-                                    if (opptyprod.Contains("manualdiscountamount"))
-                                        Opptyvalues[1] = opptyprod.GetAttributeValue<Money>("manualdiscountamount").Value.ToString();
-                                    else
-                                        Opptyvalues[1] = "0";
-
-                                    extnamt = opptyprod.GetAttributeValue<Money>("extendedamount").Value;
-                                    Opptyvalues[2] = extnamt.ToString();
-
-                                    if (extnamt < price)
-                                    {
-                                        percentAge = (price - extnamt) / price * 100;
-                                        percentAge = decimal.Round(percentAge, 2, MidpointRounding.AwayFromZero);
-                                    }
-
-                                    Opptyvalues[3] = percentAge.ToString() + "%";
-
-                                    opptysubtable += "<tr style='height: 15pt;'>";
-                                    opptysubtable += "<td  style='border-width: 0px 1pt 1pt; border-style: none solid solid; padding: 0in 5.4pt; width: 106.35pt;'> ";
-                                    opptysubtable += "<p align='center' text-align: center;'><b>" + prodname + "</b></p>";
-                                    opptysubtable += "</td>";
-                                    opptysubtable += "<td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 72.65pt;'> ";
-                                    opptysubtable += "<p align='center' text-align: center;'>" + Opptyvalues[0] + @"</p>";
-                                    opptysubtable += "</td>";
-                                    opptysubtable += "<td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 98pt;'> ";
-                                    opptysubtable += "<p align='center' text-align: center;'>" + Opptyvalues[1] + @"</p>";
-                                    opptysubtable += "</td>";
-                                    opptysubtable += "<td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 89pt;'> ";
-                                    opptysubtable += "<p align='center' text-align: center;'>" + Opptyvalues[2] + @"</p>";
-                                    opptysubtable += "</td>";
-                                    opptysubtable += "<td width='241' style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 181pt;' colspan='2'> ";
-                                    opptysubtable += "<p align='center' text-align: center;'>" + Opptyvalues[3] + @"</p>";
-                                    opptysubtable += "</td>";
-                                    opptysubtable += "</tr>";
-                                }
-                                else
-                                {
-                                    TempName = prodname;
-
-                                    if (prod.Attributes.Contains("alletech_billingcycle"))
-                                        TempName2 = prod.GetAttributeValue<EntityReference>("alletech_billingcycle").Name;
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                             
-                            }
-                        }
-                    }
                     #endregion
 
-                    #region Row 5
-                    emailbody += @"<tr style='height: 15pt;'>
+                    #endregion
+                }
+
+                #region Checking OpptyProds
+                string[] Opptyvalues = new string[4];
+                TempName = null; TempName2 = null;
+                string opptysubtable = "";
+
+                string[] opptyprodattr = { "productid", "priceperunit", "manualdiscountamount", "extendedamount" };
+                EntityCollection opptyProds = GetResultsByAttribute(service, "opportunityproduct", "opportunityid", opptyid, opptyprodattr);
+
+                if (opptyProds.Entities.Count > 0)
+                {
+                    foreach (Entity opptyprod in opptyProds.Entities)
+                    {
+
+                        string prodname = opptyprod.GetAttributeValue<EntityReference>("productid").Name;
+                        try
+                        {
+                            string[] prodattr = { "alletech_billingcycle", "alletech_plantype", "alletech_chargetype" };
+                            Entity prod = GetResultByAttribute(service, "product", "productid", opptyprod.GetAttributeValue<EntityReference>("productid").Id.ToString(), prodattr);
+
+                            int plan = prod.GetAttributeValue<OptionSetValue>("alletech_plantype").Value;
+                            int charge = prod.GetAttributeValue<OptionSetValue>("alletech_chargetype").Value;
+
+                            decimal price = 0, extnamt = 0, percentAge = 0;
+
+                            //RC||OTC||Addon
+                            if (charge == 569480001 || charge == 569480002 || plan == 569480002) //addon plan type
+                            {
+                                price = opptyprod.GetAttributeValue<Money>("priceperunit").Value;
+                                Opptyvalues[0] = price.ToString();
+
+                                if (opptyprod.Contains("manualdiscountamount"))
+                                    Opptyvalues[1] = opptyprod.GetAttributeValue<Money>("manualdiscountamount").Value.ToString();
+                                else
+                                    Opptyvalues[1] = "0";
+
+                                extnamt = opptyprod.GetAttributeValue<Money>("extendedamount").Value;
+                                Opptyvalues[2] = extnamt.ToString();
+
+                                if (extnamt < price)
+                                {
+                                    percentAge = (price - extnamt) / price * 100;
+                                    percentAge = decimal.Round(percentAge, 2, MidpointRounding.AwayFromZero);
+                                }
+
+                                Opptyvalues[3] = percentAge.ToString() + "%";
+
+                                opptysubtable += "<tr style='height: 15pt;'>";
+                                opptysubtable += "<td  style='border-width: 0px 1pt 1pt; border-style: none solid solid; padding: 0in 5.4pt; width: 106.35pt;'> ";
+                                opptysubtable += "<p align='center' text-align: center;'><b>" + prodname + "</b></p>";
+                                opptysubtable += "</td>";
+                                opptysubtable += "<td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 72.65pt;'> ";
+                                opptysubtable += "<p align='center' text-align: center;'>" + Opptyvalues[0] + @"</p>";
+                                opptysubtable += "</td>";
+                                opptysubtable += "<td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 98pt;'> ";
+                                opptysubtable += "<p align='center' text-align: center;'>" + Opptyvalues[1] + @"</p>";
+                                opptysubtable += "</td>";
+                                opptysubtable += "<td  style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 89pt;'> ";
+                                opptysubtable += "<p align='center' text-align: center;'>" + Opptyvalues[2] + @"</p>";
+                                opptysubtable += "</td>";
+                                opptysubtable += "<td width='241' style='border-width: 0px 1pt 1pt 0px; border-style: none solid solid none;  padding: 0in 5.4pt; width: 181pt;' colspan='2'> ";
+                                opptysubtable += "<p align='center' text-align: center;'>" + Opptyvalues[3] + @"</p>";
+                                opptysubtable += "</td>";
+                                opptysubtable += "</tr>";
+                            }
+                            else
+                            {
+                                TempName = prodname;
+
+                                if (prod.Attributes.Contains("alletech_billingcycle"))
+                                    TempName2 = prod.GetAttributeValue<EntityReference>("alletech_billingcycle").Name;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+
+                        }
+                    }
+                }
+                #endregion
+
+                #region Row 5
+                emailbody += @"<tr style='height: 15pt;'>
                     <td width='239' style='border-width: 0px 1pt 1pt; border-style: none solid solid; border-color: rgb(0, 0, 0) black windowtext windowtext; padding: 0in 5.4pt; width: 179pt; height: 15pt;' >
                         <p align='center' text-align: center;'><b>Product</b></p>
                     </td>
@@ -687,10 +693,10 @@ namespace DOA
                         <p align='center' text-align: center;'>" + TempName2 + @"</p>
                     </td>
                     </tr>";
-                    #endregion
+                #endregion
 
-                    #region Row 6
-                    emailbody += @"<tr style='height: 15pt;'>
+                #region Row 6
+                emailbody += @"<tr style='height: 15pt;'>
                     <td  style='border-width: 0px 1pt 1pt; border-style: none solid solid; padding: 0in 5.4pt; width: 106.35pt; height: 15pt; '>
                         <p align='center' text-align: center;'><b>Product Component</b></p>
                     </td>
@@ -707,13 +713,13 @@ namespace DOA
                         <p align='center' text-align: center;'><b>Price Deviation %</b></p>
                     </td>
                     </tr>";
-                    #endregion
+                #endregion
 
-                    emailbody += opptysubtable; //Row 7 and 8
+                emailbody += opptysubtable; //Row 7 and 8
 
-                    #region Row 9
+                #region Row 9
 
-                    emailbody += @"<tr style='height: 33pt;'>
+                emailbody += @"<tr style='height: 33pt;'>
                     <td  style='border-width: 0px 1pt 1pt; border-style: none solid solid; padding: 0in 5.4pt; width: 106.35pt; height: 33pt; '>
                         <p><b>Remarks</b></p>
                     </td>
@@ -721,16 +727,16 @@ namespace DOA
                         <p align='center' text-align: center;'>" + Oppty.GetAttributeValue<string>("customerneed") + @"</p>
                     </td>
                     </tr>";
-                    #endregion
+                #endregion
 
-                    emailbody += "</tbody></table>";
-                    emailbody += "<br /> Note: To approve from email, please reply to this email with just 'Approve'/'Approved'.";
-                    emailbody += "<br />       To reject from email, please reply to this email with just 'Reject'/'Rejected'.";
-                    emailbody += "<br /><br /> Regards,<br /> Spectra Team <br />";
-                    emailbody += "</div></body></html>";
+                emailbody += "</tbody></table>";
+                emailbody += "<br /> Note: To approve from email, please reply to this email with just 'Approve'/'Approved'.";
+                emailbody += "<br />       To reject from email, please reply to this email with just 'Reject'/'Rejected'.";
+                emailbody += "<br /><br /> Regards,<br /> Spectra Team <br />";
+                emailbody += "</div></body></html>";
 
-                    #endregion
-               // }
+                #endregion
+                // }
             }
             catch (Exception ex)
             {
@@ -770,7 +776,7 @@ namespace DOA
                 case 9: text = "L2B-RFS"; break;
                 case 10: text = "Cb-RFS Type1"; break;
                 case 11: text = "Cb-RFS Type2"; break;
-                case 12: text = "TP-F"; break;                
+                case 12: text = "TP-F"; break;
             }
             return text;
         }
