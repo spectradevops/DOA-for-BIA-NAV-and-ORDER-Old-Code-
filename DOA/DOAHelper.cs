@@ -40,6 +40,7 @@ namespace DOA
                     #region Constructing HTML
                     emailbody = "<html><body><div>";
                     emailbody += "Hi " + Approver + ",<br/><br/>";
+                    emailbody += "<p style = 'color: black; font-family: ' Arial',sans-serif; font-size: 10pt;'><b> Approval of price deviation for order : " + Oppty.GetAttributeValue<string>("alletech_oppurtunityid") + " </b></p>";
                     emailbody += "<p style = 'color: black; font-family: ' Arial',sans-serif; font-size: 10pt;'><b> Order Details </b></p>";
                     emailbody += "<table class='MsoNormalTable' style='width:547pt;font-family: Arial,sans-serif; font-size: 9pt; border-collapse: collapse;' border='0' cellspacing='0' cellpadding='0'><tbody>";
 
@@ -74,7 +75,6 @@ namespace DOA
                         TempName = null;
 
                     #region Code Commented on 27_sep_2021
-                            //    <td  style='border-width: 0px 1pt 1pt; border-style: none solid solid; padding: 0in 5.4pt; width: 106.35pt; height: 15pt;'>
                     //if (isMAC)
                     //{
                     //    emailbody += @"<tr style='height: 15pt;'>
