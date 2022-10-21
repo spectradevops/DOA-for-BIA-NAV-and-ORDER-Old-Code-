@@ -39,13 +39,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Crm.Sdk.Proxy">
-      <HintPath>..\..\..\References\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
+      <HintPath>C:\Users\vlabs.014\OneDrive - CITYCOM NETWORKS PVT. LTD\CRM Source Codes 18 Sep 2022\SDK 2015\SDK 2015\SDK\Bin\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xrm.Client">
+      <HintPath>C:\Users\vlabs.014\OneDrive - CITYCOM NETWORKS PVT. LTD\CRM Source Codes 18 Sep 2022\SDK 2015\SDK 2015\SDK\Bin\Microsoft.Xrm.Client.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xrm.Sdk">
-      <HintPath>..\..\..\References\Microsoft.Xrm.Sdk.dll</HintPath>
+      <HintPath>C:\Users\vlabs.014\OneDrive - CITYCOM NETWORKS PVT. LTD\CRM Source Codes 18 Sep 2022\SDK 2015\SDK 2015\SDK\Bin\Microsoft.Xrm.Sdk.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xrm.Sdk.Workflow">
-      <HintPath>..\OrderDOA\bin\Debug\Microsoft.Xrm.Sdk.Workflow.dll</HintPath>
+      <HintPath>C:\Users\vlabs.014\OneDrive - CITYCOM NETWORKS PVT. LTD\CRM Source Codes 18 Sep 2022\SDK 2015\SDK 2015\SDK\Bin\Microsoft.Xrm.Sdk.Workflow.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
