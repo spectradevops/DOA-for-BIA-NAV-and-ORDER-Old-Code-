@@ -422,7 +422,7 @@ namespace OrderDOA
                                     Entity log = new Entity("alletech_integrationlog");
                                     log["alletech_name"] = "Order Approval Email Pushed to ML: " + nextApprovalId.Id.ToString();
                                     log["alletech_integrationwith"] = new OptionSetValue(4);
-                                    log["alletech_regardingentity"] = "alletech_feasibility";
+                                    log["alletech_regardingentity"] = "spectra_approval";
                                     log["alletech_entityguid"] = nextApprovalId.Id.ToString();
                                     log["alletech_request"] = json.ToString();
                                     log["alletech_responce"] = result.ToString();
@@ -433,7 +433,7 @@ namespace OrderDOA
                                     Entity log = new Entity("alletech_integrationlog");
                                     log["alletech_name"] = "Order Approval Email Pushed to ML: " + nextApprovalId.Id.ToString();
                                     log["alletech_integrationwith"] = new OptionSetValue(4);
-                                    log["alletech_regardingentity"] = "alletech_feasibility";
+                                    log["alletech_regardingentity"] = "spectra_approval";
                                     log["alletech_entityguid"] = nextApprovalId.Id.ToString();
                                     log["alletech_request"] = json.ToString();
                                     log["alletech_responce"] = result.ToString();

@@ -346,7 +346,7 @@ namespace Feasibility_DOA
                                                                 Entity log = new Entity("alletech_integrationlog");
                                                                 log["alletech_name"] = "Feasibility Approval Email Pushed to ML: " + approvalId.ToString();
                                                                 log["alletech_integrationwith"] = new OptionSetValue(4);
-                                                                log["alletech_regardingentity"] = "alletech_feasibility";
+                                                                log["alletech_regardingentity"] = "spectra_approval";
                                                                 log["alletech_entityguid"] = approvalId.ToString();
                                                                 log["alletech_request"] = json.ToString();
                                                                 log["alletech_responce"] = result.ToString();
@@ -357,7 +357,7 @@ namespace Feasibility_DOA
                                                                 Entity log = new Entity("alletech_integrationlog");
                                                                 log["alletech_name"] = "Feasibility Approval Email Pushed to ML: " + approvalId.ToString();
                                                                 log["alletech_integrationwith"] = new OptionSetValue(4);
-                                                                log["alletech_regardingentity"] = "alletech_feasibility";
+                                                                log["alletech_regardingentity"] = "spectra_approval";
                                                                 log["alletech_entityguid"] = approvalId.ToString();
                                                                 log["alletech_request"] = json.ToString();
                                                                 log["alletech_responce"] = result.ToString();
