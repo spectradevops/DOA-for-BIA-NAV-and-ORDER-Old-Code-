@@ -7,14 +7,34 @@ using System.Activities;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Web.Script.Serialization;
 using System.Threading.Tasks;
 
 namespace DOA
 {
     public class CreateApprovals : CodeActivity
     {
+        #region added on 24-11-2022
+        [Input("ML_URL")]
+        [RequiredArgument]
+        public InArgument<string> ML_URL { get; set; }
+
+        [Input("ML_Authkey")]
+        [RequiredArgument]
+        public InArgument<string> ML_Authkey { get; set; }
+
+        [Input("ML_Action")]
+        [RequiredArgument]
+        public InArgument<string> ML_Action { get; set; }
+
+        [Input("ML_from")]
+        [RequiredArgument]
+        public InArgument<string> ML_from { get; set; }
+        #endregion
+
         [Input("City")]
         [RequiredArgument]
         [ReferenceTarget("alletech_city")]
@@ -46,6 +66,13 @@ namespace DOA
 
             if (context.PrimaryEntityName.ToLower() == "opportunity")
             {
+                #region Email Parameters 24 Nov 2022
+                string URL = string.Empty, Authkey = string.Empty, Action = string.Empty, from1 = string.Empty, to = string.Empty, cc = string.Empty, subject = string.Empty, content = string.Empty;
+                URL = ML_URL.Get(executionContext);
+                Authkey = ML_Authkey.Get(executionContext);
+                Action = ML_Action.Get(executionContext);
+                from1 = ML_from.Get(executionContext);
+                #endregion
 
                 Dictionary<int, Guid> approvals = new Dictionary<int, Guid>();
 
@@ -164,7 +191,7 @@ namespace DOA
                                     }
                                     #region New Logic implemented by Madhu on 17 MArch 2022
                                     else
-                                    {                                        
+                                    {
                                         percentAge = extendedAmt;
                                         EntityCollection entCollAppConfig = getApprovalConfig(service, "IPADDRESS", null);//, percentAge);
                                         foreach (Entity entAppConfig in entCollAppConfig.Entities)
@@ -192,7 +219,7 @@ namespace DOA
                                                     }
                                                 }
                                             }
-                                        }                                       
+                                        }
                                     }
                                     #endregion
                                 }
@@ -282,90 +309,169 @@ namespace DOA
                         string approver = (entApprover.Contains("fullname") ? entApprover["fullname"].ToString() : "Approver");
                         string emailbody = helper.getEmailBody(service, context.PrimaryEntityId.ToString(), approver);
 
-                        Entity entEmail = new Entity("email");
-                        entEmail["subject"] = "Pending for your approval #" + approvalId.ToString().ToUpper() + "#";
-                        entEmail["description"] = emailbody;
 
-                        Entity entTo = new Entity("activityparty");
-                        entTo["partyid"] = new EntityReference("systemuser", entApprover.Id);
-                        Entity[] entToList = { entTo };
-                        entEmail["to"] = entToList;
+                        #region Create email and Sending email commented on 24 Nov 2022
+                        //Entity entEmail = new Entity("email");
+                        //entEmail["subject"] = "Pending for your approval #" + approvalId.ToString().ToUpper() + "#";
+                        //entEmail["description"] = emailbody;
 
-                        Entity Queue = helper.GetResultByAttribute(service, "queue", "name", "DOA Approval", "queueid");
+                        //Entity entTo = new Entity("activityparty");
+                        //entTo["partyid"] = new EntityReference("systemuser", entApprover.Id);
+                        //Entity[] entToList = { entTo };
+                        //entEmail["to"] = entToList;
 
-                        if (Queue != null)
+                        //Entity Queue = helper.GetResultByAttribute(service, "queue", "name", "DOA Approval", "queueid");
+
+                        //if (Queue != null)
+                        //{
+                        //    Entity entFrom = new Entity("activityparty");
+                        //    //entFrom["partyid"] = new EntityReference("systemuser", new Guid("1A9B2FAD-7334-E711-80DE-000D3AF224B9"));// crm support user
+                        //    entFrom["partyid"] = new EntityReference("queue", Queue.Id);
+                        //    Entity[] entFromList = { entFrom };
+                        //    entEmail["from"] = entFromList;
+                        //}
+                        //else
+                        //    throw new InvalidPluginExecutionException("DOA approval not available");
+
+                        //Entity oppty = helper.GetResultByAttribute(service, "opportunity", "opportunityid", context.PrimaryEntityId.ToString(), "ownerid");
+
+                        //if (oppty != null)
+                        //{
+                        //    Entity entcc = new Entity("activityparty");
+                        //    //entFrom["partyid"] = new EntityReference("systemuser", new Guid("1A9B2FAD-7334-E711-80DE-000D3AF224B9"));// crm support user
+                        //    entcc["partyid"] = oppty.GetAttributeValue<EntityReference>("ownerid");
+
+                        //    Entity user = helper.GetResultByAttribute(service, "systemuser", "systemuserid", oppty.GetAttributeValue<EntityReference>("ownerid").Id.ToString(), "parentsystemuserid");
+                        //    if (user.Attributes.Contains("parentsystemuserid"))
+                        //    {
+                        //        Entity entcc2 = new Entity("activityparty");
+                        //        entcc2["partyid"] = user.GetAttributeValue<EntityReference>("parentsystemuserid");
+
+                        //        Entity[] entccList = { entcc, entcc2 };
+                        //        entEmail["cc"] = entccList;
+                        //    }
+                        //    else
+                        //    {
+                        //        Entity[] entccList = { entcc };
+                        //        entEmail["cc"] = entccList;
+                        //    }
+                        //}
+                        //entEmail["regardingobjectid"] = new EntityReference("spectra_approval", approvalId);
+
+
+                        //Guid emailId = service.Create(entEmail);
+                        //SendEmailRequest sendEmailReq = new SendEmailRequest()
+                        //{
+                        //    EmailId = emailId,
+                        //    IssueSend = true
+                        //};
+                        //SendEmailResponse sendEmailRes = (SendEmailResponse)service.Execute(sendEmailReq);
+                        #endregion
+
+                        #region New Logic on 24 Nov 2022
+                        subject = "Pending for your approval #" + approvalId.ToString().ToUpper() + "#";
+                        content = emailbody.ToString();
+                        string CC1 = string.Empty, CC2 = string.Empty;
+
+                        Entity entApprover1 = service.Retrieve("systemuser", entApprover.Id, new ColumnSet("internalemailaddress"));
+
+                        if (entApprover1.Attributes.Contains("internalemailaddress"))
+                            to = entApprover1.Attributes["internalemailaddress"].ToString();
+
+                        Entity opportunity = helper.GetResultByAttribute(service, "opportunity", "opportunityid", context.PrimaryEntityId.ToString(), "ownerid");
+                        Entity opportunityOwner = service.Retrieve("systemuser", opportunity.GetAttributeValue<EntityReference>("ownerid").Id, new ColumnSet("internalemailaddress", "parentsystemuserid"));
+
+                        if (opportunityOwner.Attributes.Contains("internalemailaddress"))
+                            CC1 = opportunityOwner.Attributes["internalemailaddress"].ToString();
+
+                        if (opportunityOwner.Attributes.Contains("parentsystemuserid"))
                         {
-                            Entity entFrom = new Entity("activityparty");
-                            //entFrom["partyid"] = new EntityReference("systemuser", new Guid("1A9B2FAD-7334-E711-80DE-000D3AF224B9"));// crm support user
-                            entFrom["partyid"] = new EntityReference("queue", Queue.Id);
-                            Entity[] entFromList = { entFrom };
-                            entEmail["from"] = entFromList;
+                            Entity reportiningManager = service.Retrieve("systemuser", opportunityOwner.GetAttributeValue<EntityReference>("parentsystemuserid").Id, new ColumnSet("internalemailaddress"));
+                            if (reportiningManager.Attributes.Contains("internalemailaddress"))
+                                CC2 = reportiningManager.Attributes["internalemailaddress"].ToString();
+                        }
+                        if (CC1 != string.Empty || CC2 != string.Empty)
+                        {
+                            cc = CC1 + "," + CC2;
                         }
                         else
-                            throw new InvalidPluginExecutionException("DOA approval not available");
-
-                        Entity oppty = helper.GetResultByAttribute(service, "opportunity", "opportunityid", context.PrimaryEntityId.ToString(), "ownerid");
-
-                        if (oppty != null)
                         {
-                            Entity entcc = new Entity("activityparty");
-                            //entFrom["partyid"] = new EntityReference("systemuser", new Guid("1A9B2FAD-7334-E711-80DE-000D3AF224B9"));// crm support user
-                            entcc["partyid"] = oppty.GetAttributeValue<EntityReference>("ownerid");
-
-                            Entity user = helper.GetResultByAttribute(service, "systemuser", "systemuserid", oppty.GetAttributeValue<EntityReference>("ownerid").Id.ToString(), "parentsystemuserid");
-                            if (user.Attributes.Contains("parentsystemuserid"))
-                            {
-                                Entity entcc2 = new Entity("activityparty");
-                                entcc2["partyid"] = user.GetAttributeValue<EntityReference>("parentsystemuserid");
-
-                                Entity[] entccList = { entcc, entcc2 };
-                                entEmail["cc"] = entccList;
-                            }
-                            else
-                            {
-                                Entity[] entccList = { entcc };
-                                entEmail["cc"] = entccList;
-                            }
+                            cc = "";
                         }
 
-                        //entEmail["regardingobjectid"] = new EntityReference("opportunity", context.PrimaryEntityId);
-                        entEmail["regardingobjectid"] = new EntityReference("spectra_approval", approvalId);
-                        Guid emailId = service.Create(entEmail);
-
-                        //Entity attachment = new Entity("activitymimeattachment");
-                        //attachment["subject"] = "Opportuntity Product approval details";
-                        //attachment["filename"] = "OpportuntityProduct.pdf";
-                        //attachment["body"] = Convert.ToBase64String(pdfData);
-                        ////attachment["mimetype"] = "text/plain";
-                        //attachment["attachmentnumber"] = 1;
-                        //attachment["objectid"] = new EntityReference("email", emailId);
-                        //attachment["objecttypecode"] = "email";
-                        //service.Create(attachment);
-
-                        //Send email
-                        SendEmailRequest sendEmailReq = new SendEmailRequest()
-                        {
-                            EmailId = emailId,
-                            IssueSend = true
-                        };
-                        SendEmailResponse sendEmailRes = (SendEmailResponse)service.Execute(sendEmailReq);
-
+                        #region ML API Calling
+                        string integrationCheck = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                                                              <entity name='alletech_integrationlog'>
+                                                                <attribute name='alletech_name' />
+                                                                <attribute name='createdon' />
+                                                                <attribute name='alletech_regardingentity' />
+                                                                <attribute name='alletech_integrationwith' />
+                                                                <attribute name='alletech_comment' />
+                                                                <attribute name='alletech_integrationlogid' />
+                                                                <order attribute='createdon' descending='true' />
+                                                                <filter type='and'>
+                                                                  <condition attribute='alletech_entityguid' operator='eq' value='" + approvalId + @"' />
+                                                                </filter>
+                                                              </entity>
+                                                            </fetch>";
+                        EntityCollection integrColl = service.RetrieveMultiple(new FetchExpression(integrationCheck));
+                        if (integrColl.Entities.Count == 0)
+                        {                            
+                            var result = string.Empty;
+                            string json = string.Empty;
+                            var httpWebRequest = (HttpWebRequest)WebRequest.Create(URL);
+                            httpWebRequest.ContentType = "application/json";
+                            httpWebRequest.Method = "POST";
+                            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+                            using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+                            {
+                                // #region CRM parameters mapping with ML parameters
+                                SendingEmail app = new SendingEmail();
+                                app.Authkey = Authkey;
+                                app.Action = Action;
+                                app.from = from1;
+                                app.to = to;
+                                app.cc = cc;
+                                app.subject = subject;
+                                app.content = content;
+                                json = new JavaScriptSerializer().Serialize(app);
+                                streamWriter.Write(json);
+                                streamWriter.Flush();
+                                streamWriter.Close();
+                            }
+                            //tracingService.Trace("Json generated");
+                            var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+                            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                            {
+                                result = streamReader.ReadToEnd();
+                                if (result.Contains("success"))
+                                {
+                                    Entity log = new Entity("alletech_integrationlog");
+                                    log["alletech_name"] = "Opportunity Approval Email Pushed to ML: " + approvalId.ToString();
+                                    log["alletech_integrationwith"] = new OptionSetValue(4);
+                                    log["alletech_regardingentity"] = "alletech_feasibility";
+                                    log["alletech_entityguid"] = approvalId.ToString();
+                                    log["alletech_request"] = json.ToString();
+                                    log["alletech_responce"] = result.ToString();
+                                    service.Create(log);
+                                }
+                                else
+                                {
+                                    Entity log = new Entity("alletech_integrationlog");
+                                    log["alletech_name"] = "Opportunity Approval Email Pushed to ML: " + approvalId.ToString();
+                                    log["alletech_integrationwith"] = new OptionSetValue(4);
+                                    log["alletech_regardingentity"] = "alletech_feasibility";
+                                    log["alletech_entityguid"] = approvalId.ToString();
+                                    log["alletech_request"] = json.ToString();
+                                    log["alletech_responce"] = result.ToString();
+                                    service.Create(log);
+                                }
+                            }
+                        }
+                        #endregion
+                        #endregion                       
                     }
-
-                    //if (appr.Key == 0)
-                    //{
-                    //    //throw new InvalidPluginExecutionException("hi       " + approvalId.ToString());
-                    //    SetStateRequest staReq = new SetStateRequest()
-                    //    {
-                    //        EntityMoniker = new EntityReference("spectra_approval", approvalId),
-                    //        State = new OptionSetValue(0),
-                    //        Status = new OptionSetValue(11126000)
-                    //    };
-                    //    //service.Execute(staReq);
-                    //}
-                    //isApprovalRequiredFlag = true;
                 }
-
                 Entity entOpp = new Entity("opportunity");
                 entOpp.Id = context.PrimaryEntityId;
                 entOpp["spectra_approvalrequiredflag"] = false;
@@ -400,5 +506,16 @@ namespace DOA
             query.Orders.Add(new OrderExpression("spectra_orderby", OrderType.Ascending));
             return service.RetrieveMultiple(query);
         }
+    }
+    public class SendingEmail
+    {
+        public string Authkey { get; set; }
+        public string Action { get; set; }
+        public string from { get; set; }
+        public string to { get; set; }
+        public string cc { get; set; }
+        public string subject { get; set; }
+        public string content { get; set; }
+
     }
 }
