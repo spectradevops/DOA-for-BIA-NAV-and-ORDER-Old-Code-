@@ -160,7 +160,19 @@ namespace DOA
                                         if (extendedAmt < 200)
                                         {
                                             percentAge = extendedAmt;
-                                            EntityCollection entCollAppConfig = getApprovalConfig(service, "IPADDRESS", null);//, percentAge);
+                                            EntityCollection entCollAppConfig = null;
+                                            #region new code changes  28 Dec 2022
+                                            if (prodseg.Name.ToString() == "Secured Managed Internet")
+                                            {
+                                                entCollAppConfig = getApprovalConfig(service, "IPADDRESS-MBIA", null);//, percentAge);
+                                            }
+                                            else
+                                            {
+                                                entCollAppConfig = getApprovalConfig(service, "IPADDRESS", null);//, percentAge);
+                                            }
+                                            #endregion
+
+
                                             foreach (Entity entAppConfig in entCollAppConfig.Entities)
                                             {
                                                 if ((entAppConfig.Contains("spectra_quantity") && count >= Convert.ToInt64(entAppConfig["spectra_quantity"])) || !entAppConfig.Contains("spectra_quantity"))
