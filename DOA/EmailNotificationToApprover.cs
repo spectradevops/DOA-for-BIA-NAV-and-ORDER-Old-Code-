@@ -147,7 +147,6 @@ namespace DOA
                     //SendEmailResponse sendEmailRes = (SendEmailResponse)service.Execute(sendEmailReq);
                     #endregion
 
-
                     #region New Logic on 24 Nov 2022
                     subject = "Pending for your approval #" + nextApprovalId.Id.ToString().ToUpper() + "#";
                     content = emailbody.ToString();

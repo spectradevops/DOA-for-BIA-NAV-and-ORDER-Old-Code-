@@ -428,7 +428,7 @@ namespace DOA
                                                             </fetch>";
                         EntityCollection integrColl = service.RetrieveMultiple(new FetchExpression(integrationCheck));
                         if (integrColl.Entities.Count == 0)
-                        {                            
+                        {
                             var result = string.Empty;
                             string json = string.Empty;
                             var httpWebRequest = (HttpWebRequest)WebRequest.Create(URL);
