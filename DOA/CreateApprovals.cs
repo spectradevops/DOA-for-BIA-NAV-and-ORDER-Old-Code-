@@ -162,7 +162,7 @@ namespace DOA
                                             percentAge = extendedAmt;
                                             EntityCollection entCollAppConfig = null;
                                             #region new code changes  28 Dec 2022
-                                            if (prodseg.Name.ToString() == "Secured Managed Internet")
+                                            if (prodseg.Name.ToString() == "Secured Managed Internet" || prodseg.Name.ToString() == "Managed Office Solution")
                                             {
                                                 entCollAppConfig = getApprovalConfig(service, "IPADDRESS-MBIA", null);//, percentAge);
                                             }
