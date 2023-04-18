@@ -231,9 +231,7 @@ namespace Feasibility_DOA
                                                         traceService.Trace("remarks: " + remarks);
                                                     }
                                                     #endregion
-                                                    traceService.Trace("Before Email body");
-                                                    string emailbody = helper.getEmailBody(service, oppGUID, approver, feasibilityID, productName, billCycle, remarks);
-                                                    traceService.Trace("After Email body");
+                                                   
 
 
                                                     #region Old Code 24 Nov 2022
@@ -283,7 +281,10 @@ namespace Feasibility_DOA
 
                                                     #region New Logic on 24 Nov 2022
                                                     subject = "Pending for your approval #" + approvalId.ToString().ToUpper() + "#";
-                                                    content = emailbody.ToString();
+                                                    traceService.Trace("Before Email body");
+                                                    string emailbody = helper.getEmailBody(service, oppGUID, approver, feasibilityID, productName, billCycle, remarks, subject);
+                                                    traceService.Trace("After Email body");
+                                                    content = "Hi " + approver + ",\n" + emailbody.ToString();
 
                                                     Entity entApprover1 = service.Retrieve("systemuser", entApprover.Id, new ColumnSet("internalemailaddress"));
 

@@ -86,13 +86,14 @@ namespace DOA
                     DOAHelper helper = new DOAHelper();
                     Entity entApprover = service.Retrieve("systemuser", approverId.Id, new ColumnSet("fullname"));
                     string approver = (entApprover.Contains("fullname") ? entApprover["fullname"].ToString() : "Approver");
-                    string emailbody = helper.getEmailBody(service, oppId.Id.ToString(), approver);
+
 
 
                     #region Old Code 24 Nov 2022
                     //Entity entEmail = new Entity("email");
                     //entEmail["subject"] = "Pending for your approval #" + nextApprovalId.Id.ToString().ToUpper() + "#";
-                    //entEmail["description"] = emailbody;
+                    //string emailbody = helper.getEmailBody(service, oppId.Id.ToString(), approver, "Pending for your approval #" + nextApprovalId.Id.ToString().ToUpper() + "#");
+                    //entEmail["description"] = "Hi " + approver + ",\n" + emailbody;
 
                     //Entity entTo = new Entity();
                     //Entity entFrom = new Entity();
@@ -149,6 +150,7 @@ namespace DOA
 
                     #region New Logic on 24 Nov 2022
                     subject = "Pending for your approval #" + nextApprovalId.Id.ToString().ToUpper() + "#";
+                    string emailbody = helper.getEmailBody(service, oppId.Id.ToString(), approver, subject);
                     content = emailbody.ToString();
                     string CC1 = string.Empty, CC2 = string.Empty;
 

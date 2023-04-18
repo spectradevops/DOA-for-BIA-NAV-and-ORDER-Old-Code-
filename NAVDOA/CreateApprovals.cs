@@ -149,18 +149,42 @@ namespace NAVDOA
                     entApproval["spectra_installationreport"] = new EntityReference("alletech_installationform", postImg.Id);
 
                 tracingService.Trace("approval before create");
-                Guid approvalId = service.Create(entApproval);
+
+
+                Guid approvalId = Guid.Empty;
+                string IRWCTFETCh = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                                      <entity name='spectra_approval'>
+                                        <attribute name='spectra_approvalid' />
+                                        <attribute name='spectra_name' />
+                                        <attribute name='createdon' />
+                                        <order attribute='spectra_name' descending='false' />
+                                        <filter type='and'>
+                                          <filter type='or'>
+                                            <condition attribute='spectra_installationreport' operator='eq' value='" + postImg.Id + @"' />
+                                            <condition attribute='spectra_wcr' operator='eq' value='" + postImg.Id + @"' />
+                                          </filter>
+                                        </filter>
+                                      </entity>
+                                    </fetch>";
+                EntityCollection IRWCRCollection = service.RetrieveMultiple(new FetchExpression(IRWCTFETCh));
+                if (IRWCRCollection.Entities.Count == 0)
+                {
+                    approvalId = service.Create(entApproval);
+                }
+                else
+                    return;
 
                 tracingService.Trace("approval created");
                 #endregion
 
                 
-                string emailbody = helper.getEmailBody(service,postImg, CHO.Name,Type);
+             
 
                 #region Creating EMAIL Activity
                 Entity entEmail = new Entity("email");
                 entEmail["subject"] = "Pending for your approval #" + approvalId.ToString().ToUpper() + "#";
-                entEmail["description"] = emailbody;
+                string emailbody = helper.getEmailBody(service, postImg, CHO.Name, Type, "Pending for your approval #" + approvalId.ToString().ToUpper() + "#");
+                entEmail["description"] = "Hi " + CHO.Name + ",\n" + emailbody;
                 
                 Entity entTo = new Entity("activityparty");
                 entTo["partyid"] = new EntityReference("systemuser", CHO.Id);
@@ -180,21 +204,24 @@ namespace NAVDOA
                     throw new InvalidPluginExecutionException("DOA approval not available");
 
                 entEmail["regardingobjectid"] = new EntityReference("spectra_approval", approvalId);
-                Guid emailId = service.Create(entEmail);
-                tracingService.Trace("Email created");
 
-                //Send email
-                SendEmailRequest sendEmailReq = new SendEmailRequest()
-                {
-                    EmailId = emailId,
-                    IssueSend = true
-                };
-                SendEmailResponse sendEmailRes = (SendEmailResponse)service.Execute(sendEmailReq);
+                #region Commented on 15-03-2023
+                // Guid emailId = service.Create(entEmail);
+                //tracingService.Trace("Email created");
+
+                ////Send email
+                //SendEmailRequest sendEmailReq = new SendEmailRequest()
+                //{
+                //    EmailId = emailId,
+                //    IssueSend = true
+                //};
+                //SendEmailResponse sendEmailRes = (SendEmailResponse)service.Execute(sendEmailReq);
+                #endregion
                 #endregion
 
                 #region New Logic on 24 Nov 2022
                 subject = "Pending for your approval #" + approvalId.ToString().ToUpper() + "#";
-                content = emailbody.ToString();
+                content = "Hi " + CHO.Name + ",\n" + emailbody.ToString();
 
                 Entity entApprover1 = service.Retrieve("systemuser", CHO.Id, new ColumnSet("internalemailaddress"));
 

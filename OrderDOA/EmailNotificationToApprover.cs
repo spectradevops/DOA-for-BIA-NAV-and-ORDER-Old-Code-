@@ -247,7 +247,7 @@ namespace OrderDOA
 
                         #endregion Ends here
 
-                        string emailbody = helper.getEmailBody(service, approver, orderdetails, accountdetails, casedetails, customersegment, billcycle,arc, traceService);
+                       
 
                         #region Old code 24-11-2022
                         //Entity entEmail = new Entity("email");
@@ -320,7 +320,8 @@ namespace OrderDOA
 
                         #region New Logic on 24 Nov 2022
                         subject = "Pending for your approval #" + nextApprovalId.Id.ToString().ToUpper() + "#";
-                        content = emailbody.ToString();
+                        string emailbody = helper.getEmailBody(service, approver, orderdetails, accountdetails, casedetails, customersegment, billcycle, arc, traceService, subject, nextApprovalId.Id.ToString().ToUpper());
+                        content = "Hi " + approver + ",\n" + emailbody.ToString();
                         string CC1 = string.Empty, CC2 = string.Empty, CC3 = string.Empty;
 
                         Entity entApprover1 = service.Retrieve("systemuser", entApprover.Id, new ColumnSet("internalemailaddress"));

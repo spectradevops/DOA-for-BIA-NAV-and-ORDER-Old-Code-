@@ -28,6 +28,7 @@ namespace OrderDOA
             try
             {
                 tracingService.Trace("Plugin Execution Started");
+                Entity _orderTarget = (Entity)context.InputParameters["Target"];
                 Entity _order = context.PostEntityImages["PostImage"];
                 string subtypename = string.Empty;
                 Money newOTC = new Money();
@@ -37,9 +38,9 @@ namespace OrderDOA
                 EntityReference subtype = (EntityReference)_case.Attributes["alletech_disposition"];
                 subtypename = subtype.Name;
                 tracingService.Trace("Order,Account and Post Image Values Retrieved");
-                if (_order.Contains("spectra_getrelatedproducts"))
+                if (_orderTarget.Contains("spectra_getrelatedproducts"))
                 {
-                    if (_order.Attributes["spectra_getrelatedproducts"].ToString() == "Yes")
+                    if (_orderTarget.Attributes["spectra_getrelatedproducts"].ToString() == "Yes")
                     {
                         tracingService.Trace("GetRelatedProduct Value is Yes");
                         if (_account.Attributes.Contains("alletech_businesssegment"))

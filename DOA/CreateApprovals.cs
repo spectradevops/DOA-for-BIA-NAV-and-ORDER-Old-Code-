@@ -319,13 +319,15 @@ namespace DOA
                         Entity entApprover = service.Retrieve("systemuser", appr.Value, new ColumnSet("fullname"));
 
                         string approver = (entApprover.Contains("fullname") ? entApprover["fullname"].ToString() : "Approver");
-                        string emailbody = helper.getEmailBody(service, context.PrimaryEntityId.ToString(), approver);
+
 
 
                         #region Create email and Sending email commented on 24 Nov 2022
                         //Entity entEmail = new Entity("email");
                         //entEmail["subject"] = "Pending for your approval #" + approvalId.ToString().ToUpper() + "#";
-                        //entEmail["description"] = emailbody;
+                        //string emailbody = helper.getEmailBody(service, context.PrimaryEntityId.ToString(), approver, "Pending for your approval #" + approvalId.ToString().ToUpper() + "#");
+                        ////content =  emailbody.ToString();
+                        //entEmail["description"] = "Hi " + approver + ",\n" + emailbody;
 
                         //Entity entTo = new Entity("activityparty");
                         //entTo["partyid"] = new EntityReference("systemuser", entApprover.Id);
@@ -382,7 +384,8 @@ namespace DOA
 
                         #region New Logic on 24 Nov 2022
                         subject = "Pending for your approval #" + approvalId.ToString().ToUpper() + "#";
-                        content = emailbody.ToString();
+                        string emailbody = helper.getEmailBody(service, context.PrimaryEntityId.ToString(), approver, subject);
+                        content = "Hi " + approver + ",\n" + emailbody.ToString();
                         string CC1 = string.Empty, CC2 = string.Empty;
 
                         Entity entApprover1 = service.Retrieve("systemuser", entApprover.Id, new ColumnSet("internalemailaddress"));

@@ -300,6 +300,77 @@ namespace OrderDOA
                         traceService.Trace("In home upgrade");
                         //throw new InvalidPluginExecutionException("In home upgrade");
                     }
+                    else if (OrdDetails.GetAttributeValue<OptionSetValue>("prioritycode").Value == 111260003) // BIA to MBIA
+                    {
+                        string CityHead = string.Empty, approvalone = string.Empty, approvaltwo = string.Empty;
+                        int ap = 0, ap1 = 0;
+                        #region Adding City head to approval list                      
+                        Entity account = null;
+                        if (OrdDetails.Attributes.Contains("customerid"))
+                        {
+                            account = service.Retrieve("account", ((EntityReference)OrdDetails.Attributes["customerid"]).Id, new ColumnSet("ownerid", "spectra_servicerelationshipmanagerid", "alletech_product"));
+                            if (account.Attributes.Contains("spectra_servicerelationshipmanagerid"))
+                            {
+                                traceService.Trace("Inside IF");
+                                Entity oppowner = service.Retrieve("systemuser", ((EntityReference)account.Attributes["spectra_servicerelationshipmanagerid"]).Id, new ColumnSet("spectra_cityhead"));
+
+                                if (oppowner.Attributes.Contains("spectra_cityhead"))
+                                {
+                                    approvals.Add(1, ((EntityReference)oppowner.Attributes["spectra_cityhead"]).Id);
+                                    CityHead = ((EntityReference)oppowner.Attributes["spectra_cityhead"]).Name.ToString();
+                                    ap = 1;
+                                }
+                                else
+                                {
+                                    throw new InvalidPluginExecutionException("City Head is not mapped for " + ((EntityReference)account.Attributes["spectra_servicerelationshipmanagerid"]).Name.ToString() + ", please contact sales co-ordinater for City Head mapping.");
+                                }
+                            }
+                        }
+                        #endregion
+
+                        string approverRetrieval = @"<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'>
+                                                      <entity name='spectra_approvalconfig'>
+                                                        <attribute name='spectra_name' />
+                                                        <attribute name='createdon' />
+                                                        <attribute name='statecode' />
+                                                        <attribute name='spectra_orderby' />
+                                                        <attribute name='spectra_minpercentage' />
+                                                        <attribute name='spectra_maxpercentage' />
+                                                        <attribute name='spectra_approver' />
+                                                        <attribute name='spectra_approvalconfigid' />
+                                                        <order attribute='spectra_name' descending='false' />
+                                                        <filter type='and'>
+                                                          <condition attribute='spectra_name' operator='eq' value='BIA_TO_MBIA' />
+                                                        </filter>
+                                                      </entity>
+                                                    </fetch>";
+                        EntityCollection approvalCollection = service.RetrieveMultiple(new FetchExpression(approverRetrieval));
+                        if (approvalCollection.Entities.Count > 0)
+                        {
+                            approvalone = ((EntityReference)approvalCollection.Entities[0].Attributes["spectra_approver"]).Name.ToString();
+                            approvaltwo = ((EntityReference)approvalCollection.Entities[1].Attributes["spectra_approver"]).Name.ToString();
+
+                            if (CityHead != approvalone)
+                            {
+                                if (ap == 1)
+                                {
+                                    approvals.Add(2, ((EntityReference)approvalCollection.Entities[0].Attributes["spectra_approver"]).Id);
+                                    ap1 = 2;
+                                }
+                            }
+                            if (CityHead != approvaltwo)
+                            {
+                                if (ap == 1 && ap1 == 2)
+                                {
+                                    approvals.Add(3, ((EntityReference)approvalCollection.Entities[1].Attributes["spectra_approver"]).Id);
+                                }else
+                                {
+                                    approvals.Add(2, ((EntityReference)approvalCollection.Entities[1].Attributes["spectra_approver"]).Id);
+                                }
+                            }
+                            traceService.Trace("In BIA to MBIA");
+                        }
+                    }
 
                     //approvals = approvals.OrderByDescending(a => a.Key).;
                     Guid approvalId = Guid.Empty;
@@ -499,7 +570,7 @@ namespace OrderDOA
 
                             #endregion Ends here
 
-                            string emailbody = helper.getEmailBody(service, approver, orderdetails, accountdetails, casedetails, customersegment, billcycle, arc, traceService);
+
 
                             #region Creating EMail Old Code 24 Nov 2022
                             //Entity entEmail = new Entity("email");
@@ -584,7 +655,8 @@ namespace OrderDOA
 
                             #region New Logic on 24 Nov 2022
                             subject = "Pending for your approval #" + approvalId.ToString().ToUpper() + "#";
-                            content = emailbody.ToString();
+                            string emailbody = helper.getEmailBody(service, approver, orderdetails, accountdetails, casedetails, customersegment, billcycle, arc, traceService, subject, approvalId.ToString().ToUpper());
+                            content = "Hi " + approver + ",\n" + emailbody.ToString();
                             string CC1 = string.Empty, CC2 = string.Empty, CC3 = string.Empty;
 
                             Entity entApprover1 = service.Retrieve("systemuser", entApprover.Id, new ColumnSet("internalemailaddress"));
@@ -593,50 +665,76 @@ namespace OrderDOA
                                 to = entApprover1.Attributes["internalemailaddress"].ToString();
 
 
-                            #region CC added on 08-Spe-2022                        
-                            if (accountdetails.Attributes.Contains("spectra_servicerelationshipmanagerid"))
+                            #region CC added on 08-Spe-2022   
+                            if (OrdDetails.GetAttributeValue<OptionSetValue>("prioritycode").Value == 111260003)
                             {
-                                Entity accountManager = service.Retrieve("systemuser", accountdetails.GetAttributeValue<EntityReference>("spectra_servicerelationshipmanagerid").Id, new ColumnSet("internalemailaddress", "parentsystemuserid"));
-                                if (accountManager.Attributes.Contains("internalemailaddress"))
-                                    CC1 = accountManager.Attributes["internalemailaddress"].ToString();
+                                Entity orderRetrieve = helper.GetResultByAttribute(service, "salesorder", "salesorderid", context.PrimaryEntityId.ToString(), "ownerid");
+                                Entity orderOwner = service.Retrieve("systemuser", orderRetrieve.GetAttributeValue<EntityReference>("ownerid").Id, new ColumnSet("internalemailaddress", "parentsystemuserid"));
 
-                                if (accountManager.Attributes.Contains("parentsystemuserid"))
+                                if (orderOwner.Attributes.Contains("internalemailaddress"))
+                                    CC1 = orderOwner.Attributes["internalemailaddress"].ToString();
+
+                                if (orderOwner.Attributes.Contains("parentsystemuserid"))
                                 {
-                                    Entity reportiningManager = service.Retrieve("systemuser", accountManager.GetAttributeValue<EntityReference>("parentsystemuserid").Id, new ColumnSet("internalemailaddress"));
+                                    Entity reportiningManager = service.Retrieve("systemuser", orderOwner.GetAttributeValue<EntityReference>("parentsystemuserid").Id, new ColumnSet("internalemailaddress"));
                                     if (reportiningManager.Attributes.Contains("internalemailaddress"))
                                         CC2 = reportiningManager.Attributes["internalemailaddress"].ToString();
                                 }
-                            }
-                            if (approvalCount == 4)
-                            {
-                                EntityCollection CCcoll = helper.getApprovalConfig(service, "CC", "B2B_");
-                                if (CCcoll.Entities.Count > 0)
+                                if (CC1 != string.Empty || CC2 != string.Empty)
                                 {
-                                    if (CCcoll.Entities[0].Contains("spectra_approver"))
-                                    {
-                                        Entity approvalConfig = service.Retrieve("systemuser", CCcoll.Entities[0].GetAttributeValue<EntityReference>("spectra_approver").Id, new ColumnSet("internalemailaddress"));
-                                        if (approvalConfig.Attributes.Contains("internalemailaddress"))
-                                        {
-                                            CC3 = approvalConfig.Attributes["internalemailaddress"].ToString();
-                                        }
-                                    }
-                                }
-                            }
-
-                            if (CC1 != string.Empty || CC2 != string.Empty)
-                            {
-                                if (CC3 != string.Empty)
-                                {
-                                    cc = CC1 + "," + CC2 + "," + CC3;
+                                    cc = CC1 + "," + CC2;
                                 }
                                 else
                                 {
-                                    cc = CC1 + "," + CC2;
+                                    cc = "";
                                 }
                             }
                             else
                             {
-                                cc = "";
+                                if (accountdetails.Attributes.Contains("spectra_servicerelationshipmanagerid"))
+                                {
+                                    Entity accountManager = service.Retrieve("systemuser", accountdetails.GetAttributeValue<EntityReference>("spectra_servicerelationshipmanagerid").Id, new ColumnSet("internalemailaddress", "parentsystemuserid"));
+                                    if (accountManager.Attributes.Contains("internalemailaddress"))
+                                        CC1 = accountManager.Attributes["internalemailaddress"].ToString();
+
+                                    if (accountManager.Attributes.Contains("parentsystemuserid"))
+                                    {
+                                        Entity reportiningManager = service.Retrieve("systemuser", accountManager.GetAttributeValue<EntityReference>("parentsystemuserid").Id, new ColumnSet("internalemailaddress"));
+                                        if (reportiningManager.Attributes.Contains("internalemailaddress"))
+                                            CC2 = reportiningManager.Attributes["internalemailaddress"].ToString();
+                                    }
+                                }
+                                if (approvalCount == 4)
+                                {
+                                    EntityCollection CCcoll = helper.getApprovalConfig(service, "CC", "B2B_");
+                                    if (CCcoll.Entities.Count > 0)
+                                    {
+                                        if (CCcoll.Entities[0].Contains("spectra_approver"))
+                                        {
+                                            Entity approvalConfig = service.Retrieve("systemuser", CCcoll.Entities[0].GetAttributeValue<EntityReference>("spectra_approver").Id, new ColumnSet("internalemailaddress"));
+                                            if (approvalConfig.Attributes.Contains("internalemailaddress"))
+                                            {
+                                                CC3 = approvalConfig.Attributes["internalemailaddress"].ToString();
+                                            }
+                                        }
+                                    }
+                                }
+
+                                if (CC1 != string.Empty || CC2 != string.Empty)
+                                {
+                                    if (CC3 != string.Empty)
+                                    {
+                                        cc = CC1 + "," + CC2 + "," + CC3;
+                                    }
+                                    else
+                                    {
+                                        cc = CC1 + "," + CC2;
+                                    }
+                                }
+                                else
+                                {
+                                    cc = "";
+                                }
                             }
                             #endregion
 
